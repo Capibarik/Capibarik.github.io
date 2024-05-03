@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Pentago</title>
+</head>
+
+<body>
+    <header>
+        <div id="header">
+            <nav>
+                <div id="nav">
+                    <div id="btn-settings">
+                        <img src="imgs/settings.svg" alt="Settings">
+                    </div>
+                    <div id="btn-stats">
+                        <img src="imgs/stats.svg" alt="Stats">
+                    </div>
+                    <div id="btn-rules">
+                        <img src="imgs/rules.svg" alt="Rules">
+                    </div>
+                </div>
+            </nav>
+            <h2 id="game-header">PENTAGO</h2>
+        </div>
+    </header>
+    <main>
+        <div id="main">
+            <div id="game-info">
+                <div id="score">
+                    <h2 id="score-header">SCORE</h2>
+                    <table id="score-table">
+                        <thead>
+                            <tr>
+                                <th>R\P</th>
+                                <th>P1</th>
+                                <th>P2</th>
+                                <th>P3</th>
+                                <th>P4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>R1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>R2</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>R3</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>R4</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>RES</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="left-balls">
+                    <h2 id="left-balls-header">LEFT BALLS</h2>
+                    <table id="left-balls-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <img src="imgs/yellow_gameball.png" alt="Yellow ball">
+                                </th>
+                                <th>
+                                    <img src="imgs/blue_gameball.png" alt="Blue ball">
+                                </th>
+                                <th>
+                                    <img src="imgs/red_gameball.png" alt="Red ball">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>X7</td>
+                                <td>X7</td>
+                                <td>X8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="game-field">
+                <div id="field">
+                    <div class="field-part" id="field-part1">
+                        <div class="notch" id="notch1"></div>
+                        <div class="notch" id="notch2"></div>
+                        <div class="notch" id="notch3"></div>
+                        <div class="notch" id="notch4"></div>
+                        <div class="notch" id="notch5"></div>
+                        <div class="notch" id="notch6"></div>
+                        <div class="notch" id="notch7"></div>
+                        <div class="notch" id="notch8"></div>
+                        <div class="notch" id="notch9"></div>
+                    </div>
+                    <div class="field-part" id="field-part2">
+                        <div class="notch" id="notch1"></div>
+                        <div class="notch" id="notch2"></div>
+                        <div class="notch" id="notch3"></div>
+                        <div class="notch" id="notch4"></div>
+                        <div class="notch" id="notch5"></div>
+                        <div class="notch" id="notch6"></div>
+                        <div class="notch" id="notch7"></div>
+                        <div class="notch" id="notch8"></div>
+                        <div class="notch" id="notch9"></div>
+                    </div>
+                    <div class="field-part" id="field-part3">
+                        <div class="notch" id="notch1"></div>
+                        <div class="notch" id="notch2"></div>
+                        <div class="notch" id="notch3"></div>
+                        <div class="notch" id="notch4"></div>
+                        <div class="notch" id="notch5"></div>
+                        <div class="notch" id="notch6"></div>
+                        <div class="notch" id="notch7"></div>
+                        <div class="notch" id="notch8"></div>
+                        <div class="notch" id="notch9"></div>
+                    </div>
+                    <div class="field-part" id="field-part4">
+                        <div class="notch" id="notch1"></div>
+                        <div class="notch" id="notch2"></div>
+                        <div class="notch" id="notch3"></div>
+                        <div class="notch" id="notch4"></div>
+                        <div class="notch" id="notch5"></div>
+                        <div class="notch" id="notch6"></div>
+                        <div class="notch" id="notch7"></div>
+                        <div class="notch" id="notch8"></div>
+                        <div class="notch" id="notch9"></div>
+                    </div>
+                </div>
+                <div id="cards">
+                    <div class="card-pattern" id="card-pattern1">
+                        <div class="card-marble">
+                            <img src="imgs/yellow_cardball.png" alt="Желтый шарик на карте">
+                            <img src="imgs/red_cardball.png" alt="Красный шарик на карте">
+                            <img src="imgs/blue_cardball.png" alt="Синний шарик на карте">
+                            <img src="imgs/blue_cardball.png" alt="Синий шарик на карте">
+                            <img src="imgs/yellow_cardball.png" alt="Желтый шарик на карте">
+                        </div>
+                    </div>
+                    <div class="card-pattern" id="card-pattern2">
+                        <div class="card-marble">
+
+                        </div>
+                    </div>
+                    <div class="card-pattern" id="card-pattern3">
+                        <div class="card-marble">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

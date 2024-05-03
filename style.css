@@ -1,0 +1,202 @@
+/* Подключение шрифтов */
+@font-face {
+    font-family: "Agency FB Extended";
+    src: local("Agency FB Extended"), url("fonts/agencyfbext.ttf"), format("truetype");
+}
+
+@font-face {
+    font-family: "Agency FB Extended Bold";
+    src: local("Agency FB Extended Bold"), url("fonts/agencyfbext-bold.ttf"), format("truetype");
+}
+
+:root {
+    --height_header: 14.3vh;
+}
+
+html, body {
+    margin: 0;
+    font-family: 'Agency FB Extended';
+}
+
+h2 {
+    font-family: "Agency FB Extended Bold";
+    margin: 0px;
+}
+
+#header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    height: var(--height_header);
+    width: 100%;
+    background-color: black;
+}
+
+#nav {
+    width: 120%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-content: center;
+    align-items: center;
+}
+
+#nav div {
+    margin: calc((var(--height_header) - 90px) / 3);
+}
+
+#nav img {
+    width: 90px;
+}
+
+#game-header {
+    font-size: 82pt;
+    margin-right: calc((var(--height_header) - 90px) / 3);
+    color: white;
+}
+
+#main {
+    height: calc(100vh - var(--height_header));
+    width: 100%;
+    background-color: #a5a5a5;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+#game-info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    margin-left: 20px;
+}
+
+#score, #left-balls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: calc((var(--height_header) - 90px) / 3);
+    background-color: #828282;
+}
+
+#score-header, #left-balls-header {
+    text-align: center;
+    padding: 20px;
+    font-size: 25pt;
+    color: white;
+}
+
+#score-table, #left-balls-table {
+    font-size: 18pt;
+}
+
+#score-table thead {
+    font-family: "Agency FB Extended Bold";
+}
+
+#score-table th, td {
+    padding: 15px;
+}
+
+#score-table thead tr th:nth-child(2) {
+    color: white
+}
+
+#score-table tr:first-child td:first-child {
+    color: white;
+}
+
+#left-balls-table img  {
+    width: 45px;
+}
+
+#left-balls-table th, td {
+    text-align: center;
+}
+
+#game-field {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#field {
+    width: 665px;
+    height: 665px;
+    margin: 50px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+.field-part {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 330px;
+    height: 330px;
+    background-color: #e8e8e8;
+    border-radius: 46px;
+}
+
+.notch {
+    width: 65px;
+    height: 65px;
+    background: radial-gradient(white, 60%, #b3b3b3);
+    box-shadow: inset 0px 0px 10px #a3a3a3;
+    border-radius: 50%;
+}
+
+#cards {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.card-pattern {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 240px;
+    height: 240px;
+    background-color: #ffffff;
+    border-radius: 15px;
+}
+
+.card-pattern div {
+    width: 90%;
+    height: 90%;
+    background-color: #e2e2e2;
+    border-radius: 10px;
+    border: 2px solid black;
+    box-shadow: 0px 0px 0px 3px #e2e2e2, 0px 0px 0px 5px black; /* крайняя тень находится на самом верху */
+    
+}
+
+.card-pattern div img {
+    width: 38px;
+}
+
+.card-marble {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
