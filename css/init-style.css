@@ -1,0 +1,26 @@
+/* Подключение шрифтов */
+@font-face {
+    font-family: "Agency FB Extended";
+    src: local("Agency FB Extended"), url("../fonts/agencyfbext.ttf"), format("truetype");
+}
+
+@font-face {
+    font-family: "Agency FB Extended Bold";
+    src: local("Agency FB Extended Bold"), url("../fonts/agencyfbext-bold.ttf"), format("truetype");
+    font-weight: bold;
+}
+
+:root {
+    --height_header: 14.3vh;
+    --add-window-width: 420px;
+}
+
+html, body {
+    margin: 0;
+    font-family: 'Agency FB Extended';
+}
+
+h2 {
+    font-family: "Agency FB Extended Bold";
+    margin: 0px;
+}

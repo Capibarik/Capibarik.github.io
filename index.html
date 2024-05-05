@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/init-style.css">
     <link rel="stylesheet" type="text/css" href="css/game.css">
     <link rel="stylesheet" type="text/css" href="css/settings.css">
+    <link rel="stylesheet" type="text/css" href="css/add-windows.css">
+    <link rel="stylesheet" type="text/css" href="css/stats.css">
     <title>Pentago</title>
 </head>
 
@@ -174,10 +177,10 @@
                 </div>
             </div>
         </div>
-        <div id="settings">
+        <div id="settings" class="slide-window">
             <h2>SETTINGS</h2>
-            <div id="settings-block">
-                <div id="number-of-players" class="settings-options">
+            <div id="settings-block" class="slide-window-block">
+                <div id="number-of-players" class="slide-window-block-options">
                     <h2>Number of players</h2>
                     <div class="options">
                         <div id="two-players">2P</div>
@@ -185,7 +188,7 @@
                         <div id="four-players">4P</div>
                     </div>
                 </div>
-                <div id="number-of-rounds" class="settings-options">
+                <div id="number-of-rounds" class="slide-window-block-options">
                     <h2>Number of rounds</h2>
                     <div class="options">
                         <div id="one-round">1R</div>
@@ -193,7 +196,7 @@
                         <div id="five-rounds">3R</div>
                     </div>
                 </div>
-                <div id="theme" class="settings-options">
+                <div id="theme" class="slide-window-block-options">
                     <h2>Theme</h2>
                     <div class="options">
                         <div id="dark-theme">DARK</div>
@@ -205,8 +208,27 @@
             </div>
             <img src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
-        <div>
-            
+        <div id="stats" class="slide-window">
+            <h2>STATS</h2>
+            <div id="stats-block" class="slide-window-block">
+                <div class="slide-window-block-options">
+                    <h2>Number of Games</h2>
+                    <span id="number-of-games">12</span>
+                </div>
+                <div class="slide-window-block-options">
+                    <h2>Cards Per Round</h2>
+                    <span id="cards-per-round">0.45</span>
+                </div>
+                <div class="slide-window-block-options">
+                    <h2>Cards Per Game</h2>
+                    <span id="cards-per-game">1.00</span>
+                </div>
+                <div class="slide-window-block-options">
+                    <h2>Wins</h2>
+                    <span id="number-of-wins">5</span>
+                </div>
+            </div>
+            <img src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
     </main>
 </body>
