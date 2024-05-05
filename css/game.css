@@ -1,12 +1,12 @@
 /* Подключение шрифтов */
 @font-face {
     font-family: "Agency FB Extended";
-    src: local("Agency FB Extended"), url("fonts/agencyfbext.ttf"), format("truetype");
+    src: local("Agency FB Extended"), url("../fonts/agencyfbext.ttf"), format("truetype");
 }
 
 @font-face {
     font-family: "Agency FB Extended Bold";
-    src: local("Agency FB Extended Bold"), url("fonts/agencyfbext-bold.ttf"), format("truetype");
+    src: local("Agency FB Extended Bold"), url("../fonts/agencyfbext-bold.ttf"), format("truetype");
 }
 
 :root {

@@ -1,0 +1,85 @@
+:root {
+    --width-settings: 420px;
+}
+
+#settings {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    top: var(--height_header);
+    left: 0px;
+    width: 420px;
+    height: 85%;
+    background-color: #828282;
+}
+
+#settings > h2 {
+    font-size: 30pt;
+}
+
+#settings-block {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 80%;
+    background-color: #828282;
+}
+
+#settings-block + img {
+    position: absolute;
+    top: 10px;
+    left: calc(var(--width-settings) + 10px);
+    width: 70px;
+    height: 70px;
+}
+
+.settings-options {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 80%;
+    height: 20%;
+    background-color: #cccccc;
+}
+
+.settings-options > h2 {
+    font-size: 18pt;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.options > div {
+    padding: 5px;
+    font-size: 20pt;
+    background-color: #a5a5a5;
+}
+
+.settings-options:nth-child(3) > .options > div {
+    font-size: 16pt;
+}
+
+#btn-submit {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 8%;
+    font-size: 30pt;
+    background-color: #cccccc;
+}
