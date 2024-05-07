@@ -7,7 +7,7 @@
     justify-content: space-between;
     align-content: center;
     align-items: center;
-    height: var(--height_header);
+    height: var(--height-header);
     width: 100%;
     background-color: black;
 }
@@ -23,7 +23,7 @@
 }
 
 #nav div {
-    margin: calc((var(--height_header) - 90px) / 3);
+    margin: calc((var(--height-header) - 90px) / 3);
 }
 
 #nav img {
@@ -32,12 +32,12 @@
 
 #game-header {
     font-size: 82pt;
-    margin-right: calc((var(--height_header) - 90px) / 3);
+    margin-right: calc((var(--height-header) - 90px) / 3);
     color: white;
 }
 
 #main {
-    height: calc(100vh - var(--height_header));
+    height: calc(100vh - var(--height-header));
     width: 100%;
     background-color: #a5a5a5;
     display: flex;
@@ -57,7 +57,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: calc((var(--height_header) - 90px) / 3);
+    margin: calc((var(--height-header) - 90px) / 3);
     background-color: #828282;
 }
 
@@ -176,4 +176,18 @@
     flex-wrap: nowrap;
     justify-content: space-evenly;
     align-items: center;
+}
+
+/* header-buttons */
+
+#btn-settings img, #btn-rules img, #btn-stats img {
+    transition: transform 0.6s;
+}
+
+#btn-settings:hover img {
+    transform: rotate(180deg) scale(1.2, 1.2);
+}
+
+#btn-stats:hover img, #btn-rules:hover img {
+    transform: scale(1.2, 1.2);
 }

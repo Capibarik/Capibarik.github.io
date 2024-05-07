@@ -1,4 +1,4 @@
-/* Выдвигающие окна */
+/* Выдвигающиеся окна */
 
 .slide-window {
     position: fixed;
@@ -7,11 +7,12 @@
     flex-wrap: nowrap;
     justify-content: space-evenly;
     align-items: center;
-    top: var(--height_header);
-    left: 0px;
-    width: 420px;
-    height: 85%;
+    top: var(--height-header);
+    left: calc(0px - var(--add-window-width) - 70px - 10px - 10px); /* 70px - width of img, 10px - left shift, 10px - depth*/
+    width: var(--add-window-width);
+    height: 86%;
     background-color: #828282;
+    transition: left 1s;
 }
 
 .slide-window > h2 {
@@ -35,6 +36,11 @@
     left: calc(var(--add-window-width) + 10px);
     width: 70px;
     height: 70px;
+    transition: transform 0.5s;
+}
+
+.slide-window-block + img:hover {
+    transform: scale(1.2, 1.2);
 }
 
 .slide-window-block-options {
