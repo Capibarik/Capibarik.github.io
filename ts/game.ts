@@ -1,4 +1,3 @@
 let settings = new Settings(3, 3, 2, 1);
-let game = new GameField(settings);
-
-console.log(game.scoreTable.summarizeScore());
+let stats = new Stats(4, 20, 23, 3);
+let game = new GameField(settings, stats);

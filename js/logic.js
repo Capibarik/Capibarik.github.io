@@ -17,7 +17,7 @@ class CardPattern {
     }
 }
 class GameField {
-    constructor(settings) {
+    constructor(settings, stats) {
         this.settings = settings;
         this.currentRound = 1;
         this.numberOfLeftMarbles = 30;
@@ -31,8 +31,8 @@ class GameField {
         for (let i = 1; i <= this.numberOfPlayers; i++) {
             this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this.playerTurn ? true : false)));
         }
-        this.stats = new Stats(this.alivePlayerID, 0, 0, 0, 0);
-        this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers);
+        this.stats = stats;
+        this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
         this.marblesOnField = [];
         for (let i = 0; i < 6; i++) {
             let line = [];
@@ -78,24 +78,57 @@ class Player {
     }
 }
 class Score {
-    constructor(numberOfRounds, numberOfPlayers) {
-        this.table = [];
+    constructor(numberOfRounds, numberOfPlayers, alivePlayerID) {
+        this._winnerPlayerID = -1;
+        this._alivePlayerID = alivePlayerID;
+        this._table = [];
         for (let i = 0; i < numberOfRounds + 1; i++) {
             let line = [];
             for (let j = 0; j < numberOfPlayers; j++) {
                 line.push(0);
             }
-            this.table.push(line);
+            this._table.push(line);
         }
     }
+    get winnerPlayerID() {
+        return this._winnerPlayerID;
+    }
+    get table() {
+        return this._table;
+    }
+    get alivePlayerID() {
+        return this._alivePlayerID;
+    }
+    set table(table) {
+        this._table = table;
+    }
     addPointToPlayer(round, playerID) {
-        this.table[round][playerID]++;
+        this._table[round][playerID]++;
     }
     summarizeScore() {
-        let rows = this.table.length;
-        let columns = this.table[0].length;
-        console.log("Rounds:", rows, "\n", "Players:", columns);
-        console.log(this.table);
+        let rows = this._table.length;
+        let columns = this._table[0].length;
+        for (let j = 0; j < columns; j++) {
+            for (let i = 0; i < rows - 1; i++) {
+                this._table[rows - 1][j] += this._table[i][j];
+            }
+        }
+    }
+    whoIsWinner() {
+        let rows = this._table.length;
+        let columns = this._table[0].length;
+        let amount_cards = 0;
+        for (let j = 0; j < columns; j++) {
+            if (amount_cards <= this._table[rows - 1][j]) {
+                if (amount_cards == this._table[rows - 1][j]) {
+                    this._winnerPlayerID = 0;
+                }
+                else {
+                    amount_cards = this._table[rows - 1][j];
+                    this._winnerPlayerID = j + 1;
+                }
+            }
+        }
     }
 }
 class Settings {
@@ -144,14 +177,37 @@ class Settings {
     }
 }
 class Stats {
-    constructor(alivePlayerID, numberOfGames, cardsPerRound, cardsePerGame, numberWins) {
-        this.alivePlayerID = alivePlayerID;
+    constructor(numberOfGames, numberOfRounds, numberOfCards, numberWins) {
         this.numberOfGames = numberOfGames;
-        this.cardsPerRound = cardsPerRound;
-        this.cardsPerGame = cardsePerGame;
+        this.numberOfRounds = numberOfRounds;
+        this.numberOfCards = numberOfCards;
+        this.cardsPerRound = numberOfCards / numberOfRounds;
+        this.cardsPerGame = numberOfCards / numberOfGames;
         this.numberWins = numberWins;
+    }
+    updateStats(scoreTable) {
+        let table = scoreTable.table;
+        let rows = table.length;
+        let alivePlayerID = scoreTable.alivePlayerID;
+        this.numberOfGames++;
+        this.numberOfRounds += (rows - 1);
+        this.numberOfCards += (table[rows - 1][alivePlayerID - 1] - 1);
+        this.cardsPerRound = this.numberOfCards / this.numberOfRounds;
+        this.cardsPerGame = this.numberOfCards / this.numberOfGames;
+        this.numberWins += (scoreTable.alivePlayerID == scoreTable.winnerPlayerID ? 1 : 0);
     }
 }
 let settings = new Settings(3, 3, 2, 1);
-let game = new GameField(settings);
-console.log(game.scoreTable.summarizeScore());
+let stats = new Stats(4, 20, 23, 3);
+let game = new GameField(settings, stats);
+let table = [
+    [1, 1, 1],
+    [2, 1, 1],
+    [0, 2, 2],
+    [0, 0, 0]
+];
+game.scoreTable.table = table;
+game.scoreTable.summarizeScore();
+console.log(game.scoreTable.table);
+game.scoreTable.whoIsWinner();
+console.log(game.scoreTable.winnerPlayerID);

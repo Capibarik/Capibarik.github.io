@@ -18,7 +18,7 @@ class GameField {
     private deckOfPatterns: CardPattern[];
     private marblesOnField: (null | CardMarble)[][];
 
-    constructor (settings: Settings) {
+    constructor (settings: Settings, stats: Stats) {
         this.settings = settings;
         this.currentRound = 1;
         this.numberOfLeftMarbles = 30;
@@ -37,8 +37,8 @@ class GameField {
                     (i == this.playerTurn ? true : false))
             );
         }
-        this.stats = new Stats(this.alivePlayerID, 0, 0, 0, 0);
-        this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers);
+        this.stats = stats;
+        this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
         this.marblesOnField = [];
         for (let i = 0; i < 6; i++) {
             let line: (null | CardMarble)[] = []; // null - recess is free, CardMarble(color: number) - recess is occupied
