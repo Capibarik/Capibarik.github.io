@@ -1,5 +1,3 @@
-// TODO: make background is darked when add windows open
-
 let doc = document;
 let current_add_window = false; // true - occupied, false - free
 

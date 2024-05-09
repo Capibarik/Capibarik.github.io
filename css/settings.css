@@ -18,7 +18,7 @@
     font-size: 16pt;
 }
 
-#btn-submit {
+#btn-start {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
