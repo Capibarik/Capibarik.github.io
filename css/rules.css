@@ -1,0 +1,24 @@
+#rules {
+    padding: 40px;
+    padding-top: 20px;
+    top: calc(180px - 70%);
+    left: 192px;
+    width: 70%;
+    height: 40%;
+    background-color: #e8e8e8;
+    font-size: 20pt;
+    transition: top var(--time-of-appearing);
+}
+
+#rules-block {
+    background-color: inherit;
+}
+
+#rules img {
+    left: calc(100% + 10px);
+    transform: rotate(90deg);
+}
+
+#rules img:hover {
+    transform: scale(1.2, 1.2) rotate(90deg);
+}

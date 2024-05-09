@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="css/settings.css">
     <link rel="stylesheet" type="text/css" href="css/add-windows.css">
     <link rel="stylesheet" type="text/css" href="css/stats.css">
+    <link rel="stylesheet" type="text/css" href="css/rules.css">
     <script src="js/app.js" type="text/javascript"></script>
     <title>Pentago</title>
 </head>
@@ -117,48 +118,48 @@
             <div id="game-field">
                 <div id="field">
                     <div class="field-part" id="field-part1">
-                        <div class="notch" id="notch1"></div>
-                        <div class="notch" id="notch2"></div>
-                        <div class="notch" id="notch3"></div>
-                        <div class="notch" id="notch4"></div>
-                        <div class="notch" id="notch5"></div>
-                        <div class="notch" id="notch6"></div>
-                        <div class="notch" id="notch7"></div>
-                        <div class="notch" id="notch8"></div>
-                        <div class="notch" id="notch9"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
                     </div>
                     <div class="field-part" id="field-part2">
-                        <div class="notch" id="notch1"></div>
-                        <div class="notch" id="notch2"></div>
-                        <div class="notch" id="notch3"></div>
-                        <div class="notch" id="notch4"></div>
-                        <div class="notch" id="notch5"></div>
-                        <div class="notch" id="notch6"></div>
-                        <div class="notch" id="notch7"></div>
-                        <div class="notch" id="notch8"></div>
-                        <div class="notch" id="notch9"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
                     </div>
                     <div class="field-part" id="field-part3">
-                        <div class="notch" id="notch1"></div>
-                        <div class="notch" id="notch2"></div>
-                        <div class="notch" id="notch3"></div>
-                        <div class="notch" id="notch4"></div>
-                        <div class="notch" id="notch5"></div>
-                        <div class="notch" id="notch6"></div>
-                        <div class="notch" id="notch7"></div>
-                        <div class="notch" id="notch8"></div>
-                        <div class="notch" id="notch9"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
                     </div>
                     <div class="field-part" id="field-part4">
-                        <div class="notch" id="notch1"></div>
-                        <div class="notch" id="notch2"></div>
-                        <div class="notch" id="notch3"></div>
-                        <div class="notch" id="notch4"></div>
-                        <div class="notch" id="notch5"></div>
-                        <div class="notch" id="notch6"></div>
-                        <div class="notch" id="notch7"></div>
-                        <div class="notch" id="notch8"></div>
-                        <div class="notch" id="notch9"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
+                        <div class="notch"></div>
                     </div>
                 </div>
                 <div id="cards">
@@ -233,6 +234,21 @@
             </div>
             <img src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
+        <div id="rules" class="slide-window">
+            <h2>Game`s rules</h2>
+            <div id="rules-block" class="slide-window-block">
+                Players must build as many patterns on the cards as they can in a round.
+                The player wins in the round if he builds the most number of patterns. The player wins in the game 
+                if his amount of built patterns for all rounds is the most, else it is draw.
+                There are n - 1 cards of patterns in a round where n is number of players. As all patterns on cards are built,
+                the round is over.
+                <strong>Mechanic of game:</strong> you put any marble in free recess on one of four disks of the game field,
+                then you rotate any disk on 90 degrees clockwise or counterclockwise.
+                When you place the marble, no one will able to move it.
+            </div>
+            <img src="imgs/back_arrow.svg" alt="Стрелка назад">
+        </div>
+        <div id="overlay"></div>
     </main>
 </body>
 

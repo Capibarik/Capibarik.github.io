@@ -13,6 +13,8 @@
 :root {
     --height-header: 14.3vh;
     --add-window-width: 420px;
+    --time-of-appearing: 0.8s;
+    --time-of-highlighting: 0.4s;
 }
 
 html, body {

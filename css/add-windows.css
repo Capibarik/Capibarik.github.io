@@ -11,8 +11,9 @@
     left: calc(0px - var(--add-window-width) - 70px - 10px - 10px); /* 70px - width of img, 10px - left shift, 10px - depth*/
     width: var(--add-window-width);
     height: 86%;
+    z-index: 2;
     background-color: #828282;
-    transition: left 1s;
+    transition: left var(--time-of-appearing);
 }
 
 .slide-window > h2 {
@@ -36,7 +37,7 @@
     left: calc(var(--add-window-width) + 10px);
     width: 70px;
     height: 70px;
-    transition: transform 0.5s;
+    transition: transform var(--time-of-highlighting);
 }
 
 .slide-window-block + img:hover {
@@ -56,4 +57,16 @@
 
 .slide-window-block-options > h2 {
     font-size: 18pt;
+}
+
+#overlay {
+    position: fixed;
+    left: 0px;
+    top: var(--height-header);
+    width: 100vw;
+    height: calc(100vh - var(--height-header));
+    z-index: 1;
+    background-color: rgb(123, 123, 123);
+    opacity: 0%;
+    transition: opacity var(--time-of-appearing);
 }

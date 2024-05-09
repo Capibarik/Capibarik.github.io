@@ -181,7 +181,7 @@
 /* header-buttons */
 
 #btn-settings img, #btn-rules img, #btn-stats img {
-    transition: transform 0.6s;
+    transition: transform var(--time-of-highlighting);
 }
 
 #btn-settings:hover img {

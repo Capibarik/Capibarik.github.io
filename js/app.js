@@ -21,22 +21,37 @@ function init() {
     doc.getElementById("btn-stats").addEventListener("click", function () {
         smooth_move(doc.getElementById("stats"), "left", 0);
     });
+    doc.querySelector("#rules img").addEventListener("click", function() {
+        smooth_move(doc.getElementById("rules"), "top", 180 - (180 + 600));  // 180px - top, 180px + 600px - just depth (we mustn`t see rules when we don`t press the button)
+    });
+    doc.getElementById("btn-rules").addEventListener("click", function () {
+        smooth_move(doc.getElementById("rules"), "top", 180);
+    });
 }
 
 function smooth_move(elem, direction, offset) {
     // smooth appearing and disappearing add windows
-    if (offset == 0) { // want to occupied
+    let overlay = doc.getElementById("overlay");
+    let addCss = `
+        ${direction}: ${offset}px;
+    `
+    if (offset >= 0) { // want to occupied
         if (!current_add_window) { // free
-            elem.style.cssText = `
-                ${direction}: ${offset}px;
-            `
+            overlay.removeEventListener("transitionend", function () {
+                overlay.style.zIndex = "-1";
+            });
+            elem.style.cssText = addCss;
+            overlay.style.opacity = "90%";
+            overlay.style.zIndex = 1;
             current_add_window = true; // occupied
         }
     }
     else { // want to leave
-        elem.style.cssText = `
-            ${direction}: ${offset}px;
-        `
+        overlay.addEventListener("transitionend", function () {
+            overlay.style.display = "-1";
+        });
+        elem.style.cssText = addCss;
+        overlay.style.opacity = "0%";
         current_add_window = false; // free
     }
 }
