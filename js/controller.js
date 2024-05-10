@@ -1,5 +1,5 @@
 // FIXME: update_settings() uses the same code three times
-
+// TODO: create score table using data from settings
 // Controller - communicate with model (js app) and view (HTML and CSS)
 
 
@@ -37,7 +37,10 @@ function init_events() {
         smooth_move(doc.getElementById("rules"), "top", 180);
     });
     // events for update settings
-    doc.getElementById("btn-start").addEventListener("click", update_settings);
+    doc.getElementById("btn-start").addEventListener("click", function () {
+        update_settings();
+        create_scoreTable();
+    });
 }
 
 function init_window() {
@@ -75,7 +78,7 @@ function update_settings() { // or start game
     // update game settings
     let settings = game.settings;
     if (!settings.isBlock) { // game hasn`t started yet
-        // read data from UI
+        // read data from UI (from interface)
         let numberOfPlayers = 0;
         let radio_numberOfPlayers = doc.querySelectorAll("#number-of-players input");
         for (let radio_button of radio_numberOfPlayers) {
@@ -100,11 +103,15 @@ function update_settings() { // or start game
                 break;
             }
         }
-        // set data in game settings
+        // set data in game settings (to model)
         settings.updateSettings(numberOfPlayers, numberOfRounds, theme);
-        // close settings
+        settings.isBlock = true; // game has started
+        // close settings (to interface)
         smooth_move(doc.getElementById("settings"), "left", -420 - 70 - 10 - 10);
     }
 }
 
-
+function create_scoreTable() {
+    // create score table according to settings
+    
+}

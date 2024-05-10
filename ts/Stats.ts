@@ -1,4 +1,4 @@
-// TODO: create class Stats
+// DONE: create class Stats
 
 class Stats {
     private numberOfGames: number;
