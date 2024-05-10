@@ -1,3 +1,6 @@
+<!--TODO: find out why checked doesn`t work properly on radio button-->
+<!--FIXME: there are checked radio buttons in settings only to use for test, then you need set them with localStorage-->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +13,7 @@
     <link rel="stylesheet" type="text/css" href="css/add-windows.css">
     <link rel="stylesheet" type="text/css" href="css/stats.css">
     <link rel="stylesheet" type="text/css" href="css/rules.css">
-    <script src="js/app.js" type="text/javascript"></script>
-    <script src="js/logic.js" type="text/javascript"></script>
+    <script src="js/controller.js" type="module"></script>
     <title>Pentago</title>
 </head>
 
@@ -186,25 +188,52 @@
                 <div id="number-of-players" class="slide-window-block-options">
                     <h2>Number of players</h2>
                     <div class="options">
-                        <div id="two-players">2P</div>
-                        <div id="three-players">3P</div>
-                        <div id="four-players">4P</div>
+                        <div>
+                            <input id="two-players" name="number-of-players-options" type="radio" value="2">
+                            <label for="two-players">2P</label>
+                        </div>
+                        <div>
+                            <input id="three-players" name="number-of-players-options" type="radio" value="3" checked>
+                            <label for="three-players">3P</label>
+                        </div>
+                        <div>
+                            <input id="four-players" name="number-of-players-options" type="radio" value="4">
+                            <label for="four-players">4P</label>
+                        </div>
                     </div>
                 </div>
                 <div id="number-of-rounds" class="slide-window-block-options">
                     <h2>Number of rounds</h2>
                     <div class="options">
-                        <div id="one-round">1R</div>
-                        <div id="three-rounds">2R</div>
-                        <div id="five-rounds">3R</div>
+                        <div>
+                            <input id="one-round" name="number-of-rounds-options" type="radio" value="1">
+                            <label for="one-round">1R</label>
+                        </div>
+                        <div>
+                            <input id="two-rounds" name="number-of-rounds-options" type="radio" value="2" checked>
+                            <label for="two-rounds">2R</label>
+                        </div>
+                        <div>
+                            <input id="five-rounds" name="number-of-rounds-options" type="radio" value="5">
+                            <label for="five-rounds">5R</label>
+                        </div>
                     </div>
                 </div>
                 <div id="theme" class="slide-window-block-options">
                     <h2>Theme</h2>
                     <div class="options">
-                        <div id="dark-theme">DARK</div>
-                        <div id="light-theme">LIGHT</div>
-                        <div id="color-theme">COLOR</div>
+                        <div>
+                            <input id="dark-theme" name="theme-options" type="radio" value="dark">
+                            <label for="dark-theme">DARK</label>
+                        </div>
+                        <div>
+                            <input id="light-theme" name="theme-options" type="radio" value="light">
+                            <label for="light-theme">LIGHT</label>
+                        </div>
+                        <div>
+                            <input id="color-theme" name="theme-options" type="radio" value="color" checked>
+                            <label for="color-theme">COLOR</label>
+                        </div>
                     </div>
                 </div>
                 <div id="btn-start">START</div>

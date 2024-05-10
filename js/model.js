@@ -18,7 +18,7 @@ class CardPattern {
 }
 class GameField {
     constructor(settings, stats) {
-        this.settings = settings;
+        this._settings = settings;
         this.currentRound = 1;
         this.numberOfLeftMarbles = 30;
         this.numberOfMarbleOnField = 0;
@@ -26,10 +26,10 @@ class GameField {
         this.numberOfRounds = settings.numberOfRounds;
         this.numberOfCardsInRounds = settings.numberOfCardsInRounds;
         this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
-        this.playerTurn = this.alivePlayerID;
+        this.playerIDTurn = this.alivePlayerID;
         this.players = [];
         for (let i = 1; i <= this.numberOfPlayers; i++) {
-            this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this.playerTurn ? true : false)));
+            this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this.playerIDTurn ? true : false)));
         }
         this.stats = stats;
         this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
@@ -45,6 +45,9 @@ class GameField {
         for (let i = 0; i < this.numberOfCardsInRounds; i++) {
             this.deckOfPatterns.push(new CardPattern());
         }
+    }
+    get settings() {
+        return this._settings;
     }
     get scoreTable() {
         return this._scoreTable;
@@ -132,11 +135,11 @@ class Score {
     }
 }
 class Settings {
-    constructor(numberOfPlayers, numberOfRounds, numberOfCardsInRound, theme) {
+    constructor(numberOfPlayers, numberOfRounds, theme) {
         this._isBlock = false;
         this._numberOfPlayers = numberOfPlayers;
         this._numberOfRounds = numberOfRounds;
-        this._numberOfCardsInRound = numberOfCardsInRound;
+        this._numberOfCardsInRound = numberOfPlayers - 1;
         this._theme = theme;
     }
     get isBlock() {
@@ -175,6 +178,12 @@ class Settings {
     set theme(theme) {
         this._theme = theme;
     }
+    updateSettings(numberOfPlayers, numberOfRounds, numberOfCardsInRound, theme) {
+        this._numberOfPlayers = numberOfPlayers;
+        this._numberOfRounds = numberOfRounds;
+        this._numberOfCardsInRound = numberOfCardsInRound;
+        this._theme = theme;
+    }
 }
 class Stats {
     constructor(numberOfGames, numberOfRounds, numberOfCards, numberWins) {
@@ -197,17 +206,8 @@ class Stats {
         this.numberWins += (scoreTable.alivePlayerID == scoreTable.winnerPlayerID ? 1 : 0);
     }
 }
-let settings = new Settings(3, 3, 2, 1);
+let settings = new Settings(3, 3, 1);
 let stats = new Stats(4, 20, 23, 3);
 let game = new GameField(settings, stats);
-let table = [
-    [1, 1, 1],
-    [2, 1, 1],
-    [0, 2, 2],
-    [0, 0, 0]
-];
-game.scoreTable.table = table;
-game.scoreTable.summarizeScore();
-console.log(game.scoreTable.table);
-game.scoreTable.whoIsWinner();
-console.log(game.scoreTable.winnerPlayerID);
+
+export default game;

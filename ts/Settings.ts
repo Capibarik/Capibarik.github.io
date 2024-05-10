@@ -9,13 +9,12 @@ class Settings {
     constructor(
         numberOfPlayers: number,
         numberOfRounds: number,
-        numberOfCardsInRound: number,
         theme: number,
     ) {
         this._isBlock = false; // false - we can`t change settings except theme, game hasn`t started yet
         this._numberOfPlayers = numberOfPlayers;
         this._numberOfRounds = numberOfRounds;
-        this._numberOfCardsInRound = numberOfCardsInRound;
+        this._numberOfCardsInRound = numberOfPlayers - 1;
         this._theme = theme;
     }
     get isBlock(): boolean {
@@ -52,6 +51,17 @@ class Settings {
         }
     }
     set theme(theme: number) {
+        this._theme = theme;
+    }
+    updateSettings(
+        numberOfPlayers: number,
+        numberOfRounds: number,
+        numberOfCardsInRound: number,
+        theme: number
+    ): void {
+        this._numberOfPlayers = numberOfPlayers;
+        this._numberOfRounds = numberOfRounds;
+        this._numberOfCardsInRound = numberOfCardsInRound;
         this._theme = theme;
     }
 }

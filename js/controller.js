@@ -1,3 +1,9 @@
+// Controller - communicate with model (js app) and view (HTML and CSS)
+
+
+import game from "./model.js";
+
+
 let doc = document;
 let current_add_window = false; // true - occupied, false - free
 
@@ -25,6 +31,8 @@ function init() {
     doc.getElementById("btn-rules").addEventListener("click", function () {
         smooth_move(doc.getElementById("rules"), "top", 180);
     });
+    // events for update settings
+    doc.getElementById("btn-start").addEventListener("click", update_settings);
 }
 
 function smooth_move(elem, direction, offset) {
@@ -53,3 +61,36 @@ function smooth_move(elem, direction, offset) {
         current_add_window = false; // free
     }
 }
+
+function update_settings() {
+    // update game settings
+    let settings = game.settings;
+    if (!settings.isBlock) { // game hasn`t started yet
+        // read data from UI
+        let numberOfPlayers = 0;
+        let radio_numberOfPlayers = doc.querySelectorAll("#number-of-players input");
+        for (let radio_button of radio_numberOfPlayers) {
+            if (radio_button.getAttribute("checked") !== null) {
+                numberOfPlayers = parseInt(radio_button.getAttribute("value"));
+            }
+        }
+        let numberOfRounds = 0;
+        let radio_numberOfRounds = doc.querySelectorAll("#number-of-rounds input");
+        for (let radio_button of radio_numberOfRounds) {
+            if (radio_button.getAttribute("checked") !== null) {
+                numberOfRounds = parseInt(radio_button.getAttribute("value"));
+            }
+        }
+        let theme = "";
+        let radio_theme = doc.querySelectorAll("#theme input");
+        for (let radio_button of radio_theme) {
+            if (radio_button.getAttribute("checked") !== null) {
+                theme = radio_button.getAttribute("value");
+            }
+        }
+        console.log(numberOfPlayers, numberOfRounds, theme);
+    }
+    
+}
+
+

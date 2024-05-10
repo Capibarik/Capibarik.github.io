@@ -1,3 +1,5 @@
+/* FIXME: when a user changes size of page, text of rules goes beyond the limits of div */
+
 #rules {
     padding: 40px;
     padding-top: 20px;
