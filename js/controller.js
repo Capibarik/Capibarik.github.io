@@ -1,3 +1,5 @@
+// FIXME: update_settings() uses the same code three times
+
 // Controller - communicate with model (js app) and view (HTML and CSS)
 
 
@@ -8,10 +10,13 @@ let doc = document;
 let current_add_window = false; // true - occupied, false - free
 
 (function () {
-    window.addEventListener('load', init); // everything was loaded
+    window.addEventListener('load', function () {
+        init_events();
+        init_window();
+    }); // everything was loaded
 } ());
 
-function init() {
+function init_events() {
     // events for opening and closing add windows
     doc.querySelector("#settings img").addEventListener("click", function() {
         smooth_move(doc.getElementById("settings"), "left", -420 - 70 - 10 - 10);  // 420px - width of add window, 70px - width of img, 10px - left shift, 10px - depth
@@ -33,6 +38,10 @@ function init() {
     });
     // events for update settings
     doc.getElementById("btn-start").addEventListener("click", update_settings);
+}
+
+function init_window() {
+    smooth_move(doc.getElementById("settings"), "left", 0); // open settings at the beginning
 }
 
 function smooth_move(elem, direction, offset) {
@@ -62,7 +71,7 @@ function smooth_move(elem, direction, offset) {
     }
 }
 
-function update_settings() {
+function update_settings() { // or start game
     // update game settings
     let settings = game.settings;
     if (!settings.isBlock) { // game hasn`t started yet
@@ -70,27 +79,32 @@ function update_settings() {
         let numberOfPlayers = 0;
         let radio_numberOfPlayers = doc.querySelectorAll("#number-of-players input");
         for (let radio_button of radio_numberOfPlayers) {
-            if (radio_button.getAttribute("checked") !== null) {
+            if (radio_button.checked) {
                 numberOfPlayers = parseInt(radio_button.getAttribute("value"));
+                break;
             }
         }
         let numberOfRounds = 0;
         let radio_numberOfRounds = doc.querySelectorAll("#number-of-rounds input");
         for (let radio_button of radio_numberOfRounds) {
-            if (radio_button.getAttribute("checked") !== null) {
+            if (radio_button.checked) {
                 numberOfRounds = parseInt(radio_button.getAttribute("value"));
+                break;
             }
         }
         let theme = "";
         let radio_theme = doc.querySelectorAll("#theme input");
         for (let radio_button of radio_theme) {
-            if (radio_button.getAttribute("checked") !== null) {
+            if (radio_button.checked) {
                 theme = radio_button.getAttribute("value");
+                break;
             }
         }
-        console.log(numberOfPlayers, numberOfRounds, theme);
+        // set data in game settings
+        settings.updateSettings(numberOfPlayers, numberOfRounds, theme);
+        // close settings
+        smooth_move(doc.getElementById("settings"), "left", -420 - 70 - 10 - 10);
     }
-    
 }
 
 

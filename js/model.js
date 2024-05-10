@@ -178,10 +178,10 @@ class Settings {
     set theme(theme) {
         this._theme = theme;
     }
-    updateSettings(numberOfPlayers, numberOfRounds, numberOfCardsInRound, theme) {
+    updateSettings(numberOfPlayers, numberOfRounds, theme) {
         this._numberOfPlayers = numberOfPlayers;
         this._numberOfRounds = numberOfRounds;
-        this._numberOfCardsInRound = numberOfCardsInRound;
+        this._numberOfCardsInRound = numberOfPlayers - 1;
         this._theme = theme;
     }
 }
@@ -206,7 +206,7 @@ class Stats {
         this.numberWins += (scoreTable.alivePlayerID == scoreTable.winnerPlayerID ? 1 : 0);
     }
 }
-let settings = new Settings(3, 3, 1);
+let settings = new Settings(3, 3, "light");
 let stats = new Stats(4, 20, 23, 3);
 let game = new GameField(settings, stats);
 
