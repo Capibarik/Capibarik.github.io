@@ -80,14 +80,6 @@
     padding: 15px;
 }
 
-#score-table thead tr th:nth-child(2) {
-    color: white
-}
-
-#score-table tr:first-child td:first-child {
-    color: white;
-}
-
 #left-balls-table img  {
     width: 45px;
 }

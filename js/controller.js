@@ -1,5 +1,6 @@
 // FIXME: update_settings() uses the same code three times
 // TODO: create score table using data from settings
+// TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // Controller - communicate with model (js app) and view (HTML and CSS)
 
 
@@ -39,7 +40,6 @@ function init_events() {
     // events for update settings
     doc.getElementById("btn-start").addEventListener("click", function () {
         update_settings();
-        create_scoreTable();
     });
 }
 
@@ -106,12 +106,55 @@ function update_settings() { // or start game
         // set data in game settings (to model)
         settings.updateSettings(numberOfPlayers, numberOfRounds, theme);
         settings.isBlock = true; // game has started
-        // close settings (to interface)
+        game.updateGameField(); // update game field according to settings
+        // close settings and draw score table (to interface)
+        create_scoreTable();
         smooth_move(doc.getElementById("settings"), "left", -420 - 70 - 10 - 10);
     }
 }
 
 function create_scoreTable() {
-    // create score table according to settings
-    
+    // create score table according to settings before the game
+    // read data from Score (from model)
+    let score = game.scoreTable;
+    let table = score.table;
+    let alivePlayerID = score.alivePlayerID;
+    let rows = table.length - 1;
+    let columns = table[0].length;
+    // update interface (to UI)
+    let tr_of_players = doc.querySelector("#score-table thead tr");
+    for (let p = 1; p <= columns; p++) {
+        let th_of_player = doc.createElement("th");
+        th_of_player.innerHTML = ("P" + p);
+        if (p == alivePlayerID) {
+            th_of_player.style.color = "white";
+        }
+        tr_of_players.appendChild(th_of_player);
+    }
+    let tbody = doc.querySelector("#score-table tbody");
+    for (let r = 1; r <= rows; r++) {
+        let tr_round = doc.createElement("tr");
+        let th_round_label = doc.createElement("th"); 
+        th_round_label.innerHTML = "R" + r;
+        if (r == 1) { // mark first round 
+            th_round_label.style.color = "white";
+        }
+        tr_round.appendChild(th_round_label);
+        for (let p = 1; p <= columns; p++) {
+            let th_round = doc.createElement("th");
+            th_round.innerHTML = 0;
+            tr_round.appendChild(th_round);
+        }
+        tbody.appendChild(tr_round);
+    }
+    let tr_result = doc.createElement("tr");
+    let th_result_label = doc.createElement("th");
+    th_result_label.innerHTML = "RES";
+    tr_result.appendChild(th_result_label);
+    for (let p = 1; p <= columns; p++) {
+        let th_result = doc.createElement("th");
+        th_result.innerHTML = 0;
+        tr_result.appendChild(th_result);
+    }
+    tbody.appendChild(tr_result);
 }

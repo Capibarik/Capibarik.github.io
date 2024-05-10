@@ -52,6 +52,33 @@ class GameField {
     get scoreTable() {
         return this._scoreTable;
     }
+    updateGameField() {
+        this.currentRound = 1;
+        this.numberOfLeftMarbles = 30;
+        this.numberOfMarbleOnField = 0;
+        this.numberOfPlayers = settings.numberOfPlayers;
+        this.numberOfRounds = settings.numberOfRounds;
+        this.numberOfCardsInRounds = settings.numberOfCardsInRounds;
+        this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
+        this.playerIDTurn = this.alivePlayerID;
+        this.players = [];
+        for (let i = 1; i <= this.numberOfPlayers; i++) {
+            this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this.playerIDTurn ? true : false)));
+        }
+        this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
+        this.marblesOnField = [];
+        for (let i = 0; i < 6; i++) {
+            let line = [];
+            for (let j = 0; j < 6; j++) {
+                line.push(null);
+            }
+            this.marblesOnField.push(line);
+        }
+        this.deckOfPatterns = [];
+        for (let i = 0; i < this.numberOfCardsInRounds; i++) {
+            this.deckOfPatterns.push(new CardPattern());
+        }
+    }
 }
 class GameMarble {
     constructor(color) {
