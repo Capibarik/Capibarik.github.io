@@ -24,7 +24,7 @@ class Settings {
     get numberOfRounds(): number {
         return this._numberOfRounds;
     }
-    get numberOfCardsInRounds(): number {
+    get numberOfCardsInRound(): number {
         return this._numberOfCardsInRound;
     }
     get theme(): string {

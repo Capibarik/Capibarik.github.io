@@ -1,16 +1,22 @@
 "use strict";
 class CardMarble {
     constructor(color) {
-        this.color = color;
+        this._color = color;
+    }
+    get color() {
+        return this._color;
     }
 }
 class CardPattern {
     constructor() {
         this.isBuilt = false;
-        this.pattern = [];
+        this._pattern = [];
         for (let i = 0; i < 5; i++) {
-            this.pattern.push(new CardMarble(Math.ceil(Math.random() * (2 - 0) + 0)));
+            this._pattern.push(new CardMarble(Math.floor(Math.random() * (2 + 1 - 0) + 0)));
         }
+    }
+    get pattern() {
+        return this._pattern;
     }
     blockCard() {
         this.isBuilt = true;
@@ -24,7 +30,7 @@ class GameField {
         this.numberOfMarbleOnField = 0;
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
-        this.numberOfCardsInRounds = settings.numberOfCardsInRounds;
+        this.numberOfCardsInRounds = settings.numberOfCardsInRound;
         this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
         this.playerIDTurn = this.alivePlayerID;
         this.players = [];
@@ -41,9 +47,9 @@ class GameField {
             }
             this.marblesOnField.push(line);
         }
-        this.deckOfPatterns = [];
+        this._deckOfPatterns = [];
         for (let i = 0; i < this.numberOfCardsInRounds; i++) {
-            this.deckOfPatterns.push(new CardPattern());
+            this._deckOfPatterns.push(new CardPattern());
         }
     }
     get settings() {
@@ -52,13 +58,16 @@ class GameField {
     get scoreTable() {
         return this._scoreTable;
     }
-    updateGameField() {
+    get deckOfPatterns() {
+        return this._deckOfPatterns;
+    }
+    runGame() {
         this.currentRound = 1;
         this.numberOfLeftMarbles = 30;
         this.numberOfMarbleOnField = 0;
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
-        this.numberOfCardsInRounds = settings.numberOfCardsInRounds;
+        this.numberOfCardsInRounds = settings.numberOfCardsInRound;
         this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
         this.playerIDTurn = this.alivePlayerID;
         this.players = [];
@@ -74,7 +83,7 @@ class GameField {
             }
             this.marblesOnField.push(line);
         }
-        this.deckOfPatterns = [];
+        this._deckOfPatterns = [];
         for (let i = 0; i < this.numberOfCardsInRounds; i++) {
             this.deckOfPatterns.push(new CardPattern());
         }
@@ -178,7 +187,7 @@ class Settings {
     get numberOfRounds() {
         return this._numberOfRounds;
     }
-    get numberOfCardsInRounds() {
+    get numberOfCardsInRound() {
         return this._numberOfCardsInRound;
     }
     get theme() {

@@ -1,5 +1,6 @@
 // FIXME: update_settings() uses the same code three times
-// TODO: create score table using data from settings
+// HACK: change alert() with normal message, you should come up with the solution
+// DONE: create score table using data from settings
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // Controller - communicate with model (js app) and view (HTML and CSS)
 
@@ -78,7 +79,7 @@ function update_settings() { // or start game
     // update game settings
     let settings = game.settings;
     if (!settings.isBlock) { // game hasn`t started yet
-        // read data from UI (from interface)
+        // read data from interface (from UI)
         let numberOfPlayers = 0;
         let radio_numberOfPlayers = doc.querySelectorAll("#number-of-players input");
         for (let radio_button of radio_numberOfPlayers) {
@@ -106,10 +107,14 @@ function update_settings() { // or start game
         // set data in game settings (to model)
         settings.updateSettings(numberOfPlayers, numberOfRounds, theme);
         settings.isBlock = true; // game has started
-        game.updateGameField(); // update game field according to settings
-        // close settings and draw score table (to interface)
+        game.runGame(); // update game field according to the settings
+        // close settings and draw score table (to UI)
         create_scoreTable();
+        gen_cards();
         smooth_move(doc.getElementById("settings"), "left", -420 - 70 - 10 - 10);
+    }
+    else {
+        alert("Game is going on");
     }
 }
 
@@ -157,4 +162,34 @@ function create_scoreTable() {
         tr_result.appendChild(th_result);
     }
     tbody.appendChild(tr_result);
+}
+
+function gen_cards() {
+    // generate cards for game
+    // read data from Settings (from model)
+    let settings = game.settings;
+    let deckOfPatterns = game.deckOfPatterns;
+    // update interface (generate cards) (to UI)
+    let number_color = {
+        0: "yellow",
+        1: "red",
+        2: "blue"
+    };
+    // generate cards from deckOfPatterns
+    let container_cards = doc.getElementById("cards"); // container has already been on page
+    for (let i = 0; i < deckOfPatterns.length; i++) {
+        let empty_card = doc.createElement("div");
+        empty_card.setAttribute("class", "card-pattern");
+        empty_card.setAttribute("id", "card-pattern-" + i);
+        let inner_card = doc.createElement("div");
+        inner_card.setAttribute("class", "card-marble");
+        let cardPattern = deckOfPatterns[i]; 
+        for (let cardMarble of cardPattern.pattern) {
+            let img_marble = doc.createElement("img");
+            img_marble.src = "imgs/" + number_color[cardMarble.color] + "_cardball.png";
+            inner_card.appendChild(img_marble);
+        }
+        empty_card.appendChild(inner_card);
+        container_cards.appendChild(empty_card);
+    }
 }

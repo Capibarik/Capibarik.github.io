@@ -15,7 +15,7 @@ class GameField {
     private playerIDTurn: number;
     private stats: Stats;
     private _scoreTable: Score;
-    private deckOfPatterns: CardPattern[];
+    private _deckOfPatterns: CardPattern[];
     private marblesOnField: (null | CardMarble)[][];
 
     constructor (settings: Settings, stats: Stats) {
@@ -25,7 +25,7 @@ class GameField {
         this.numberOfMarbleOnField = 0;
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
-        this.numberOfCardsInRounds = settings.numberOfCardsInRounds;
+        this.numberOfCardsInRounds = settings.numberOfCardsInRound;
         this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
         this.playerIDTurn = this.alivePlayerID;
         this.players = [];
@@ -47,9 +47,9 @@ class GameField {
             }
             this.marblesOnField.push(line);
         }
-        this.deckOfPatterns = [];
+        this._deckOfPatterns = [];
         for (let i = 0; i < this.numberOfCardsInRounds; i++) {
-            this.deckOfPatterns.push(new CardPattern());
+            this._deckOfPatterns.push(new CardPattern());
         }
     }
     get settings(): Settings {
@@ -58,15 +58,19 @@ class GameField {
     get scoreTable(): Score {
         return this._scoreTable;
     }
-    updateGameField(): void {
-        // game field always updates after one game
+    get deckOfPatterns(): CardPattern[] {
+        return this._deckOfPatterns;
+    }
+    runGame(): void {
+        // run game and apply settings
+        // game field always updates after game
         // imagine that a game goes again
         this.currentRound = 1;
         this.numberOfLeftMarbles = 30;
         this.numberOfMarbleOnField = 0;
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
-        this.numberOfCardsInRounds = settings.numberOfCardsInRounds;
+        this.numberOfCardsInRounds = settings.numberOfCardsInRound;
         this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
         this.playerIDTurn = this.alivePlayerID;
         this.players = [];
@@ -87,7 +91,7 @@ class GameField {
             }
             this.marblesOnField.push(line);
         }
-        this.deckOfPatterns = [];
+        this._deckOfPatterns = [];
         for (let i = 0; i < this.numberOfCardsInRounds; i++) {
             this.deckOfPatterns.push(new CardPattern());
         }
