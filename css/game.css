@@ -82,6 +82,11 @@
 
 #left-balls-table img  {
     width: 45px;
+    transition: transform 0.3s;
+}
+
+#left-balls-table img:hover {
+    transform: scale(1.5, 1.5);
 }
 
 #left-balls-table th, td {
@@ -183,3 +188,5 @@
 #btn-stats:hover img, #btn-rules:hover img {
     transform: scale(1.2, 1.2);
 }
+
+

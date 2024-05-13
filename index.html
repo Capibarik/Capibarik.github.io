@@ -1,3 +1,4 @@
+<!--HACK: I couldn`t come up with anything better than the implementation of coordinate plot on the field with group of classes n{i} - i belongs from 1 to 9 -->
 <!--FIXME: there are checked radio buttons in settings only to use for test, then you need set them with localStorage-->
 <!--TODO: adapt to different size of screen: phone, PC and tablet-->
 <!--DONE: find out why checked doesn`t work properly on radio button-->
@@ -15,7 +16,8 @@
     <link rel="stylesheet" type="text/css" href="css/add-windows.css">
     <link rel="stylesheet" type="text/css" href="css/stats.css">
     <link rel="stylesheet" type="text/css" href="css/rules.css">
-    <script src="js/controller.js" type="module"></script>
+    <link rel="stylesheet" type="text/css" href="css/add-style.css">
+    <script src="js/presenter.js" type="module"></script>
     <title>Pentago</title>
 </head>
 
@@ -59,21 +61,21 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <img src="imgs/yellow_gameball.png" alt="Yellow ball">
+                                    <img src="imgs/yellow_gameball.png" alt="Yellow ball" draggable="true">
                                 </th>
                                 <th>
-                                    <img src="imgs/blue_gameball.png" alt="Blue ball">
+                                    <img src="imgs/blue_gameball.png" alt="Blue ball" draggable="true">
                                 </th>
                                 <th>
-                                    <img src="imgs/red_gameball.png" alt="Red ball">
+                                    <img src="imgs/red_gameball.png" alt="Red ball" draggable="true">
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>X7</td>
-                                <td>X7</td>
-                                <td>X8</td>
+                                <td id="yellow-xnum">X9</td>
+                                <td id="blue-xnum">X9</td>
+                                <td id="red-xnum">X9</td>
                             </tr>
                         </tbody>
                     </table>
@@ -82,66 +84,51 @@
             <div id="game-field">
                 <div id="field">
                     <div class="field-part" id="field-part-1">
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
+                        <div class="notch n1"></div>
+                        <div class="notch n2"></div>
+                        <div class="notch n3"></div>
+                        <div class="notch n4"></div>
+                        <div class="notch n5"></div>
+                        <div class="notch n6"></div>
+                        <div class="notch n7"></div>
+                        <div class="notch n8"></div>
+                        <div class="notch n9"></div>
                     </div>
                     <div class="field-part" id="field-part-2">
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
+                        <div class="notch n1"></div>
+                        <div class="notch n2"></div>
+                        <div class="notch n3"></div>
+                        <div class="notch n4"></div>
+                        <div class="notch n5"></div>
+                        <div class="notch n6"></div>
+                        <div class="notch n7"></div>
+                        <div class="notch n8"></div>
+                        <div class="notch n9"></div>
                     </div>
                     <div class="field-part" id="field-part-3">
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
+                        <div class="notch n1"></div>
+                        <div class="notch n2"></div>
+                        <div class="notch n3"></div>
+                        <div class="notch n4"></div>
+                        <div class="notch n5"></div>
+                        <div class="notch n6"></div>
+                        <div class="notch n7"></div>
+                        <div class="notch n8"></div>
+                        <div class="notch n9"></div>
                     </div>
                     <div class="field-part" id="field-part-4">
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
-                        <div class="notch"></div>
+                        <div class="notch n1"></div>
+                        <div class="notch n2"></div>
+                        <div class="notch n3"></div>
+                        <div class="notch n4"></div>
+                        <div class="notch n5"></div>
+                        <div class="notch n6"></div>
+                        <div class="notch n7"></div>
+                        <div class="notch n8"></div>
+                        <div class="notch n9"></div>
                     </div>
                 </div>
                 <div id="cards">
-                    <!--div class="card-pattern" id="card-pattern-1">
-                        <div class="card-marble">
-                            <img src="imgs/yellow_cardball.png" alt="Желтый шарик на карте">
-                            <img src="imgs/red_cardball.png" alt="Красный шарик на карте">
-                            <img src="imgs/blue_cardball.png" alt="Синний шарик на карте">
-                            <img src="imgs/blue_cardball.png" alt="Синий шарик на карте">
-                            <img src="imgs/yellow_cardball.png" alt="Желтый шарик на карте">
-                        </div>
-                    </div>
-                    <div class="card-pattern" id="card-pattern-2">
-                        <div class="card-marble"></div>
-                    </div>
-                    <div class="card-pattern" id="card-pattern-3">
-                        <div class="card-marble"></div>
-                    </div-->
                 </div>
             </div>
         </div>

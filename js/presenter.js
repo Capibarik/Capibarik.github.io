@@ -1,8 +1,14 @@
 // FIXME: update_settings() uses the same code three times
-// HACK: change alert() with normal message, you should come up with the solution
-// DONE: create score table using data from settings
+// FIXME: overlay doesn`t still work properly
+// TODO: process case when the balls is over and add in UML algorithm
+// TODO: you have to not forget that you need update draggable properties of game balls before new game
+// TODO: implement function send_message instead of alerts
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
-// Controller - communicate with model (js app) and view (HTML and CSS)
+// TODO: implement function of rotate and add marbles of field at both model and view 
+// DONE: so the overlay doesn`t want to disappear, you should fix that
+// DONE: create score table using data from settings
+// DONE: why does img of balls think that it is notch and recieve drop event?
+// Presenter - communicate with model (js app) and view (HTML and CSS)
 
 
 import game from "./model.js";
@@ -10,6 +16,7 @@ import game from "./model.js";
 
 let doc = document;
 let current_add_window = false; // true - occupied, false - free
+let dragged_elem = null; // it is game ball
 
 (function () {
     window.addEventListener('load', function () {
@@ -42,6 +49,15 @@ function init_events() {
     doc.getElementById("btn-start").addEventListener("click", function () {
         update_settings();
     });
+    // events for game
+    for (let game_ball of doc.querySelectorAll("#left-balls-table img")) {
+        game_ball.addEventListener("dragstart", dragstart_ball);
+    }
+    for (let notch of doc.getElementsByClassName("notch")) {
+        notch.addEventListener("dragover", dragover_notch);
+        notch.addEventListener("dragleave", dragleave_notch);
+        notch.addEventListener("drop", place_marble);
+    }
 }
 
 function init_window() {
@@ -54,25 +70,31 @@ function smooth_move(elem, direction, offset) {
     let addCss = `
         ${direction}: ${offset}px;
     `
+    // micro func
+    function change_zIndex() {
+        overlay.style.zIndex = "-1";
+    }
     if (offset >= 0) { // want to occupied
         if (!current_add_window) { // free
-            overlay.removeEventListener("transitionend", function () {
-                overlay.style.zIndex = "-1";
-            });
             elem.style.cssText = addCss;
             overlay.style.opacity = "90%";
-            overlay.style.zIndex = 1;
+            overlay.style.zIndex = "1";
             current_add_window = true; // occupied
         }
     }
     else { // want to leave
-        overlay.addEventListener("transitionend", function () {
-            overlay.style.display = "-1";
-        });
+        overlay.addEventListener("transitionend", change_zIndex, {
+            "once": true,
+        }); // put overlay under main layers
         elem.style.cssText = addCss;
         overlay.style.opacity = "0%";
         current_add_window = false; // free
     }
+}
+
+function send_message() {
+    // like alert, but it is better
+    
 }
 
 function update_settings() { // or start game
@@ -167,14 +189,8 @@ function create_scoreTable() {
 function gen_cards() {
     // generate cards for game
     // read data from Settings (from model)
-    let settings = game.settings;
     let deckOfPatterns = game.deckOfPatterns;
     // update interface (generate cards) (to UI)
-    let number_color = {
-        0: "yellow",
-        1: "red",
-        2: "blue"
-    };
     // generate cards from deckOfPatterns
     let container_cards = doc.getElementById("cards"); // container has already been on page
     for (let i = 0; i < deckOfPatterns.length; i++) {
@@ -186,10 +202,68 @@ function gen_cards() {
         let cardPattern = deckOfPatterns[i]; 
         for (let cardMarble of cardPattern.pattern) {
             let img_marble = doc.createElement("img");
-            img_marble.src = "imgs/" + number_color[cardMarble.color] + "_cardball.png";
+            img_marble.src = "imgs/" + game.getColorOfNumber(cardMarble.color) + "_cardball.png";
             inner_card.appendChild(img_marble);
         }
         empty_card.appendChild(inner_card);
         container_cards.appendChild(empty_card);
+    }
+}
+
+function dragstart_ball(evt) {
+    // ball is started to drag
+    // read data (from UI)
+    dragged_elem = evt.target; // memorize what ball has been dragged
+    let color = dragged_elem.src.match(/(?<=imgs\/).*/)[0].match(/.*(?=_gameball\.png)/)[0];
+    // read data (from model)
+    if (game.getNumberOfMarbles(color) == 1) {
+        evt.target.setAttribute("draggable", "false");
+    }
+}
+
+function dragover_notch(evt) {
+    // dragged ball over notch
+    evt.preventDefault(); // block next acts to allow dispatching drop event
+    let notch = evt.target;
+    if (notch.childNodes.length == 0 & notch.nodeName === "DIV") {
+        notch.classList.add("bordered");
+    }
+}
+
+function dragleave_notch(evt) {
+    // dragged ball leave from notch
+    evt.target.classList.remove("bordered");
+}
+
+function place_marble(evt) { 
+    // drop ball on the notch
+    dragleave_notch(evt);
+    // read data from model (from model)
+    let isBlock = game.settings.isBlock; // has game started?
+    // continue read data from interface (from UI)
+    let notch = evt.target;
+    if (!isBlock) { // game is block
+        alert("Game hasn`t started yet");
+    }
+    else if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
+        alert("This place has been occupied");
+    }
+    else {
+        // update inteface (to UI)
+        let new_game_ball = doc.createElement("img");
+        new_game_ball.setAttribute("draggable", "false");
+        new_game_ball.src = dragged_elem.src;
+        notch.appendChild(new_game_ball);
+        // read data from interface (from UI)
+        let index_field = parseInt(notch.parentNode.getAttribute("id").split("-")[2]) - 1;
+        let index_notch = parseInt(notch.getAttribute("class").split(" ")[1].at(1)) - 1; // just take number of notch
+        let index_row = Math.floor(index_notch / 3);
+        index_notch %= 3;
+        let color = new_game_ball.src.match(/(?<=imgs\/).*/)[0].match(/.*(?=_gameball\.png)/)[0];
+        // update model (to model)
+        game.placeMarble(index_field, index_row, index_notch, color);
+        // update interface (to UI)
+        let td_xnum = doc.getElementById(color + "-xnum");
+        td_xnum.innerHTML = "X" + game.getNumberOfMarbles(color);
     }
 }

@@ -24,10 +24,23 @@ class CardPattern {
 }
 class GameField {
     constructor(settings, stats) {
+        this._NUMBER_COLOR = {
+            0: "yellow",
+            1: "red",
+            2: "blue",
+        };
+        this._COLOR_NUMBER = {
+            "yellow": 0,
+            "red": 1,
+            "blue": 2
+        };
         this._settings = settings;
         this.currentRound = 1;
-        this.numberOfLeftMarbles = 30;
-        this.numberOfMarbleOnField = 0;
+        this._numberOfMarbles = {
+            "yellow": 9,
+            "blue": 9,
+            "red": 9
+        };
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
         this.numberOfCardsInRounds = settings.numberOfCardsInRound;
@@ -39,18 +52,28 @@ class GameField {
         }
         this.stats = stats;
         this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
-        this.marblesOnField = [];
-        for (let i = 0; i < 6; i++) {
-            let line = [];
-            for (let j = 0; j < 6; j++) {
-                line.push(null);
+        this._marblesOnField = [];
+        for (let i = 0; i < 4; i++) {
+            let part_field = [];
+            for (let j = 0; j < 3; j++) {
+                let line = [];
+                for (let k = 0; k < 3; k++) {
+                    line.push(null);
+                }
+                part_field.push(line);
             }
-            this.marblesOnField.push(line);
+            this._marblesOnField.push(part_field);
         }
         this._deckOfPatterns = [];
         for (let i = 0; i < this.numberOfCardsInRounds; i++) {
             this._deckOfPatterns.push(new CardPattern());
         }
+    }
+    getColorOfNumber(num) {
+        return this._NUMBER_COLOR[num];
+    }
+    getNumberOfColor(color) {
+        return this._COLOR_NUMBER[color];
     }
     get settings() {
         return this._settings;
@@ -61,10 +84,19 @@ class GameField {
     get deckOfPatterns() {
         return this._deckOfPatterns;
     }
+    getNumberOfMarbles(color) {
+        return this._numberOfMarbles[color];
+    }
+    get marblesOnField() {
+        return this._marblesOnField;
+    }
     runGame() {
         this.currentRound = 1;
-        this.numberOfLeftMarbles = 30;
-        this.numberOfMarbleOnField = 0;
+        this._numberOfMarbles = {
+            "yellow": 9,
+            "blue": 9,
+            "red": 9
+        };
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
         this.numberOfCardsInRounds = settings.numberOfCardsInRound;
@@ -75,18 +107,26 @@ class GameField {
             this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this.playerIDTurn ? true : false)));
         }
         this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
-        this.marblesOnField = [];
-        for (let i = 0; i < 6; i++) {
-            let line = [];
-            for (let j = 0; j < 6; j++) {
-                line.push(null);
+        this._marblesOnField = [];
+        for (let i = 0; i < 4; i++) {
+            let part_field = [];
+            for (let j = 0; j < 3; j++) {
+                let line = [];
+                for (let k = 0; k < 3; k++) {
+                    line.push(null);
+                }
+                part_field.push(line);
             }
-            this.marblesOnField.push(line);
+            this._marblesOnField.push(part_field);
         }
         this._deckOfPatterns = [];
         for (let i = 0; i < this.numberOfCardsInRounds; i++) {
             this.deckOfPatterns.push(new CardPattern());
         }
+    }
+    placeMarble(index_field, index_row, index, color) {
+        this._marblesOnField[index_field][index_row][index] = new GameMarble(this.getNumberOfColor(color));
+        this._numberOfMarbles[color]--;
     }
 }
 class GameMarble {
