@@ -60,6 +60,7 @@
 }
 
 #overlay {
+    pointer-events: none;
     position: fixed;
     left: 0px;
     top: var(--height-header);

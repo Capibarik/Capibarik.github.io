@@ -113,6 +113,7 @@
 }
 
 .field-part {
+    position: relative;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
@@ -122,6 +123,7 @@
     height: 330px;
     background-color: #e8e8e8;
     border-radius: 46px;
+    transition: rotate 2s;
 }
 
 .notch {
@@ -175,20 +177,63 @@
     align-items: center;
 }
 
+/* arrow for rotating */
 
+.arrow {
+    position: absolute;
+    width: 80px;
+    transition: scale 0.8s;
+} 
+
+
+.cw-f1 {
+    top: -80px;
+    left: 0px;
+}
+
+.ccw-f1 { 
+    top: 0px;
+    left: -80px;
+    transform: rotate(-90deg);
+}
+
+.cw-f2 { 
+    top: 0px;
+    right: -80px;
+    transform: rotate(90deg);
+}
+
+.ccw-f2 {
+    top: -80px;
+    right: 0px;
+}
+
+.cw-f3 {
+    bottom: -80px;
+    right: 0px;
+    transform: rotate(-180deg);
+}
+
+.ccw-f3 {
+    bottom: 0px;
+    right: -80px;
+    transform: rotate(90deg);
+}
+
+.cw-f4 {
+    bottom: 0px;
+    left: -80px;
+    transform: rotate(-90deg);
+}
+
+.ccw-f4 {
+    bottom: -80px;
+    left: 0px;
+    transform: rotate(180deg);
+}
 
 /* header-buttons */
 
 #btn-settings img, #btn-rules img, #btn-stats img {
     transition: transform var(--time-of-highlighting);
 }
-
-#btn-settings:hover img {
-    transform: rotate(180deg) scale(1.2, 1.2);
-}
-
-#btn-stats:hover img, #btn-rules:hover img {
-    transform: scale(1.2, 1.2);
-}
-
-
