@@ -1,13 +1,14 @@
 // FIXME: update_settings() uses the same code three times
-// FIXME: overlay doesn`t still work properly
-// TODO: process case when the balls is over and add in UML algorithm
+// TODO: define new behavior of dragged balls
+// TODO: process case in the code when the balls is over
 // TODO: you have to not forget that you need update draggable properties of game balls before new game
-// TODO: implement function send_message instead of alerts
+// TODO: implement function send_message() instead of alerts
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: implement function of rotate and add marbles of field at both model and view 
 // DONE: so the overlay doesn`t want to disappear, you should fix that
 // DONE: create score table using data from settings
 // DONE: why does img of balls think that it is notch and recieve drop event?
+// DONE: overlay doesn`t still work properly
 // Presenter - communicate with model (js app) and view (HTML and CSS)
 
 
@@ -203,6 +204,7 @@ function gen_cards() {
         for (let cardMarble of cardPattern.pattern) {
             let img_marble = doc.createElement("img");
             img_marble.src = "imgs/" + game.getColorOfNumber(cardMarble.color) + "_cardball.png";
+            img_marble.setAttribute("draggable", "false");
             inner_card.appendChild(img_marble);
         }
         empty_card.appendChild(inner_card);
@@ -265,5 +267,14 @@ function place_marble(evt) {
         // update interface (to UI)
         let td_xnum = doc.getElementById(color + "-xnum");
         td_xnum.innerHTML = "X" + game.getNumberOfMarbles(color);
+        // as soon as player puts ball on the field, the arrows will appear on each angle of the parts
+        rotate();
     }
+}
+
+function rotate() {
+    // rotate part of field
+    let arrow_cw = doc.createElement("img"); // clockwise
+    let arrow_ccw = doc.createElement("img"); // counter clockwise
+    
 }
