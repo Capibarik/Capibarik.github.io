@@ -1,0 +1,42 @@
+{
+    "todo-tree.tree.scanMode": "workspace",
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "DONE",
+        "XXX",
+        "[ ]",
+        "[x]"
+    ],
+    "todo-tree.highlights.customHighlight": {
+        "DONE": {
+          "icon": "issue-closed",
+          "type": "line",
+          "iconColour": "green",
+          "foreground": "white",
+          "background": "green",
+        },
+        "TODO": {
+          "icon": "check",
+          "type": "line",
+          "iconColour": "yellow",
+          "foreground": "indigo",
+          "background": "yellow",
+        },
+        "FIXME": {
+          "icon": "beaker",
+          "type": "line",
+          "iconColour": "red",
+          "foreground": "white",
+          "background": "red",
+        },
+        "HACK": {
+          "type": "line",
+          "foreground": "cyan",
+          "background": "blue",
+        }
+      },
+      "liveServer.settings.port": 5501,
+}

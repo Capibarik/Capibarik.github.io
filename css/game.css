@@ -103,6 +103,7 @@
 }
 
 #field {
+    position: relative;
     width: 665px;
     height: 665px;
     margin: 50px;
@@ -113,7 +114,6 @@
 }
 
 .field-part {
-    position: relative;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
@@ -123,7 +123,7 @@
     height: 330px;
     background-color: #e8e8e8;
     border-radius: 46px;
-    transition: rotate 2s;
+    transition: transform 1s ease;
 }
 
 .notch {
@@ -182,7 +182,6 @@
 .arrow {
     position: absolute;
     width: 80px;
-    transition: scale 0.8s;
 } 
 
 .cw-f1 {

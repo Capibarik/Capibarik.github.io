@@ -128,6 +128,26 @@ class GameField {
         this._marblesOnField[index_field][index_row][index] = new GameMarble(this.getNumberOfColor(color));
         this._numberOfMarbles[color]--;
     }
+    rotate(index_field, direction) {
+        let part_field = this._marblesOnField[index_field];
+        let new_part_field = [];
+        for (let i = 0; i < 3; i++) {
+            let line = [];
+            for (let j = 0; j < 3; j++) {
+                line.push(null);
+            }
+            new_part_field.push(line);
+        }
+        console.log(part_field);
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                new_part_field[i][j] = part_field[3 - j - 1][i];
+                console.log(part_field[3 - j - 1][i]);
+            }
+        }
+        console.log(new_part_field);
+        this._marblesOnField[index_field] = new_part_field;
+    }
 }
 class GameMarble {
     constructor(color) {

@@ -1,8 +1,9 @@
 // FIXME: update_settings() uses the same code three times
-// TODO: when player puts ball on the field, but hasn`t rotated part of field, you need disable balls
+// FIXME: balls are able to drag when they are over
+// FIXME: part of fields rotate in wrong way (they do entire 360 degrees turn)
+// FIXME: coords on parts of fields will break when a player rotates part
 // TODO: define new behavior of dragged balls
 // TODO: process case in the code when the balls is over
-// TODO: you have to not forget that you need update draggable properties of game balls before new game
 // TODO: implement function send_message() instead of alerts
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: implement function of rotate and add marbles of field at both model and view 
@@ -10,6 +11,8 @@
 // DONE: create score table using data from settings
 // DONE: why does img of balls think that it is notch and recieve drop event?
 // DONE: overlay doesn`t still work properly
+// DONE: when player puts ball on the field, but hasn`t rotated part of field, you need disable balls
+// DONE: you have to not forget that you need update draggable properties of game balls before new game
 // Presenter - communicate with model (js app) and view (HTML and CSS)
 
 
@@ -89,7 +92,6 @@ function smooth_move(elem, direction, offset) {
 
 function send_message() {
     // like alert, but it is better
-    
 }
 
 function update_settings() { // or start game
@@ -129,6 +131,12 @@ function update_settings() { // or start game
         create_scoreTable();
         gen_cards();
         smooth_move(doc.getElementById("settings"), "left", -420 - 70 - 10 - 10);
+        // enable all gameballs until player will rotates field
+        set_list_of_elems_attr(
+            doc.querySelectorAll("#left-balls-table img"),
+            "draggable",
+            "true"
+        );
     }
     else {
         alert("Game is going on");
@@ -229,14 +237,9 @@ function dragleave_notch(evt) {
 function place_marble(evt) { 
     // drop ball on the notch
     dragleave_notch(evt);
-    // read data from model (from model)
-    let isBlock = game.settings.isBlock; // has game started?
     // continue read data from interface (from UI)
     let notch = evt.target;
-    if (!isBlock) { // game is block
-        alert("Game hasn`t started yet");
-    }
-    else if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
+    if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
         alert("This place has been occupied");
     }
     else {
@@ -253,11 +256,6 @@ function place_marble(evt) {
         let color = dragged_elem.src.match(/(?<=imgs\/).*/)[0].match(/.*(?=_gameball\.png)/)[0];
         // update model (to model)
         game.placeMarble(index_field, index_row, index_notch, color);
-        // read data (from model)
-        // disable ball if all are on the field
-        if (game.getNumberOfMarbles(color) == 0) {
-            doc.getElementById(color + "-gameball").setAttribute("draggable", "false");
-        }
         // update interface (to UI)
         let td_xnum = doc.getElementById(color + "-xnum");
         td_xnum.innerHTML = "X" + game.getNumberOfMarbles(color);
@@ -275,34 +273,75 @@ function place_marble(evt) {
 function add_arrows_on_field() {
     // add arrrow for rotating fields
     // update interface (to UI)
+    let field = doc.getElementById("field");
     for (let i = 1; i <= 4; i++) {
-        let part_field = doc.getElementById("field-part-" + i);
         let arrow_cw = doc.createElement("img"); // clockwise
         let arrow_ccw = doc.createElement("img"); // counter clockwise
         arrow_cw.src = "imgs/bended_arrow.svg";
         arrow_ccw.src = "imgs/bended_arrow_mirrored.svg";
         arrow_cw.classList.add(...["arrow", "cw-f" + i]);
         arrow_ccw.classList.add(...["arrow", "ccw-f" + i]);
+        let part_field = doc.getElementById("field-part-" + i);
         arrow_cw.addEventListener("click", function () {
             rotate(part_field, "cw");
         });
         arrow_ccw.addEventListener("click", function () {
             rotate(part_field, "ccw");
         });
-        part_field.appendChild(arrow_cw);
-        part_field.appendChild(arrow_ccw);
+        field.appendChild(arrow_cw);
+        field.appendChild(arrow_ccw);
     }
 }
 
 function rotate(part_field, direction) {
     // rotate part field
-    // enable to choose game balls
-    set_list_of_elems_attr(
-        doc.querySelectorAll("#left-balls-table img"),
-        "draggable",
-        "true"
+    // update model (to model)
+    let index_field = parseInt(part_field.getAttribute("id").match(/\d/)[0]) - 1;
+    game.rotate(
+        index_field,
+        direction
     );
+    // update interface (to UI)
+    let degrees = parseInt(part_field.getAttribute("rotated"));
+    part_field.classList.remove("rotated-" + degrees);
+    if (direction === "cw") {
+        part_field.setAttribute("rotated", (degrees + 90) % 360);
+        degrees = (degrees + 90) % 360;
+    }
+    else {
+        part_field.setAttribute("rotated", (degrees - 90) % 360);
+        degrees = (degrees - 90) % 360;
+    }
+    part_field.classList.add("rotated-" + degrees);
+    // delete arrows
+    let arrows = doc.getElementsByClassName("arrow");
+    while (arrows.length > 0) {
+        arrows[0].remove();
+    }
+    // disable balls selectively  
+    let game_balls = doc.querySelectorAll("#left-balls-table img");
+    for (let game_ball of game_balls) {
+        // read data (from model and UI)
+        let color = game_ball.getAttribute("id").match(/.*(?=(-gameball))/)[0];
+        let number_of_color = game.getNumberOfMarbles(color);
+        // update interface (to UI)
+        game_ball.setAttribute("draggable", number_of_color != 0);
+    }
+    end_of_player_turn();
 }
+
+function end_of_player_turn() {
+    // at the end of player turn we do a lot of things were described in file "Пентаго.drawio"
+    check_combs();
+}
+
+function check_combs() {
+    // do we have built combinations?
+    // calc (in model)
+
+    // update interface (to UI)
+}
+
 
 function set_list_of_elems_attr(list_of_elems, property, value) {
     for (let elem of list_of_elems) {
