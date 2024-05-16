@@ -185,7 +185,6 @@
     transition: scale 0.8s;
 } 
 
-
 .cw-f1 {
     top: -80px;
     left: 0px;
@@ -236,4 +235,16 @@
 
 #btn-settings img, #btn-rules img, #btn-stats img {
     transition: transform var(--time-of-highlighting);
+}
+
+#btn-settings img:hover {
+    transform: rotate(180deg) scale(1.2, 1.2);
+}
+
+#btn-stats img:hover {
+    transform: scale(1.2, 1.2);
+}
+
+#btn-rules img:hover {
+    transform: scale(1.2, 1.2);
 }

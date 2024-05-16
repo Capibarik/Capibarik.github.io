@@ -1,4 +1,5 @@
 // FIXME: update_settings() uses the same code three times
+// TODO: when player puts ball on the field, but hasn`t rotated part of field, you need disable balls
 // TODO: define new behavior of dragged balls
 // TODO: process case in the code when the balls is over
 // TODO: you have to not forget that you need update draggable properties of game balls before new game
@@ -71,10 +72,6 @@ function smooth_move(elem, direction, offset) {
     let addCss = `
         ${direction}: ${offset}px;
     `
-    // micro func
-    function change_zIndex() {
-        overlay.style.zIndex = "-1";
-    }
     if (offset >= 0) { // want to occupied
         if (!current_add_window) { // free
             elem.style.cssText = addCss;
@@ -84,9 +81,6 @@ function smooth_move(elem, direction, offset) {
         }
     }
     else { // want to leave
-        overlay.addEventListener("transitionend", change_zIndex, {
-            "once": true,
-        }); // put overlay under main layers
         elem.style.cssText = addCss;
         overlay.style.opacity = "0%";
         current_add_window = false; // free
@@ -155,7 +149,7 @@ function create_scoreTable() {
         let th_of_player = doc.createElement("th");
         th_of_player.innerHTML = ("P" + p);
         if (p == alivePlayerID) {
-            th_of_player.style.color = "white";
+            th_of_player.classList.add("text-highlighted");
         }
         tr_of_players.appendChild(th_of_player);
     }
@@ -165,7 +159,7 @@ function create_scoreTable() {
         let th_round_label = doc.createElement("th"); 
         th_round_label.innerHTML = "R" + r;
         if (r == 1) { // mark first round 
-            th_round_label.style.color = "white";
+            th_round_label.classList.add("text-highlighted");
         }
         tr_round.appendChild(th_round_label);
         for (let p = 1; p <= columns; p++) {
@@ -216,11 +210,6 @@ function dragstart_ball(evt) {
     // ball is started to drag
     // read data (from UI)
     dragged_elem = evt.target; // memorize what ball has been dragged
-    let color = dragged_elem.src.match(/(?<=imgs\/).*/)[0].match(/.*(?=_gameball\.png)/)[0];
-    // read data (from model)
-    if (game.getNumberOfMarbles(color) == 1) {
-        evt.target.setAttribute("draggable", "false");
-    }
 }
 
 function dragover_notch(evt) {
@@ -261,20 +250,62 @@ function place_marble(evt) {
         let index_notch = parseInt(notch.getAttribute("class").split(" ")[1].at(1)) - 1; // just take number of notch
         let index_row = Math.floor(index_notch / 3);
         index_notch %= 3;
-        let color = new_game_ball.src.match(/(?<=imgs\/).*/)[0].match(/.*(?=_gameball\.png)/)[0];
+        let color = dragged_elem.src.match(/(?<=imgs\/).*/)[0].match(/.*(?=_gameball\.png)/)[0];
         // update model (to model)
         game.placeMarble(index_field, index_row, index_notch, color);
+        // read data (from model)
+        // disable ball if all are on the field
+        if (game.getNumberOfMarbles(color) == 0) {
+            doc.getElementById(color + "-gameball").setAttribute("draggable", "false");
+        }
         // update interface (to UI)
         let td_xnum = doc.getElementById(color + "-xnum");
         td_xnum.innerHTML = "X" + game.getNumberOfMarbles(color);
         // as soon as player puts ball on the field, the arrows will appear on each angle of the parts
-        rotate();
+        // disable all gameballs until player will rotates field
+        set_list_of_elems_attr(
+            doc.querySelectorAll("#left-balls-table img"),
+            "draggable",
+            "false"
+        );
+        add_arrows_on_field(); // for rotating
     }
 }
 
-function rotate() {
-    // rotate part of field
-    let arrow_cw = doc.createElement("img"); // clockwise
-    let arrow_ccw = doc.createElement("img"); // counter clockwise
-    
+function add_arrows_on_field() {
+    // add arrrow for rotating fields
+    // update interface (to UI)
+    for (let i = 1; i <= 4; i++) {
+        let part_field = doc.getElementById("field-part-" + i);
+        let arrow_cw = doc.createElement("img"); // clockwise
+        let arrow_ccw = doc.createElement("img"); // counter clockwise
+        arrow_cw.src = "imgs/bended_arrow.svg";
+        arrow_ccw.src = "imgs/bended_arrow_mirrored.svg";
+        arrow_cw.classList.add(...["arrow", "cw-f" + i]);
+        arrow_ccw.classList.add(...["arrow", "ccw-f" + i]);
+        arrow_cw.addEventListener("click", function () {
+            rotate(part_field, "cw");
+        });
+        arrow_ccw.addEventListener("click", function () {
+            rotate(part_field, "ccw");
+        });
+        part_field.appendChild(arrow_cw);
+        part_field.appendChild(arrow_ccw);
+    }
+}
+
+function rotate(part_field, direction) {
+    // rotate part field
+    // enable to choose game balls
+    set_list_of_elems_attr(
+        doc.querySelectorAll("#left-balls-table img"),
+        "draggable",
+        "true"
+    );
+}
+
+function set_list_of_elems_attr(list_of_elems, property, value) {
+    for (let elem of list_of_elems) {
+        elem.setAttribute(property, value);
+    }
 }
