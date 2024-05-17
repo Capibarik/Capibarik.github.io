@@ -1,12 +1,12 @@
 // FIXME: update_settings() uses the same code three times
-// FIXME: balls are able to drag when they are over
 // FIXME: part of fields rotate in wrong way (they do entire 360 degrees turn)
 // FIXME: coords on parts of fields will break when a player rotates part
 // TODO: define new behavior of dragged balls
 // TODO: process case in the code when the balls is over
-// TODO: implement function send_message() instead of alerts
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: implement function of rotate and add marbles of field at both model and view 
+// DONE: balls are able to drag when they are over
+// DONE: implement function send_alert() instead of alerts
 // DONE: so the overlay doesn`t want to disappear, you should fix that
 // DONE: create score table using data from settings
 // DONE: why does img of balls think that it is notch and recieve drop event?
@@ -66,6 +66,7 @@ function init_events() {
 }
 
 function init_window() {
+    send_alert("Hello, Pentago");
     smooth_move(doc.getElementById("settings"), "left", 0); // open settings at the beginning
 }
 
@@ -90,8 +91,40 @@ function smooth_move(elem, direction, offset) {
     }
 }
 
-function send_message() {
+function send_alert(message) {
     // like alert, but it is better
+    let div_alert = doc.createElement("div");
+    div_alert.classList.add("alert");
+    let div_attention = doc.createElement("div");
+    div_attention.classList.add("attention");
+    let img = doc.createElement("img");
+    img.src = "imgs/attention.svg";
+    img.alt = "Внимание";
+    let div_message = doc.createElement("div");
+    div_message.classList.add("message");
+    div_message.innerHTML = message;
+    let div_alert_close = doc.createElement("div");
+    div_alert_close.classList.add("alert-close");
+    div_alert_close.innerHTML = "X";
+    div_attention.appendChild(img);
+    div_alert.appendChild(div_attention);
+    div_alert.appendChild(div_message);
+    div_alert.appendChild(div_alert_close);
+    div_alert_close.addEventListener("click", function () {
+        // disappearing
+        div_alert.style.opacity = "0%";
+        div_alert.addEventListener("transitionend", function () {
+            // destruct after disappearing
+            div_alert.remove();
+        }, {once: true,});
+    });
+    doc.getElementsByTagName("body")[0].appendChild(div_alert);
+    // situate alert on the screen
+    let width = div_alert.getBoundingClientRect().width;
+    let left_offset = window.innerWidth / 2 - width / 2;
+    div_alert.style.left = `${left_offset}px`;
+    div_alert.style.top = "20%";
+    div_alert.style.opacity = "100%";
 }
 
 function update_settings() { // or start game
@@ -139,7 +172,7 @@ function update_settings() { // or start game
         );
     }
     else {
-        alert("Game is going on");
+        send_alert("Game is going on");
     }
 }
 
@@ -240,7 +273,7 @@ function place_marble(evt) {
     // continue read data from interface (from UI)
     let notch = evt.target;
     if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
-        alert("This place has been occupied");
+        send_alert("This place has been occupied");
     }
     else {
         // update inteface (to UI)

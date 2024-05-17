@@ -1,0 +1,41 @@
+.alert {
+    position: fixed;
+    display: flex;
+    justify-content: space-around;
+    top: -20%;
+    z-index: 2;
+    padding: 10px;
+    border: 2px solid white;
+    color: white;
+    background-color: #666666;
+    box-shadow: 0px 0px 30px black;
+    opacity: 0%;
+    transition: top 0.8s, opacity 0.5s ease;
+}
+
+.alert-close {
+    font-size: 20pt;
+    align-self: flex-start;
+}
+
+.attention {
+    align-self: flex-start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    border: 2px solid white;
+    background-color: #666666;
+    width: 80px;
+    height: 80px;
+    font-size: 30pt;
+}
+
+.attention img {
+    width: 15px;
+}
+
+.message {
+    padding: 10px;
+    font-size: 20pt; 
+}
