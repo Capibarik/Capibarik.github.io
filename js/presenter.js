@@ -1,10 +1,12 @@
+// FIXME: delete everything has comment DELETE
 // FIXME: update_settings() uses the same code three times
 // FIXME: part of fields rotate in wrong way (they do entire 360 degrees turn)
 // FIXME: coords on parts of fields will break when a player rotates part
 // TODO: define new behavior of dragged balls
-// TODO: process case in the code when the balls is over
+// TODO: process case in the code when all balls is over at the end of the round
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: implement function of rotate and add marbles of field at both model and view 
+// DONE: fixed case when the text of rules goes beyond the limits of block with the add-class
 // DONE: balls are able to drag when they are over
 // DONE: implement function send_alert() instead of alerts
 // DONE: so the overlay doesn`t want to disappear, you should fix that
@@ -46,9 +48,13 @@ function init_events() {
     });
     doc.querySelector("#rules img").addEventListener("click", function() {
         smooth_move(doc.getElementById("rules"), "top", 180 - (180 + 600));  // 180px - top, 180px + 600px - just depth (we mustn`t see rules when we don`t press the button)
+        doc.getElementById("rules").addEventListener("transitionend", function () {
+            doc.getElementById("rules-block").classList.add("text-nowrapped");
+        },  { once: true });
     });
     doc.getElementById("btn-rules").addEventListener("click", function () {
         smooth_move(doc.getElementById("rules"), "top", 180);
+        doc.getElementById("rules-block").classList.remove("text-nowrapped");
     });
     // events for update settings
     doc.getElementById("btn-start").addEventListener("click", function () {
@@ -66,7 +72,6 @@ function init_events() {
 }
 
 function init_window() {
-    send_alert("Hello, Pentago");
     smooth_move(doc.getElementById("settings"), "left", 0); // open settings at the beginning
 }
 
@@ -360,12 +365,14 @@ function rotate(part_field, direction) {
         // update interface (to UI)
         game_ball.setAttribute("draggable", number_of_color != 0);
     }
+    normalize_part_field_coords(part_field, direction);
     end_of_player_turn();
 }
 
 function end_of_player_turn() {
     // at the end of player turn we do a lot of things were described in file "Пентаго.drawio"
     check_combs();
+
 }
 
 function check_combs() {
@@ -373,11 +380,53 @@ function check_combs() {
     // calc (in model)
 
     // update interface (to UI)
-}
 
+}
 
 function set_list_of_elems_attr(list_of_elems, property, value) {
     for (let elem of list_of_elems) {
         elem.setAttribute(property, value);
+    }
+}
+
+function normalize_part_field_coords(part_field, direction) {
+    /*
+    Real:
+    1 2 3  (cw (ccw))   7 4 1
+    4 5 6     -->       8 5 2  
+    7 8 9               9 6 3
+    
+    We should fix that with turning the opposite direction
+
+    Fixed:
+    7 4 1  (ccw (cw))  1 2 3
+    8 5 2     -->      4 5 6
+    9 6 3              7 8 9
+
+    We know that there is the normal order in part_field of notches in HTML
+    So we should change sequence of notches "1 2 3 4 5 6 7 8 9" to "3 6 9 2 5 8 1 4 7"
+    if a player turns field clockwise
+    And "1 2 3 4 5 6 7 8 9" to "7 4 1 8 5 2 9 6 3", if a player turns counterclockwise, 
+    to make normal order on the screen
+    */
+    let part_field_children = part_field.children;
+    let mas = [];
+    let nmas = [];
+    // read order of notches
+    for (let i = 0; i < 9; i++) {
+        mas[i] = parseInt(part_field_children[i].classList[1].match(/\d/));
+        nmas[i] = mas[i];
+    }
+    let k = (direction == "cw" ? 9 - 1 : 0);
+    let d = (direction == "cw" ? -1 : +1);
+    for (let i = 0; i < 3; i++) {
+        for (let j = 2 - i; j < mas.length - i; j += 3) {
+            nmas[j] = mas[k];
+            k += d;
+        }
+    }
+    for (let i = 0; i < mas.length; i++) {
+        part_field_children[i].classList.remove("n" + mas[i]);
+        part_field_children[i].classList.add("n" + nmas[i]);
     }
 }

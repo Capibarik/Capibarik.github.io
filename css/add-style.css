@@ -6,6 +6,10 @@
     color: white; 
 }
 
+.text-nowrapped {
+    white-space: nowrap;
+}
+
 .rotated-0 {
     transform: rotate(0deg);
 }

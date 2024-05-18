@@ -151,8 +151,12 @@ class GameField {
         console.log(part_field);
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
-                new_part_field[i][j] = part_field[3 - j - 1][i];    
-                console.log(part_field[3 - j - 1][i]);
+                if (direction === "cw") {
+                    new_part_field[i][j] = part_field[3 - j - 1][i];    
+                }
+                else {
+                    new_part_field[i][j] = part_field[j][3 - i - 1];
+                }
             }
         }
         console.log(new_part_field);
