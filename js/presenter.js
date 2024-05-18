@@ -1,11 +1,13 @@
 // FIXME: delete everything has comment DELETE
-// FIXME: update_settings() uses the same code three times
-// FIXME: part of fields rotate in wrong way (they do entire 360 degrees turn)
-// FIXME: coords on parts of fields will break when a player rotates part
 // TODO: define new behavior of dragged balls
 // TODO: process case in the code when all balls is over at the end of the round
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
-// TODO: implement function of rotate and add marbles of field at both model and view 
+// TODO: graphic code refactoring
+// TODO: relieve GameField.ts from a lot of outsider methods
+// DONE: implement function of rotate and add marbles of field at both model and view 
+// DONE: part of fields rotate in wrong way (they do entire 360 degrees turn)
+// DONE: coords on parts of fields will break when a player rotates part
+// DONE: update_settings() uses the same code three times
 // DONE: fixed case when the text of rules goes beyond the limits of block with the add-class
 // DONE: balls are able to drag when they are over
 // DONE: implement function send_alert() instead of alerts
@@ -132,35 +134,23 @@ function send_alert(message) {
     div_alert.style.opacity = "100%";
 }
 
+function read_radio_data(group_of_radio) {
+    // read condition of radio buttons
+    for (let radio_button of group_of_radio) {
+        if (radio_button.checked) {
+            return radio_button.getAttribute("value");
+        }
+    }
+}
+
 function update_settings() { // or start game
     // update game settings
     let settings = game.settings;
     if (!settings.isBlock) { // game hasn`t started yet
         // read data from interface (from UI)
-        let numberOfPlayers = 0;
-        let radio_numberOfPlayers = doc.querySelectorAll("#number-of-players input");
-        for (let radio_button of radio_numberOfPlayers) {
-            if (radio_button.checked) {
-                numberOfPlayers = parseInt(radio_button.getAttribute("value"));
-                break;
-            }
-        }
-        let numberOfRounds = 0;
-        let radio_numberOfRounds = doc.querySelectorAll("#number-of-rounds input");
-        for (let radio_button of radio_numberOfRounds) {
-            if (radio_button.checked) {
-                numberOfRounds = parseInt(radio_button.getAttribute("value"));
-                break;
-            }
-        }
-        let theme = "";
-        let radio_theme = doc.querySelectorAll("#theme input");
-        for (let radio_button of radio_theme) {
-            if (radio_button.checked) {
-                theme = radio_button.getAttribute("value");
-                break;
-            }
-        }
+        let numberOfPlayers = parseInt(read_radio_data(doc.querySelectorAll("#number-of-players input")));
+        let numberOfRounds = parseInt(read_radio_data(doc.querySelectorAll("#number-of-rounds input")));
+        let theme = read_radio_data(doc.querySelectorAll("#theme input"));
         // set data in game settings (to model)
         settings.updateSettings(numberOfPlayers, numberOfRounds, theme);
         settings.isBlock = true; // game has started
@@ -343,14 +333,14 @@ function rotate(part_field, direction) {
     let degrees = parseInt(part_field.getAttribute("rotated"));
     part_field.classList.remove("rotated-" + degrees);
     if (direction === "cw") {
-        part_field.setAttribute("rotated", (degrees + 90) % 360);
-        degrees = (degrees + 90) % 360;
+        part_field.setAttribute("rotated", degrees + 90);
+        degrees = degrees + 90;
     }
     else {
-        part_field.setAttribute("rotated", (degrees - 90) % 360);
-        degrees = (degrees - 90) % 360;
+        part_field.setAttribute("rotated", degrees - 90);
+        degrees = degrees - 90;
     }
-    part_field.classList.add("rotated-" + degrees);
+    part_field.style.transform = `rotate(${degrees}deg)`;
     // delete arrows
     let arrows = doc.getElementsByClassName("arrow");
     while (arrows.length > 0) {
@@ -372,7 +362,7 @@ function rotate(part_field, direction) {
 function end_of_player_turn() {
     // at the end of player turn we do a lot of things were described in file "Пентаго.drawio"
     check_combs();
-
+    
 }
 
 function check_combs() {

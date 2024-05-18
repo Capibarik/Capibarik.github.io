@@ -179,6 +179,10 @@ class Player {
     set isMyTurn(isMyTurn) {
         this._isMyTurn = isMyTurn;
     }
+    placeMarble() {
+    }
+    rotate() {
+    }
 }
 class Score {
     constructor(numberOfRounds, numberOfPlayers, alivePlayerID) {
