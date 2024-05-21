@@ -1,6 +1,9 @@
 class GameMarble {
-    private color: number;
+    private _color: number;
     constructor (color: number) {
-        this.color = color;
+        this._color = color;
+    }
+    get color(): number {
+        return this._color;
     }
 }

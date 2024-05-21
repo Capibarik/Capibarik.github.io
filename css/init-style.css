@@ -11,10 +11,31 @@
 }
 
 :root {
+    /* sizes */
     --height-header: 14.3vh;
     --add-window-width: 420px;
     --time-of-appearing: 0.8s;
     --time-of-highlighting: 0.4s;
+    /* colors for themes */
+    /* light theme */
+    --dim-gray: #696969ff;
+    --eerie-black: #201F1Fff;
+    --gray: #818181ff;
+    --silver: #BBBAB9ff;
+    --battleship-gray: #999999ff;
+    /* color theme */
+    --indigo-dye: #274060ff;
+    --lapis-lazuli: #335c81ff;
+    --argentinian-blue: #65afffff;
+    --space-cadet: #1b2845ff;
+    --united-nations-blue: #5899e2ff;
+    /* dark theme */
+    --night: #000f08ff;
+    --gunmetal: #1c3738ff;
+    --davys-gray: #4d4847ff;
+    --mint-cream: #f4fff8ff;
+    --cadet-gray: #8baaadff;
+
 }
 
 html, body {

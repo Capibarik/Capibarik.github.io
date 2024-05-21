@@ -8,18 +8,43 @@ class CardMarble {
     }
 }
 class CardPattern {
-    constructor() {
-        this.isBuilt = false;
+    constructor(pattern) {
+        this._isBuilt = false;
         this._pattern = [];
         for (let i = 0; i < 5; i++) {
             this._pattern.push(new CardMarble(Math.floor(Math.random() * (2 + 1 - 0) + 0)));
         }
+        this._pattern = pattern !== null && pattern !== void 0 ? pattern : this._pattern;
+    }
+    get isBuilt() {
+        return this._isBuilt;
     }
     get pattern() {
         return this._pattern;
     }
+    itIsbuilt() {
+        this._isBuilt = true;
+    }
     blockCard() {
-        this.isBuilt = true;
+        this._isBuilt = true;
+    }
+    getReversePattern() {
+        let reverse_pattern = [];
+        for (let i = this._pattern.length - 1; i >= 0; i--) {
+            reverse_pattern.push(this._pattern[i]);
+        }
+        return reverse_pattern;
+    }
+    equals(other) {
+        if (other == this)
+            return true;
+        if (other == null)
+            return false;
+        for (let i = 0; i < other.pattern.length; i++) {
+            if (this.pattern[i].color !== other.pattern[i].color)
+                return false;
+        }
+        return true;
     }
 }
 class GameField {
@@ -138,7 +163,6 @@ class GameField {
             }
             new_part_field.push(line);
         }
-        console.log(part_field);
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (direction === "cw") {
@@ -149,13 +173,75 @@ class GameField {
                 }
             }
         }
-        console.log(new_part_field);
         this._marblesOnField[index_field] = new_part_field;
+    }
+    toGeneralField() {
+        let general_field = [];
+        for (let i = 0; i < 3; i++) {
+            let line = [];
+            for (let j = 0; j < 6; j++) {
+                line.push(this._marblesOnField[Math.floor(j / 3)][i][j % 3]);
+            }
+            general_field.push(line);
+        }
+        for (let i = 0; i < 3; i++) {
+            let line = [];
+            for (let j = 0; j < 6; j++) {
+                line.push(this._marblesOnField[((j <= 2) ? 3 : 2)][i][j % 3]);
+            }
+            general_field.push(line);
+        }
+        return general_field;
+    }
+    checkCombs() {
+        let gf = this.toGeneralField();
+        let builtCardsIndexes = [];
+        for (let index = 0; index < this.deckOfPatterns.length; index++) {
+            let card_pattern = this.deckOfPatterns[index];
+            if (!card_pattern.isBuilt) {
+                let reverse_card_pattern = new CardPattern(card_pattern.getReversePattern());
+                for (let i = 0; i < 6; i++) {
+                    let patterns = [[], [], [], []];
+                    for (let j = 0; j < 5; j++) {
+                        if (gf[i][j] !== null && patterns[0] !== null)
+                            patterns[0].push(new CardMarble(gf[i][j].color));
+                        else
+                            patterns[0] = null;
+                        if (gf[j][i] !== null && patterns[1] !== null)
+                            patterns[1].push(new CardMarble(gf[j][i].color));
+                        else
+                            patterns[1] = null;
+                        if (gf[i][j + 1] !== null && patterns[2] !== null)
+                            patterns[2].push(new CardMarble(gf[i][j + 1].color));
+                        else
+                            patterns[2] = null;
+                        if (gf[j + 1][i] !== null && patterns[3] !== null)
+                            patterns[3].push(new CardMarble(gf[j + 1][i].color));
+                        else
+                            patterns[3] = null;
+                    }
+                    let card_patterns = [null, null, null, null];
+                    for (let k = 0; k < 4; k++) {
+                        if (patterns[k] !== null)
+                            card_patterns[k] = new CardPattern(patterns[k]);
+                        if (card_pattern.equals(card_patterns[k]) || reverse_card_pattern.equals(card_patterns[k])) {
+                            card_pattern.itIsbuilt();
+                            builtCardsIndexes.push(index);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return builtCardsIndexes;
     }
 }
 class GameMarble {
     constructor(color) {
-        this.color = color;
+        this._color = color;
+    }
+    get color() {
+        return this._color;
     }
 }
 class Player {
@@ -178,10 +264,6 @@ class Player {
     }
     set isMyTurn(isMyTurn) {
         this._isMyTurn = isMyTurn;
-    }
-    placeMarble() {
-    }
-    rotate() {
     }
 }
 class Score {

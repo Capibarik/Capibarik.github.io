@@ -28,10 +28,4 @@ class Player {
     set isMyTurn(isMyTurn) {
         this._isMyTurn = isMyTurn;
     }
-    placeMarble() {
-
-    }
-    rotate() {
-        
-    }
 }    

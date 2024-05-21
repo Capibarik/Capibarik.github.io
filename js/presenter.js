@@ -1,9 +1,7 @@
 // FIXME: delete everything has comment DELETE
-// TODO: define new behavior of dragged balls
 // TODO: process case in the code when all balls is over at the end of the round
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: graphic code refactoring
-// TODO: relieve GameField.ts from a lot of outsider methods
 // DONE: implement function of rotate and add marbles of field at both model and view 
 // DONE: part of fields rotate in wrong way (they do entire 360 degrees turn)
 // DONE: coords on parts of fields will break when a player rotates part
@@ -368,9 +366,9 @@ function end_of_player_turn() {
 function check_combs() {
     // do we have built combinations?
     // calc (in model)
-
+    let built_cards_indexes = game.checkCombs();
     // update interface (to UI)
-
+    console.log(built_cards_indexes);
 }
 
 function set_list_of_elems_attr(list_of_elems, property, value) {
