@@ -451,7 +451,7 @@ class Stats {
         let alivePlayerID = scoreTable.alivePlayerID;
         this._numberOfGames++;
         this.numberOfRounds += (rows - 1);
-        this.numberOfCards += (table[rows - 1][alivePlayerID - 1] - 1);
+        this.numberOfCards += (table[rows - 1][alivePlayerID - 1]);
         this._cardsPerRound = this.numberOfCards / this.numberOfRounds;
         this._cardsPerGame = this.numberOfCards / this._numberOfGames;
         this._numberWins += (scoreTable.alivePlayerID == scoreTable.winnerPlayerID ? 1 : 0);
