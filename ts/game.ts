@@ -1,3 +1,3 @@
 let settings = new Settings(3, 3, "light");
-let stats = new Stats(4, 20, 23, 3);
+let stats = new Stats(0, 0, 0, 0);
 let game = new GameField(settings, stats);

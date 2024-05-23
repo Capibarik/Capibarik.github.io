@@ -1,7 +1,10 @@
+// HACK: create normal screen to announce winner or draw (without alert)
 // FIXME: delete everything has comment DELETE
 // TODO: process case in the code when all balls is over at the end of the round
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: graphic code refactoring
+// TODO: make smooth appearing of card back after checking combs if player builds a combinations
+// TODO: process the end of the game (while without animations and transitions)
 // DONE: implement function of rotate and add marbles of field at both model and view 
 // DONE: part of fields rotate in wrong way (they do entire 360 degrees turn)
 // DONE: coords on parts of fields will break when a player rotates part
@@ -183,7 +186,8 @@ function create_scoreTable() {
         let th_of_player = doc.createElement("th");
         th_of_player.innerHTML = ("P" + p);
         if (p == alivePlayerID) {
-            th_of_player.classList.add("text-highlighted");
+            // th_of_player.classList.add("text-highlighted");
+            th_of_player.setAttribute("id", "current-player");
         }
         tr_of_players.appendChild(th_of_player);
     }
@@ -193,7 +197,8 @@ function create_scoreTable() {
         let th_round_label = doc.createElement("th"); 
         th_round_label.innerHTML = "R" + r;
         if (r == 1) { // mark first round 
-            th_round_label.classList.add("text-highlighted");
+            // th_round_label.classList.add("text-highlighted");
+            th_round_label.setAttribute("id", "current-round");
         }
         tr_round.appendChild(th_round_label);
         for (let p = 1; p <= columns; p++) {
@@ -236,7 +241,7 @@ function gen_cards() {
             inner_card.appendChild(img_marble);
         }
         empty_card.appendChild(inner_card);
-        container_cards.appendChild(empty_card);
+        container_cards.appendChild(empty_card);        
     }
 }
 
@@ -283,8 +288,7 @@ function place_marble(evt) {
         // update model (to model)
         game.placeMarble(index_field, index_row, index_notch, color);
         // update interface (to UI)
-        let td_xnum = doc.getElementById(color + "-xnum");
-        td_xnum.innerHTML = "X" + game.getNumberOfMarbles(color);
+        set_number_of_marbles(color);
         // as soon as player puts ball on the field, the arrows will appear on each angle of the parts
         // disable all gameballs until player will rotates field
         set_list_of_elems_attr(
@@ -368,7 +372,135 @@ function check_combs() {
     // calc (in model)
     let built_cards_indexes = game.checkCombs();
     // update interface (to UI)
-    console.log(built_cards_indexes);
+    if (built_cards_indexes.length > 0) { // if there are built cards
+        for (let built_index of built_cards_indexes) {
+            let card_marble = doc.querySelector(`#card-pattern-${built_index} .card-marble`);
+            while (card_marble.children.length > 0) {
+                card_marble.children[0].remove();
+            }
+            card_marble.setAttribute("class", "card-back");
+            // add point(s) to current player 
+            // read data (from model)
+            let score_table = game.scoreTable;
+            let current_round = game.currentRound - 1; // score uses 0-indexed
+            let current_player = game.playerIDTurn - 1; // score uses 0-indexed
+            score_table.addPointToPlayer(current_round, current_player);
+            // update intefrace (to UI)
+            let cell = doc.querySelector(`#score-table tbody tr:nth-child(${current_round + 1}) th:nth-child(${current_player + 2})`);
+            cell.innerHTML = parseInt(cell.innerHTML) + 1;
+        }
+        // check whether all cards are built
+        if (game.getLeftCardPatterns() > 0) { // not all cards are built
+            can_we_continue_round();
+        }
+        else { // all cards are built
+            can_we_continue_game();
+        }
+    }
+    else { // if there aren`t
+        can_we_continue_round();
+    }
+
+}
+
+function can_we_continue_round() {
+    // check whether all balls are over
+    let left_marbles = game.getLeftMarbles();
+    if (left_marbles > 0) { // continue round
+        // read data (from model)
+        game.changeTurn(); // to model
+        // change interface and read data from model (from model to UI)
+        let next_player = game.playerIDTurn;
+        let current_player_in_table = doc.getElementById("current-player");
+        current_player_in_table.removeAttribute("id");
+        let next_player_in_table = doc.querySelector(`#score-table thead tr th:nth-child(${next_player + 1})`);
+        next_player_in_table.setAttribute("id", "current-player");
+    }
+    else { // balls are over
+        can_we_continue_game();
+    }
+}
+
+function can_we_continue_game() {
+    // check whether it is last round
+    let number_of_rounds = game.numberOfRounds;
+    let current_round = game.currentRound;
+    if (current_round == number_of_rounds) { // end of the game
+        // disable balls
+        set_list_of_elems_attr(
+            doc.querySelectorAll("#left-balls-table img"),
+            "draggable",
+            "false"
+        );
+        // calculate result (from model)
+        game.scoreTable.summarizeScore();
+        let result_row = game.scoreTable.getResultRow();
+        let winner_id = game.scoreTable.winnerPlayerID;
+        console.log(game.scoreTable);
+        // update score table result (to UI)
+        let result_cells = doc.querySelectorAll("#score-table tbody tr:last-child th:nth-child(n+2)");
+        for (let i = 0; i < result_cells.length; i++) {
+            result_cells[i].innerHTML = result_row[i];
+        }
+        // announce the winner or announce draw (to UI)
+        if (winner_id == 0) { // draw
+            send_alert("Draw :(");
+        }
+        else { // one winner
+            send_alert(`Player P${winner_id} has won!!!\nCongratulations!!!`);
+        }
+        // update stats (to model)
+        game.stats.updateStats(game.scoreTable);
+        // update stats (to UI)
+        doc.getElementById("number-of-games").innerHTML = game.stats.numberOfGames;
+        doc.getElementById("cards-per-round").innerHTML = game.stats.cardsPerRound;
+        doc.getElementById("cards-per-game").innerHTML = game.stats.cardsPerGame;
+        doc.getElementById("number-of-wins").innerHTML = game.stats.numberWins;
+        // clean all game field
+
+        // unlock settings in order to play again
+        game.settings.isBlock = false; // settings is enabled
+    }
+    else { // it isn`t last round
+        run_round(); // run new round
+    }
+}
+
+function run_round() {
+    // clear game field on the screen 
+    // clean out marbles and cards
+    // restore amount of marbles
+    // clear screen (UI)
+    remove_elems(".card-pattern");
+    remove_elems(".notch img");
+    // run new round (model)
+    game.runRound();
+    let next_round = game.currentRound;
+    // update (UI)
+    let colors = ["yellow", "blue", "red"];
+    for (let color of colors) {
+        set_number_of_marbles(color);
+    }
+    let current_round_in_table = doc.getElementById("current-round");
+    current_round_in_table.removeAttribute("id");
+    let next_round_in_table = doc.querySelector(`#score-table tbody tr:nth-child(${next_round}) th:first-child`);
+    next_round_in_table.setAttribute("id", "current-round");
+    // gen cards
+    gen_cards();
+}
+
+function set_number_of_marbles(color) {
+    // on the screen
+    let td_xnum = doc.getElementById(color + "-xnum");
+    td_xnum.innerHTML = "X" + game.getNumberOfMarbles(color);
+}
+
+function remove_elems(query) {
+    let elem = doc.querySelector(query);
+    while (elem !== null) {
+        elem.remove();
+        elem = doc.querySelector(query);
+    }
 }
 
 function set_list_of_elems_attr(list_of_elems, property, value) {
@@ -417,4 +549,9 @@ function normalize_part_field_coords(part_field, direction) {
         part_field_children[i].classList.remove("n" + mas[i]);
         part_field_children[i].classList.add("n" + nmas[i]);
     }
+}
+
+function clear_gamefield() {
+    // full clear to first condition
+    
 }

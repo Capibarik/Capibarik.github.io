@@ -60,7 +60,7 @@ class GameField {
             "blue": 2
         };
         this._settings = settings;
-        this.currentRound = 1;
+        this._currentRound = 1;
         this._numberOfMarbles = {
             "yellow": 9,
             "blue": 9,
@@ -70,12 +70,12 @@ class GameField {
         this.numberOfRounds = settings.numberOfRounds;
         this.numberOfCardsInRounds = settings.numberOfCardsInRound;
         this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
-        this.playerIDTurn = this.alivePlayerID;
+        this._playerIDTurn = this.alivePlayerID;
         this.players = [];
         for (let i = 1; i <= this.numberOfPlayers; i++) {
-            this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this.playerIDTurn ? true : false)));
+            this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this._playerIDTurn ? true : false)));
         }
-        this.stats = stats;
+        this._stats = stats;
         this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
         this._marblesOnField = [];
         for (let i = 0; i < 4; i++) {
@@ -100,6 +100,25 @@ class GameField {
     getNumberOfColor(color) {
         return this._COLOR_NUMBER[color];
     }
+    getNumberOfMarbles(color) {
+        return this._numberOfMarbles[color];
+    }
+    getLeftMarbles() {
+        return this.getNumberOfMarbles("yellow") + this.getNumberOfMarbles("blue") + this.getNumberOfMarbles("red");
+    }
+    restoreMarbles() {
+        this._numberOfMarbles["yellow"] = 9;
+        this._numberOfMarbles["blue"] = 9;
+        this._numberOfMarbles["red"] = 9;
+    }
+    getLeftCardPatterns() {
+        let cnt = 0;
+        for (let cardPattern of this.deckOfPatterns) {
+            if (!cardPattern.isBuilt)
+                cnt++;
+        }
+        return cnt;
+    }
     get settings() {
         return this._settings;
     }
@@ -109,14 +128,20 @@ class GameField {
     get deckOfPatterns() {
         return this._deckOfPatterns;
     }
-    getNumberOfMarbles(color) {
-        return this._numberOfMarbles[color];
-    }
     get marblesOnField() {
         return this._marblesOnField;
     }
+    get currentRound() {
+        return this._currentRound;
+    }
+    get playerIDTurn() {
+        return this._playerIDTurn;
+    }
+    get stats() {
+        return this._stats;
+    }
     runGame() {
-        this.currentRound = 1;
+        this._currentRound = 1;
         this._numberOfMarbles = {
             "yellow": 9,
             "blue": 9,
@@ -126,28 +151,24 @@ class GameField {
         this.numberOfRounds = settings.numberOfRounds;
         this.numberOfCardsInRounds = settings.numberOfCardsInRound;
         this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
-        this.playerIDTurn = this.alivePlayerID;
+        this._playerIDTurn = this.alivePlayerID;
         this.players = [];
         for (let i = 1; i <= this.numberOfPlayers; i++) {
-            this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this.playerIDTurn ? true : false)));
+            this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this._playerIDTurn ? true : false)));
         }
         this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
-        this._marblesOnField = [];
-        for (let i = 0; i < 4; i++) {
-            let part_field = [];
-            for (let j = 0; j < 3; j++) {
-                let line = [];
-                for (let k = 0; k < 3; k++) {
-                    line.push(null);
-                }
-                part_field.push(line);
-            }
-            this._marblesOnField.push(part_field);
-        }
-        this._deckOfPatterns = [];
-        for (let i = 0; i < this.numberOfCardsInRounds; i++) {
-            this.deckOfPatterns.push(new CardPattern());
-        }
+        this.clearField();
+        this.genCards();
+    }
+    runRound() {
+        this._numberOfMarbles = {
+            "yellow": 9,
+            "blue": 9,
+            "red": 9
+        };
+        this._currentRound++;
+        this.clearField();
+        this.genCards();
     }
     placeMarble(index_field, index_row, index, color) {
         this._marblesOnField[index_field][index_row][index] = new GameMarble(this.getNumberOfColor(color));
@@ -196,8 +217,8 @@ class GameField {
     checkCombs() {
         let gf = this.toGeneralField();
         let builtCardsIndexes = [];
-        for (let index = 0; index < this.deckOfPatterns.length; index++) {
-            let card_pattern = this.deckOfPatterns[index];
+        for (let index = 0; index < this._deckOfPatterns.length; index++) {
+            let card_pattern = this._deckOfPatterns[index];
             if (!card_pattern.isBuilt) {
                 let reverse_card_pattern = new CardPattern(card_pattern.getReversePattern());
                 for (let i = 0; i < 6; i++) {
@@ -227,13 +248,37 @@ class GameField {
                         if (card_pattern.equals(card_patterns[k]) || reverse_card_pattern.equals(card_patterns[k])) {
                             card_pattern.itIsbuilt();
                             builtCardsIndexes.push(index);
-                            break;
                         }
                     }
                 }
             }
         }
         return builtCardsIndexes;
+    }
+    changeTurn() {
+        this._playerIDTurn = (this._playerIDTurn + 1) % (this.players.length + 1);
+        if (this._playerIDTurn == 0)
+            this._playerIDTurn = 1;
+    }
+    clearField() {
+        this._marblesOnField = [];
+        for (let i = 0; i < 4; i++) {
+            let part_field = [];
+            for (let j = 0; j < 3; j++) {
+                let line = [];
+                for (let k = 0; k < 3; k++) {
+                    line.push(null);
+                }
+                part_field.push(line);
+            }
+            this._marblesOnField.push(part_field);
+        }
+    }
+    genCards() {
+        this._deckOfPatterns = [];
+        for (let i = 0; i < this.numberOfCardsInRounds; i++) {
+            this.deckOfPatterns.push(new CardPattern());
+        }
     }
 }
 class GameMarble {
@@ -288,6 +333,13 @@ class Score {
     get alivePlayerID() {
         return this._alivePlayerID;
     }
+    getResultRow() {
+        let result = [];
+        for (let i = 0; i < this._table.length; i++) {
+            result.push(this._table[this._table.length - 1][i]);
+        }
+        return result;
+    }
     set table(table) {
         this._table = table;
     }
@@ -302,6 +354,7 @@ class Score {
                 this._table[rows - 1][j] += this._table[i][j];
             }
         }
+        this.whoIsWinner();
     }
     whoIsWinner() {
         let rows = this._table.length;
@@ -373,27 +426,39 @@ class Settings {
 }
 class Stats {
     constructor(numberOfGames, numberOfRounds, numberOfCards, numberWins) {
-        this.numberOfGames = numberOfGames;
+        this._numberOfGames = numberOfGames;
         this.numberOfRounds = numberOfRounds;
         this.numberOfCards = numberOfCards;
-        this.cardsPerRound = numberOfCards / numberOfRounds;
-        this.cardsPerGame = numberOfCards / numberOfGames;
-        this.numberWins = numberWins;
+        this._cardsPerRound = numberOfCards / numberOfRounds;
+        this._cardsPerGame = numberOfCards / numberOfGames;
+        this._numberWins = numberWins;
+    }
+    get numberOfGames() {
+        return this._numberOfGames;
+    }
+    get cardsPerRound() {
+        return this._cardsPerRound;
+    }
+    get cardsPerGame() {
+        return this._cardsPerGame;
+    }
+    get numberWins() {
+        return this._numberWins;
     }
     updateStats(scoreTable) {
         let table = scoreTable.table;
         let rows = table.length;
         let alivePlayerID = scoreTable.alivePlayerID;
-        this.numberOfGames++;
+        this._numberOfGames++;
         this.numberOfRounds += (rows - 1);
         this.numberOfCards += (table[rows - 1][alivePlayerID - 1] - 1);
-        this.cardsPerRound = this.numberOfCards / this.numberOfRounds;
-        this.cardsPerGame = this.numberOfCards / this.numberOfGames;
-        this.numberWins += (scoreTable.alivePlayerID == scoreTable.winnerPlayerID ? 1 : 0);
+        this._cardsPerRound = this.numberOfCards / this.numberOfRounds;
+        this._cardsPerGame = this.numberOfCards / this._numberOfGames;
+        this._numberWins += (scoreTable.alivePlayerID == scoreTable.winnerPlayerID ? 1 : 0);
     }
 }
 let settings = new Settings(3, 3, "light");
-let stats = new Stats(4, 20, 23, 3);
+let stats = new Stats(0, 0, 0, 0);
 let game = new GameField(settings, stats);
 
 export default game;

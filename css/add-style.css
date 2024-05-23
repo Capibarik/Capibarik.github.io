@@ -2,8 +2,12 @@
     border: 3px solid cyan;
 }
 
-.text-highlighted {
+#current-player {
     color: white; 
+}
+
+#current-round {
+    color: white;
 }
 
 .text-nowrapped {

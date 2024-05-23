@@ -25,6 +25,13 @@ class Score {
     get alivePlayerID(): number {
         return this._alivePlayerID;
     }
+    getResultRow(): number[] {
+        let result = [];
+        for (let i = 0; i < this._table.length; i++) {
+            result.push(this._table[this._table.length - 1][i]);
+        }
+        return result;
+    }
     set table(table: number[][]) {
         this._table = table;
     } 
@@ -39,8 +46,9 @@ class Score {
                 this._table[rows - 1][j] += this._table[i][j]; 
             }
         }
+        this.whoIsWinner();
     }
-    whoIsWinner(): void {
+    private whoIsWinner(): void {
         let rows = this._table.length; // number of rounds with result
         let columns = this._table[0].length; // number of players
         let amount_cards = 0;

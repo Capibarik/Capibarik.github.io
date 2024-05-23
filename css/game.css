@@ -177,6 +177,12 @@
     align-items: center;
 }
 
+.card-back {
+    background: url("../imgs/card_back.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 /* arrow for rotating */
 
 .arrow {

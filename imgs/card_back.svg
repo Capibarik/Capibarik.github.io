@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 235 235">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#New_Pattern);
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-9 {
+        font-size: 4.88px;
+        letter-spacing: .1em;
+      }
+
+      .cls-9, .cls-10 {
+        font-family: AgencyFB-Bold, 'Agency FB';
+        font-weight: 700;
+      }
+
+      .cls-9, .cls-10, .cls-11 {
+        fill: #f9f9f9;
+      }
+
+      .cls-3 {
+        fill: #d50000;
+      }
+
+      .cls-4 {
+        fill: #c4c4c4;
+      }
+
+      .cls-5 {
+        fill: none;
+      }
+
+      .cls-10 {
+        font-size: 21.25px;
+      }
+
+      .cls-6 {
+        fill: #fff;
+      }
+
+      .cls-7 {
+        fill: #f9ff00;
+      }
+
+      .cls-11 {
+        font-family: AgencyFB-Reg, 'Agency FB';
+        font-size: 4.88px;
+        letter-spacing: .1em;
+      }
+
+      .cls-8 {
+        fill: #0033c1;
+      }
+    </style>
+    <pattern id="New_Pattern" data-name="New Pattern" x="0" y="0" width="10" height="11.17" patternTransform="translate(1176.98 -277.29)" patternUnits="userSpaceOnUse" viewBox="0 0 10 11.17">
+      <g>
+        <rect class="cls-5" width="10" height="11.17"/>
+        <polygon class="cls-4" points="14.5 11.17 10 8.63 5.5 11.17 10 13.71 14.5 11.17"/>
+        <polygon class="cls-4" points="4.5 11.17 0 8.63 -4.5 11.17 0 13.71 4.5 11.17"/>
+        <polygon class="cls-4" points="9.5 5.58 5 3.04 .5 5.58 5 8.13 9.5 5.58"/>
+        <polygon class="cls-4" points="14.5 0 10 -2.54 5.5 0 10 2.54 14.5 0"/>
+        <polygon class="cls-4" points="4.5 0 0 -2.54 -4.5 0 0 2.54 4.5 0"/>
+      </g>
+    </pattern>
+    <linearGradient id="linear-gradient" x1="117.5" y1="235" x2="117.5" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#b6b6b6"/>
+      <stop offset=".08" stop-color="#acacac" stop-opacity=".9"/>
+      <stop offset=".26" stop-color="#969696" stop-opacity=".69"/>
+      <stop offset=".41" stop-color="#898989" stop-opacity=".55"/>
+      <stop offset=".48" stop-color="#848484" stop-opacity=".5"/>
+      <stop offset=".57" stop-color="#868686" stop-opacity=".53"/>
+      <stop offset=".68" stop-color="#8d8d8d" stop-opacity=".61"/>
+      <stop offset=".8" stop-color="#989898" stop-opacity=".73"/>
+      <stop offset=".94" stop-color="#a7a7a7" stop-opacity=".91"/>
+      <stop offset="1" stop-color="#afafaf"/>
+    </linearGradient>
+  </defs>
+  <g id="_Элементы_игры" data-name="Элементы игры">
+    <g>
+      <g>
+        <rect id="_Узор" data-name="Узор" class="cls-1" width="235" height="235" rx="5.6" ry="5.6"/>
+        <rect id="_Градиент" data-name="Градиент" class="cls-2" width="235" height="235" rx="5.6" ry="5.6"/>
+      </g>
+      <g>
+        <text class="cls-11" transform="translate(9.13 134.46) scale(4.44 1)"><tspan x="0" y="0">THE MIND TWISTING GAME</tspan></text>
+        <text class="cls-9" transform="translate(98.77 103.87) scale(2.77 1)"><tspan x="0" y="0">TRIPLE</tspan></text>
+        <g>
+          <text class="cls-10" transform="translate(4.31 124.75) scale(3.14 1)"><tspan x="0" y="0">PENTAGO</tspan></text>
+          <g>
+            <rect class="cls-3" x="222.93" y="108" width="7.76" height="7.76"/>
+            <rect class="cls-8" x="213.69" y="108" width="7.76" height="7.76"/>
+            <rect class="cls-7" x="213.69" y="117.24" width="7.76" height="7.76"/>
+            <rect class="cls-6" x="222.93" y="117.24" width="7.76" height="7.76"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
