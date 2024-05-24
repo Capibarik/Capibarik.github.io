@@ -21,12 +21,13 @@
 // DONE: you have to not forget that you need update draggable properties of game balls before new game
 // Presenter - communicate with model (js app) and view (HTML and CSS)
 
-
+// graphics_utility
+import { smooth_move } from "./graphics_utility.js";
+// model
 import game from "./model.js";
 
 
 let doc = document;
-let current_add_window = false; // true - occupied, false - free
 let dragged_elem = null; // it is game ball
 
 (function () {
@@ -77,27 +78,6 @@ function init_events() {
 
 function init_window() {
     smooth_move(doc.getElementById("settings"), "left", 0); // open settings at the beginning
-}
-
-function smooth_move(elem, direction, offset) {
-    // smooth appearing and disappearing add windows
-    let overlay = doc.getElementById("overlay");
-    let addCss = `
-        ${direction}: ${offset}px;
-    `
-    if (offset >= 0) { // want to occupied
-        if (!current_add_window) { // free
-            elem.style.cssText = addCss;
-            overlay.style.opacity = "90%";
-            overlay.style.zIndex = "1";
-            current_add_window = true; // occupied
-        }
-    }
-    else { // want to leave
-        elem.style.cssText = addCss;
-        overlay.style.opacity = "0%";
-        current_add_window = false; // free
-    }
 }
 
 function send_alert(message) {
