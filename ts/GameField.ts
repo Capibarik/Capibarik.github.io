@@ -1,4 +1,5 @@
 // FIXME: 'get marblesOnField()' is used only for test
+// FIXME: amount of balls is 9, not 3 (and in index.html)
 // FIXME: code repeats four times in checkCombs
 // TODO: implement method that will check combinations, you should check combinations after there are 5 balls and more on the field
 // DONE: create GameField, impelement constructor of class
@@ -33,9 +34,9 @@ class GameField {
         this._settings = settings;
         this._currentRound = 1;
         this._numberOfMarbles = {
-            "yellow": 9,
-            "blue": 9,
-            "red": 9
+            "yellow": 3,
+            "blue": 3,
+            "red": 3
         };
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
@@ -86,9 +87,9 @@ class GameField {
         return this.getNumberOfMarbles("yellow") + this.getNumberOfMarbles("blue") + this.getNumberOfMarbles("red");
     }
     restoreMarbles(): void {
-        this._numberOfMarbles["yellow"] = 9;
-        this._numberOfMarbles["blue"] = 9;
-        this._numberOfMarbles["red"] = 9;
+        this._numberOfMarbles["yellow"] = 3;
+        this._numberOfMarbles["blue"] = 3;
+        this._numberOfMarbles["red"] = 3;
     }
     getLeftCardPatterns(): number {
         // 0 - all cards are built
@@ -124,12 +125,9 @@ class GameField {
         // run game and apply settings
         // game field always updates after game
         // imagine that a game goes again
+        this._settings.isBlock = true; // game has started, settings is blocked
         this._currentRound = 1;
-        this._numberOfMarbles = {
-            "yellow": 9,
-            "blue": 9,
-            "red": 9
-        };
+        this.restoreMarbles();
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
         this.numberOfCardsInRounds = settings.numberOfCardsInRound;
@@ -149,11 +147,7 @@ class GameField {
         this.genCards();
     }
     runRound(): void {
-        this._numberOfMarbles = {
-            "yellow": 9,
-            "blue": 9,
-            "red": 9
-        };
+        this.restoreMarbles();
         this._currentRound++;
         this.clearField();
         this.genCards();

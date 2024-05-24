@@ -39,8 +39,12 @@ class Stats {
         this._numberOfGames++;
         this.numberOfRounds += (rows - 1);
         this.numberOfCards += (table[rows - 1][alivePlayerID - 1]);
-        this._cardsPerRound = this.numberOfCards / this.numberOfRounds;
-        this._cardsPerGame = this.numberOfCards / this._numberOfGames;
+        this._cardsPerRound = Stats.roundToFixed(this.numberOfCards / this.numberOfRounds, 2);
+        this._cardsPerGame = Stats.roundToFixed(this.numberOfCards / this._numberOfGames, 2);
         this._numberWins += (scoreTable.alivePlayerID == scoreTable.winnerPlayerID ? 1 : 0);
+    }
+    private static roundToFixed(num: number, fixed: number): number {
+        let ans = Math.round(num * Math.pow(10, fixed)) / Math.pow(10, fixed);
+        return ans;
     }
 }

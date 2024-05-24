@@ -1,5 +1,6 @@
 // HACK: create normal screen to announce winner or draw (without alert)
 // FIXME: delete everything has comment DELETE
+// FIXME: if you select gameball as an image, you can move it
 // TODO: process case in the code when all balls is over at the end of the round
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: graphic code refactoring
@@ -157,6 +158,9 @@ function update_settings() { // or start game
         settings.isBlock = true; // game has started
         game.runGame(); // update game field according to the settings
         // close settings and draw score table (to UI)
+        if (doc.getElementById("score-table") !== null) {
+            doc.getElementById("score-table").remove();
+        }
         create_scoreTable();
         gen_cards();
         smooth_move(doc.getElementById("settings"), "left", -420 - 70 - 10 - 10);
@@ -180,13 +184,25 @@ function create_scoreTable() {
     let alivePlayerID = score.alivePlayerID;
     let rows = table.length - 1;
     let columns = table[0].length;
+    // create skeleton of score table
+    let score_table = doc.createElement("table");
+    score_table.setAttribute("id", "score-table");
+    let thead = doc.createElement("thead");
+    let first_tr = doc.createElement("tr");
+    let first_th = doc.createElement("th");
+    first_th.innerHTML = "R\\P";
+    let tbody_empty = doc.createElement("tbody");
+    first_tr.appendChild(first_th);
+    thead.appendChild(first_tr);
+    score_table.appendChild(thead);
+    score_table.appendChild(tbody_empty);
+    doc.getElementById("score").appendChild(score_table);
     // update interface (to UI)
     let tr_of_players = doc.querySelector("#score-table thead tr");
     for (let p = 1; p <= columns; p++) {
         let th_of_player = doc.createElement("th");
         th_of_player.innerHTML = ("P" + p);
         if (p == alivePlayerID) {
-            // th_of_player.classList.add("text-highlighted");
             th_of_player.setAttribute("id", "current-player");
         }
         tr_of_players.appendChild(th_of_player);
@@ -197,7 +213,6 @@ function create_scoreTable() {
         let th_round_label = doc.createElement("th"); 
         th_round_label.innerHTML = "R" + r;
         if (r == 1) { // mark first round 
-            // th_round_label.classList.add("text-highlighted");
             th_round_label.setAttribute("id", "current-round");
         }
         tr_round.appendChild(th_round_label);
@@ -358,13 +373,7 @@ function rotate(part_field, direction) {
         game_ball.setAttribute("draggable", number_of_color != 0);
     }
     normalize_part_field_coords(part_field, direction);
-    end_of_player_turn();
-}
-
-function end_of_player_turn() {
-    // at the end of player turn we do a lot of things were described in file "Пентаго.drawio"
     check_combs();
-    
 }
 
 function check_combs() {
@@ -457,7 +466,7 @@ function can_we_continue_game() {
         doc.getElementById("cards-per-game").innerHTML = game.stats.cardsPerGame;
         doc.getElementById("number-of-wins").innerHTML = game.stats.numberWins;
         // clean all game field
-
+        clear_gamefield();
         // unlock settings in order to play again
         game.settings.isBlock = false; // settings is enabled
     }
@@ -481,6 +490,13 @@ function run_round() {
     for (let color of colors) {
         set_number_of_marbles(color);
     }
+    // enable balls
+    set_list_of_elems_attr(
+        doc.querySelectorAll("#left-balls-table img"),
+        "draggable",
+        "true"
+    );
+    // update table
     let current_round_in_table = doc.getElementById("current-round");
     current_round_in_table.removeAttribute("id");
     let next_round_in_table = doc.querySelector(`#score-table tbody tr:nth-child(${next_round}) th:first-child`);
@@ -552,6 +568,15 @@ function normalize_part_field_coords(part_field, direction) {
 }
 
 function clear_gamefield() {
-    // full clear to first condition
-    
+    // full clear to almost first condition
+    // restore marbles (to model)
+    game.restoreMarbles();
+    // update marbles (to UI)    
+    let colors = ["yellow", "blue", "red"];
+    for (let color of colors) {
+        set_number_of_marbles(color);
+    }
+    // clear screen (to UI)
+    remove_elems(".card-pattern");
+    remove_elems(".notch img");
 }
