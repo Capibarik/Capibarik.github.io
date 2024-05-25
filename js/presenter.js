@@ -1,6 +1,7 @@
 // HACK: create normal screen to announce winner or draw (without alert)
 // FIXME: delete everything has comment DELETE
-// FIXME: if you select gameball as an image, you can move it
+// TODO: make a computer plays with you
+// TODO: try to refactor code for graphics (in presenter)
 // TODO: process case in the code when all balls is over at the end of the round
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: graphic code refactoring
@@ -22,9 +23,16 @@
 // Presenter - communicate with model (js app) and view (HTML and CSS)
 
 // graphics_utility
-import { smooth_move } from "./graphics_utility.js";
+import { 
+    smooth_move,
+    send_alert,
+    read_radio_data,
+    remove_elems,
+    set_list_of_elems_attr,
+    normalize_part_field_coords,
+    set_number_of_marbles } from "./graphics_utility.js";
 // model
-import game from "./model.js";
+import { game, stats } from "./model.js";
 
 
 let doc = document;
@@ -72,57 +80,12 @@ function init_events() {
     for (let notch of doc.getElementsByClassName("notch")) {
         notch.addEventListener("dragover", dragover_notch);
         notch.addEventListener("dragleave", dragleave_notch);
-        notch.addEventListener("drop", place_marble);
+        notch.addEventListener("drop", whose_turn);
     }
 }
 
 function init_window() {
     smooth_move(doc.getElementById("settings"), "left", 0); // open settings at the beginning
-}
-
-function send_alert(message) {
-    // like alert, but it is better
-    let div_alert = doc.createElement("div");
-    div_alert.classList.add("alert");
-    let div_attention = doc.createElement("div");
-    div_attention.classList.add("attention");
-    let img = doc.createElement("img");
-    img.src = "imgs/attention.svg";
-    img.alt = "Внимание";
-    let div_message = doc.createElement("div");
-    div_message.classList.add("message");
-    div_message.innerHTML = message;
-    let div_alert_close = doc.createElement("div");
-    div_alert_close.classList.add("alert-close");
-    div_alert_close.innerHTML = "X";
-    div_attention.appendChild(img);
-    div_alert.appendChild(div_attention);
-    div_alert.appendChild(div_message);
-    div_alert.appendChild(div_alert_close);
-    div_alert_close.addEventListener("click", function () {
-        // disappearing
-        div_alert.style.opacity = "0%";
-        div_alert.addEventListener("transitionend", function () {
-            // destruct after disappearing
-            div_alert.remove();
-        }, {once: true,});
-    });
-    doc.getElementsByTagName("body")[0].appendChild(div_alert);
-    // situate alert on the screen
-    let width = div_alert.getBoundingClientRect().width;
-    let left_offset = window.innerWidth / 2 - width / 2;
-    div_alert.style.left = `${left_offset}px`;
-    div_alert.style.top = "20%";
-    div_alert.style.opacity = "100%";
-}
-
-function read_radio_data(group_of_radio) {
-    // read condition of radio buttons
-    for (let radio_button of group_of_radio) {
-        if (radio_button.checked) {
-            return radio_button.getAttribute("value");
-        }
-    }
 }
 
 function update_settings() { // or start game
@@ -240,6 +203,20 @@ function gen_cards() {
     }
 }
 
+function whose_turn(evt) {
+    // Must a computer or real player move?
+    // read data (from model)
+    if (game.playerIDTurn === game.alivePlayerID) {
+        send_alert("BOBR");
+    }
+    else {
+        send_alert("COMPUTER");
+    }
+    console.log(evt);
+    dragleave_notch(evt); // after dropping, but before placing marble we remove border from notch
+    place_marble(evt.target);
+}
+
 function dragstart_ball(evt) {
     // ball is started to drag
     // read data (from UI)
@@ -260,11 +237,11 @@ function dragleave_notch(evt) {
     evt.target.classList.remove("bordered");
 }
 
-function place_marble(evt) { 
+function place_marble(notch) { 
     // drop ball on the notch
-    dragleave_notch(evt);
+    // dragleave_notch(evt);
     // continue read data from interface (from UI)
-    let notch = evt.target;
+    // let notch = evt.target;
     if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
         send_alert("This place has been occupied");
     }
@@ -283,7 +260,7 @@ function place_marble(evt) {
         // update model (to model)
         game.placeMarble(index_field, index_row, index_notch, color);
         // update interface (to UI)
-        set_number_of_marbles(color);
+        set_number_of_marbles(color, game.getNumberOfMarbles(color));
         // as soon as player puts ball on the field, the arrows will appear on each angle of the parts
         // disable all gameballs until player will rotates field
         set_list_of_elems_attr(
@@ -306,6 +283,8 @@ function add_arrows_on_field() {
         arrow_ccw.src = "imgs/bended_arrow_mirrored.svg";
         arrow_cw.classList.add(...["arrow", "cw-f" + i]);
         arrow_ccw.classList.add(...["arrow", "ccw-f" + i]);
+        arrow_cw.setAttribute("draggable", "false");
+        arrow_ccw.setAttribute("draggable", "false");
         let part_field = doc.getElementById("field-part-" + i);
         arrow_cw.addEventListener("click", function () {
             rotate(part_field, "cw");
@@ -439,12 +418,12 @@ function can_we_continue_game() {
             send_alert(`Player P${winner_id} has won!!!\nCongratulations!!!`);
         }
         // update stats (to model)
-        game.stats.updateStats(game.scoreTable);
+        stats.updateStats(game.scoreTable);
         // update stats (to UI)
-        doc.getElementById("number-of-games").innerHTML = game.stats.numberOfGames;
-        doc.getElementById("cards-per-round").innerHTML = game.stats.cardsPerRound;
-        doc.getElementById("cards-per-game").innerHTML = game.stats.cardsPerGame;
-        doc.getElementById("number-of-wins").innerHTML = game.stats.numberWins;
+        doc.getElementById("number-of-games").innerHTML = stats.numberOfGames;
+        doc.getElementById("cards-per-round").innerHTML = stats.cardsPerRound;
+        doc.getElementById("cards-per-game").innerHTML = stats.cardsPerGame;
+        doc.getElementById("number-of-wins").innerHTML = stats.numberWins;
         // clean all game field
         clear_gamefield();
         // unlock settings in order to play again
@@ -468,7 +447,7 @@ function run_round() {
     // update (UI)
     let colors = ["yellow", "blue", "red"];
     for (let color of colors) {
-        set_number_of_marbles(color);
+        set_number_of_marbles(color, game.getNumberOfMarbles(color));
     }
     // enable balls
     set_list_of_elems_attr(
@@ -485,68 +464,6 @@ function run_round() {
     gen_cards();
 }
 
-function set_number_of_marbles(color) {
-    // on the screen
-    let td_xnum = doc.getElementById(color + "-xnum");
-    td_xnum.innerHTML = "X" + game.getNumberOfMarbles(color);
-}
-
-function remove_elems(query) {
-    let elem = doc.querySelector(query);
-    while (elem !== null) {
-        elem.remove();
-        elem = doc.querySelector(query);
-    }
-}
-
-function set_list_of_elems_attr(list_of_elems, property, value) {
-    for (let elem of list_of_elems) {
-        elem.setAttribute(property, value);
-    }
-}
-
-function normalize_part_field_coords(part_field, direction) {
-    /*
-    Real:
-    1 2 3  (cw (ccw))   7 4 1
-    4 5 6     -->       8 5 2  
-    7 8 9               9 6 3
-    
-    We should fix that with turning the opposite direction
-
-    Fixed:
-    7 4 1  (ccw (cw))  1 2 3
-    8 5 2     -->      4 5 6
-    9 6 3              7 8 9
-
-    We know that there is the normal order in part_field of notches in HTML
-    So we should change sequence of notches "1 2 3 4 5 6 7 8 9" to "3 6 9 2 5 8 1 4 7"
-    if a player turns field clockwise
-    And "1 2 3 4 5 6 7 8 9" to "7 4 1 8 5 2 9 6 3", if a player turns counterclockwise, 
-    to make normal order on the screen
-    */
-    let part_field_children = part_field.children;
-    let mas = [];
-    let nmas = [];
-    // read order of notches
-    for (let i = 0; i < 9; i++) {
-        mas[i] = parseInt(part_field_children[i].classList[1].match(/\d/));
-        nmas[i] = mas[i];
-    }
-    let k = (direction == "cw" ? 9 - 1 : 0);
-    let d = (direction == "cw" ? -1 : +1);
-    for (let i = 0; i < 3; i++) {
-        for (let j = 2 - i; j < mas.length - i; j += 3) {
-            nmas[j] = mas[k];
-            k += d;
-        }
-    }
-    for (let i = 0; i < mas.length; i++) {
-        part_field_children[i].classList.remove("n" + mas[i]);
-        part_field_children[i].classList.add("n" + nmas[i]);
-    }
-}
-
 function clear_gamefield() {
     // full clear to almost first condition
     // restore marbles (to model)
@@ -554,7 +471,7 @@ function clear_gamefield() {
     // update marbles (to UI)    
     let colors = ["yellow", "blue", "red"];
     for (let color of colors) {
-        set_number_of_marbles(color);
+        set_number_of_marbles(color, game.getNumberOfMarbles(color));
     }
     // clear screen (to UI)
     remove_elems(".card-pattern");

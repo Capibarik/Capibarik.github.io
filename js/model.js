@@ -48,7 +48,7 @@ class CardPattern {
     }
 }
 class GameField {
-    constructor(settings, stats) {
+    constructor(settings) {
         this._NUMBER_COLOR = {
             0: "yellow",
             1: "red",
@@ -75,7 +75,6 @@ class GameField {
         for (let i = 1; i <= this.numberOfPlayers; i++) {
             this.players.push(new Player(i, (i == this.alivePlayerID ? true : false), (i == this._playerIDTurn ? true : false)));
         }
-        this._stats = stats;
         this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
         this._marblesOnField = [];
         for (let i = 0; i < 4; i++) {
@@ -136,9 +135,6 @@ class GameField {
     }
     get playerIDTurn() {
         return this._playerIDTurn;
-    }
-    get stats() {
-        return this._stats;
     }
     runGame() {
         this._settings.isBlock = true;
@@ -456,6 +452,6 @@ class Stats {
 }
 let settings = new Settings(3, 3, "light");
 let stats = new Stats(0, 0, 0, 0);
-let game = new GameField(settings, stats);
+let game = new GameField(settings);
 
-export default game;
+export {game, stats};

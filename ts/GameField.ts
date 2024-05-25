@@ -1,7 +1,7 @@
 // FIXME: 'get marblesOnField()' is used only for test
 // FIXME: amount of balls is 9, not 3 (and in index.html)
 // FIXME: code repeats four times in checkCombs
-// TODO: implement method that will check combinations, you should check combinations after there are 5 balls and more on the field
+// DONE: implement method that will check combinations, you should check combinations after there are 5 balls and more on the field
 // DONE: create GameField, impelement constructor of class
 
 
@@ -25,12 +25,12 @@ class GameField {
     private alivePlayerID: number;
     private players: Player[];
     private _playerIDTurn: number;
-    private _stats: Stats;
+
     private _scoreTable: Score;
     private _deckOfPatterns: CardPattern[];
     private _marblesOnField: (null | GameMarble)[][][];
 
-    constructor (settings: Settings, stats: Stats) {
+    constructor (settings: Settings) {
         this._settings = settings;
         this._currentRound = 1;
         this._numberOfMarbles = {
@@ -52,7 +52,6 @@ class GameField {
                     (i == this._playerIDTurn ? true : false))
             );
         }
-        this._stats = stats;
         this._scoreTable = new Score(this.numberOfRounds, this.numberOfPlayers, this.alivePlayerID);
         this._marblesOnField = [];
         for (let i = 0; i < 4; i++) {
@@ -117,9 +116,6 @@ class GameField {
     }
     get playerIDTurn(): number {
         return this._playerIDTurn;
-    }
-    get stats(): Stats {
-        return this._stats; 
     }
     runGame(): void {
         // run game and apply settings
