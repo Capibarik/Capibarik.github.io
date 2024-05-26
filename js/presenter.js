@@ -85,8 +85,8 @@ function init_events() {
         notch.addEventListener("dragleave", dragleave_notch);
         notch.addEventListener("drop", function (evt) {
             dragleave_notch(evt);
-            place_marble(evt.target);
-            add_arrows_on_field();
+            place_marble(evt.target, true); // true - I am real player
+            // add_arrows_on_field();
         });
     }
 }
@@ -230,7 +230,7 @@ function dragleave_notch(evt) {
     evt.target.classList.remove("bordered");
 }
 
-function place_marble(notch) { // notch: HTMLElement
+function place_marble(notch, isRealPlayer) { // notch: HTMLElement
     // drop ball on the notch
     // continue read data from interface (from UI)
     if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
@@ -259,6 +259,7 @@ function place_marble(notch) { // notch: HTMLElement
             "draggable",
             "false"
         );
+        if (isRealPlayer) add_arrows_on_field();
     }
 }
 
@@ -363,6 +364,14 @@ function check_combs() {
 function change_turn() {
     // read data (from model)
     game.changeTurn(); // to model
+    // change interface and read data from model (from model to UI)
+    setTimeout(function () {
+        let next_player = game.playerIDTurn;
+        let current_player_in_table = doc.getElementById("current-player");
+        current_player_in_table.removeAttribute("id");
+        let next_player_in_table = doc.querySelector(`#score-table thead tr th:nth-child(${next_player + 1})`);
+        next_player_in_table.setAttribute("id", "current-player");
+    }, 1000);
     console.log("alive player", game.alivePlayerID, "\n player ID", game.playerIDTurn);
     // check alive player
     if (game.alivePlayerID !== game.playerIDTurn) { // computer plays
@@ -372,17 +381,16 @@ function change_turn() {
             "draggable",
             "false"
         );
+        // computer`s move
         let move = calc_move(game.marblesOnField);
         dragged_elem = move["game-ball"];
-        place_marble(move["target"]);
-        rotate(move["part-field"], move["direction"]);
+        setTimeout(function () {
+            place_marble(move["target"], false);
+        }, 2000);
+        setTimeout(function () {
+            rotate(move["part-field"], move["direction"]);
+        }, 3000);
     }
-    // change interface and read data from model (from model to UI)
-    let next_player = game.playerIDTurn;
-    let current_player_in_table = doc.getElementById("current-player");
-    current_player_in_table.removeAttribute("id");
-    let next_player_in_table = doc.querySelector(`#score-table thead tr th:nth-child(${next_player + 1})`);
-    next_player_in_table.setAttribute("id", "current-player");
 }
 
 function can_we_continue_round() {
