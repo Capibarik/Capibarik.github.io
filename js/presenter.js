@@ -1,6 +1,8 @@
 // HACK: create normal screen to announce winner or draw (without alert)
 // FIXME: delete everything has comment DELETE
-// TODO: make a computer plays with you
+// TODO: find out how create pretty animations in order to real player manages to keep an eye on the game
+// TODO: find out how computer can get only not zero number of balls
+// TODO: how can computer get random color of available ball (number of this ball doesn`t equal zero)
 // TODO: try to refactor code for graphics (in presenter)
 // TODO: process case in the code when all balls is over at the end of the round
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
@@ -30,7 +32,8 @@ import {
     remove_elems,
     set_list_of_elems_attr,
     normalize_part_field_coords,
-    set_number_of_marbles } from "./graphics_utility.js";
+    set_number_of_marbles,
+    random_number } from "./graphics_utility.js";
 // model
 import { game, stats } from "./model.js";
 
@@ -80,7 +83,11 @@ function init_events() {
     for (let notch of doc.getElementsByClassName("notch")) {
         notch.addEventListener("dragover", dragover_notch);
         notch.addEventListener("dragleave", dragleave_notch);
-        notch.addEventListener("drop", whose_turn);
+        notch.addEventListener("drop", function (evt) {
+            dragleave_notch(evt);
+            place_marble(evt.target);
+            add_arrows_on_field();
+        });
     }
 }
 
@@ -203,20 +210,6 @@ function gen_cards() {
     }
 }
 
-function whose_turn(evt) {
-    // Must a computer or real player move?
-    // read data (from model)
-    if (game.playerIDTurn === game.alivePlayerID) {
-        send_alert("BOBR");
-    }
-    else {
-        send_alert("COMPUTER");
-    }
-    console.log(evt);
-    dragleave_notch(evt); // after dropping, but before placing marble we remove border from notch
-    place_marble(evt.target);
-}
-
 function dragstart_ball(evt) {
     // ball is started to drag
     // read data (from UI)
@@ -237,11 +230,9 @@ function dragleave_notch(evt) {
     evt.target.classList.remove("bordered");
 }
 
-function place_marble(notch) { 
+function place_marble(notch) { // notch: HTMLElement
     // drop ball on the notch
-    // dragleave_notch(evt);
     // continue read data from interface (from UI)
-    // let notch = evt.target;
     if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
         send_alert("This place has been occupied");
     }
@@ -268,7 +259,6 @@ function place_marble(notch) {
             "draggable",
             "false"
         );
-        add_arrows_on_field(); // for rotating
     }
 }
 
@@ -368,21 +358,38 @@ function check_combs() {
     else { // if there aren`t
         can_we_continue_round();
     }
+}
 
+function change_turn() {
+    // read data (from model)
+    game.changeTurn(); // to model
+    console.log("alive player", game.alivePlayerID, "\n player ID", game.playerIDTurn);
+    // check alive player
+    if (game.alivePlayerID !== game.playerIDTurn) { // computer plays
+        // disable balls
+        set_list_of_elems_attr(
+            doc.querySelectorAll("#left-balls-table img"),
+            "draggable",
+            "false"
+        );
+        let move = calc_move(game.marblesOnField);
+        dragged_elem = move["game-ball"];
+        place_marble(move["target"]);
+        rotate(move["part-field"], move["direction"]);
+    }
+    // change interface and read data from model (from model to UI)
+    let next_player = game.playerIDTurn;
+    let current_player_in_table = doc.getElementById("current-player");
+    current_player_in_table.removeAttribute("id");
+    let next_player_in_table = doc.querySelector(`#score-table thead tr th:nth-child(${next_player + 1})`);
+    next_player_in_table.setAttribute("id", "current-player");
 }
 
 function can_we_continue_round() {
     // check whether all balls are over
     let left_marbles = game.getLeftMarbles();
     if (left_marbles > 0) { // continue round
-        // read data (from model)
-        game.changeTurn(); // to model
-        // change interface and read data from model (from model to UI)
-        let next_player = game.playerIDTurn;
-        let current_player_in_table = doc.getElementById("current-player");
-        current_player_in_table.removeAttribute("id");
-        let next_player_in_table = doc.querySelector(`#score-table thead tr th:nth-child(${next_player + 1})`);
-        next_player_in_table.setAttribute("id", "current-player");
+        change_turn();
     }
     else { // balls are over
         can_we_continue_game();
@@ -462,6 +469,8 @@ function run_round() {
     next_round_in_table.setAttribute("id", "current-round");
     // gen cards
     gen_cards();
+    // change turn of players
+    change_turn();
 }
 
 function clear_gamefield() {
@@ -476,4 +485,35 @@ function clear_gamefield() {
     // clear screen (to UI)
     remove_elems(".card-pattern");
     remove_elems(".notch img");
+}
+
+function calc_move() {
+    // calc computer move
+    // return {HTMLElement, HTMLElement, string}
+    // this is computer`s stategy
+    let directions = ["cw", "ccw"];
+    let direction = directions[Math.floor(Math.random() * 2)];
+    let number_of_color = random_number(0, 3);
+    while (game.getNumberOfMarbles(game.getColorOfNumber(number_of_color)) === 0) {
+        number_of_color = random_number(0, 3);
+    }
+    let game_ball = doc.getElementById(game.getColorOfNumber(number_of_color) + "-gameball");
+    let number_of_field = random_number(1, 5);
+    let number_of_notch = random_number(1, 10);
+    let target = doc.querySelector(`#field-part-${number_of_field} .n${number_of_notch}`);
+    console.log("___________________________________");
+    console.log("BEFORE", target, target.childNodes);
+    while (target.childNodes.length > 0) {
+        number_of_field = random_number(1, 5);
+        number_of_notch = random_number(1, 10);
+        target = doc.querySelector(`#field-part-${number_of_field} .n${number_of_notch}`);
+    }
+    console.log("AFTER", target);
+    let part_field = doc.getElementById("field-part-" + random_number(1, 5));
+    return {
+        "game-ball": game_ball,
+        "target": target,
+        "part-field": part_field,
+        "direction": direction
+    };
 }

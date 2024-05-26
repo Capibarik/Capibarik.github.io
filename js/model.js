@@ -62,14 +62,14 @@ class GameField {
         this._settings = settings;
         this._currentRound = 1;
         this._numberOfMarbles = {
-            "yellow": 3,
-            "blue": 3,
-            "red": 3
+            "yellow": 9,
+            "blue": 9,
+            "red": 9
         };
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
         this.numberOfCardsInRounds = settings.numberOfCardsInRound;
-        this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
+        this.alivePlayerID = Math.floor(Math.random() * (this.numberOfPlayers + 1 - 1) + 1);
         this._playerIDTurn = this.alivePlayerID;
         this.players = [];
         for (let i = 1; i <= this.numberOfPlayers; i++) {
@@ -106,9 +106,9 @@ class GameField {
         return this.getNumberOfMarbles("yellow") + this.getNumberOfMarbles("blue") + this.getNumberOfMarbles("red");
     }
     restoreMarbles() {
-        this._numberOfMarbles["yellow"] = 3;
-        this._numberOfMarbles["blue"] = 3;
-        this._numberOfMarbles["red"] = 3;
+        this._numberOfMarbles["yellow"] = 9;
+        this._numberOfMarbles["blue"] = 9;
+        this._numberOfMarbles["red"] = 9;
     }
     getLeftCardPatterns() {
         let cnt = 0;
@@ -143,7 +143,7 @@ class GameField {
         this.numberOfPlayers = settings.numberOfPlayers;
         this.numberOfRounds = settings.numberOfRounds;
         this.numberOfCardsInRounds = settings.numberOfCardsInRound;
-        this.alivePlayerID = Math.ceil(Math.random() * (this.numberOfPlayers - 1) + 1);
+        this.alivePlayerID = Math.floor(Math.random() * (this.numberOfPlayers + 1 - 1) + 1);
         this._playerIDTurn = this.alivePlayerID;
         this.players = [];
         for (let i = 1; i <= this.numberOfPlayers; i++) {

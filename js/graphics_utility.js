@@ -127,3 +127,8 @@ export function set_number_of_marbles(color, number) {
     let td_xnum = doc.getElementById(color + "-xnum");
     td_xnum.innerHTML = "X" + number;
 }
+
+export function random_number(down, up) {
+    // r ∈ [down, up)
+    return Math.floor(Math.random() * (up - down) + down);
+}
