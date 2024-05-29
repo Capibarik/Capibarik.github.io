@@ -1,8 +1,10 @@
 @keyframes flip-card {
-    from {
-        transform: rotate3d(0, 1, 0, 0deg);
-    }
     to {
-        transform: rotate3d(0, 1, 0, 45deg);
+        transform: rotateY(180deg);
     }
+}
+
+.flip-card {
+    animation: 0.8s ease flip-card;
+    animation-fill-mode: forwards;
 }

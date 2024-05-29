@@ -193,20 +193,26 @@ function gen_cards() {
     // generate cards from deckOfPatterns
     let container_cards = doc.getElementById("cards"); // container has already been on page
     for (let i = 0; i < deckOfPatterns.length; i++) {
-        let empty_card = doc.createElement("div");
-        empty_card.setAttribute("class", "card-pattern");
-        empty_card.setAttribute("id", "card-pattern-" + i);
+        let flip_card = doc.createElement("div");
+        flip_card.setAttribute("class", "card");
         let inner_card = doc.createElement("div");
-        inner_card.setAttribute("class", "card-marble");
+        inner_card.setAttribute("class", "card-pattern");
+        inner_card.setAttribute("id", "card-pattern-" + i);
+        let card_front = doc.createElement("div");
+        card_front.setAttribute("class", "card-marble"); 
+        let card_back = doc.createElement("div");
+        card_back.setAttribute("class", "card-back");
         let cardPattern = deckOfPatterns[i]; 
         for (let cardMarble of cardPattern.pattern) {
             let img_marble = doc.createElement("img");
             img_marble.src = "imgs/" + game.getColorOfNumber(cardMarble.color) + "_cardball.png";
             img_marble.setAttribute("draggable", "false");
-            inner_card.appendChild(img_marble);
+            card_front.appendChild(img_marble);
         }
-        empty_card.appendChild(inner_card);
-        container_cards.appendChild(empty_card);        
+        inner_card.appendChild(card_front);
+        inner_card.appendChild(card_back);
+        flip_card.appendChild(inner_card);
+        container_cards.appendChild(flip_card);        
     }
 }
 
@@ -321,7 +327,7 @@ function rotate(part_field, direction) {
         let number_of_color = game.getNumberOfMarbles(color);
         // update interface (to UI)
         game_ball.setAttribute("draggable", number_of_color != 0);
-    }
+}
     normalize_part_field_coords(part_field, direction);
     check_combs();
 }
@@ -333,11 +339,8 @@ function check_combs() {
     // update interface (to UI)
     if (built_cards_indexes.length > 0) { // if there are built cards
         for (let built_index of built_cards_indexes) {
-            let card_marble = doc.querySelector(`#card-pattern-${built_index} .card-marble`);
-            while (card_marble.children.length > 0) {
-                card_marble.children[0].remove();
-            }
-            card_marble.setAttribute("class", "card-back");
+            let card_pattern = doc.getElementById(`card-pattern-${built_index}`);
+            card_pattern.classList.add("flip-card"); // add "flip-card" to card-pattern
             // add point(s) to current player 
             // read data (from model)
             let score_table = game.scoreTable;
@@ -454,7 +457,7 @@ function run_round() {
     // clean out marbles and cards
     // restore amount of marbles
     // clear screen (UI)
-    remove_elems(".card-pattern");
+    remove_elems(".card");
     remove_elems(".notch img");
     // run new round (model)
     game.runRound();
@@ -491,14 +494,15 @@ function clear_gamefield() {
         set_number_of_marbles(color, game.getNumberOfMarbles(color));
     }
     // clear screen (to UI)
-    remove_elems(".card-pattern");
+    remove_elems(".card");
     remove_elems(".notch img");
 }
 
 function calc_move() {
     // calc computer move
-    // return {HTMLElement, HTMLElement, string}
+    // return {HTMLElement, HTMLElement, HTMLElement, string}
     // this is computer`s stategy
+    // computer uses game.marblesOnField in order to calculate its next move
     let directions = ["cw", "ccw"];
     let direction = directions[Math.floor(Math.random() * 2)];
     let number_of_color = random_number(0, 3);
