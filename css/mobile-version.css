@@ -40,6 +40,15 @@
         transition: height var(--time-of-highlighting);
     }
 
+    /* cancel hover on the phone */
+    #burger-toggle:hover #burger-button {
+        transform: rotate(0deg);
+    }
+
+    #burger-button-toggle:checked ~ #burger-toggle #burger-button {
+        transform: rotate(90deg);
+    }
+
     #burger-button-toggle:checked ~ #burger-menu li {
         height: 12vh; /* 100% = CRASH - size of child mustn`t depend on parent size, size has to be known in advance */
         transition: height var(--time-of-highlighting); 
