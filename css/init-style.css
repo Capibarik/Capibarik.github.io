@@ -12,10 +12,11 @@
 
 :root {
     /* sizes */
-    --height-header: 14.3vh;
+    --height-header: 14.3%;
     --add-window-width: 420px;
     --time-of-appearing: 0.8s;
     --time-of-highlighting: 0.4s;
+    --width-of-arrows: 12%;
     /* colors for themes */
     /* light theme */
     --dim-gray: #696969ff;
@@ -35,7 +36,6 @@
     --davys-gray: #4d4847ff;
     --mint-cream: #f4fff8ff;
     --cadet-gray: #8baaadff;
-
 }
 
 * {
@@ -48,6 +48,8 @@
 html, body {
     margin: 0;
     font-family: 'Agency FB Extended';
+    width: 100vw;
+    height: 100vh;
 }
 
 h2 {

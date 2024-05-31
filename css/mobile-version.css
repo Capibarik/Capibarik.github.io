@@ -1,0 +1,60 @@
+@media screen and (width <= 1200px) {
+    #main {
+        flex-direction: column-reverse;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    #game-field {
+        width: 100%;
+        height: 60%;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    #game-info {
+        width: 100%;
+        height: 20%;
+        flex-direction: row;
+    }
+
+    #cards {
+        width: 100%;
+        height: 20%;
+        flex-direction: row;
+    }
+
+    #burger-toggle {
+        display: flex;
+    }
+
+    #burger-menu {
+        top: 100%;
+        left: 0;
+        flex-direction: column;
+    }
+
+    #burger-menu li {
+        height: 0;
+        background-color: black;
+        transition: height var(--time-of-highlighting);
+    }
+
+    #burger-button-toggle:checked ~ #burger-menu li {
+        height: 12vh; /* 100% = CRASH - size of child mustn`t depend on parent size, size has to be known in advance */
+        transition: height var(--time-of-highlighting); 
+    }
+
+    #burger-button-toggle:checked ~ #burger-menu li:last-child {
+        border-end-start-radius: 12%;
+        border-end-end-radius: 12%;
+    } 
+
+    .slide-window {
+        width: calc(var(--add-window-width) - 100px);
+    }
+
+    #left-balls {
+        width: 50%;
+    }
+}

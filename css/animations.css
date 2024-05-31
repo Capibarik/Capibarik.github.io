@@ -1,10 +1,16 @@
 @keyframes flip-card {
+    25% {
+        transform: scale(1.2);
+    }
+    50% {
+        transform: scale(1.0);
+    }
     to {
         transform: rotateY(180deg);
     }
 }
 
 .flip-card {
-    animation: 0.8s ease flip-card;
+    animation: 1.5s ease flip-card;
     animation-fill-mode: forwards;
 }

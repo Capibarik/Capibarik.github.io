@@ -2,12 +2,8 @@
     border: 3px solid cyan;
 }
 
-#current-player {
+#current-player, #current-round {
     color: white; 
-}
-
-#current-round {
-    color: white;
 }
 
 .text-nowrapped {

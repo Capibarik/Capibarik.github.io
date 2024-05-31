@@ -17,7 +17,7 @@
 }
 
 .slide-window > h2 {
-    font-size: 30pt;
+    font-size: min(8vmin, 30pt);
 }
 
 .slide-window-block {
@@ -34,9 +34,8 @@
 .slide-window-block + img {
     position: absolute;
     top: 10px;
-    left: calc(var(--add-window-width) + 10px);
-    width: 70px;
-    height: 70px;
+    left: calc(100% + 10px);
+    width: min(10vw, 70px);
     transition: transform var(--time-of-highlighting);
 }
 
@@ -56,7 +55,7 @@
 }
 
 .slide-window-block-options > h2 {
-    font-size: 18pt;
+    font-size: min(4.2vmin, 18pt);
 }
 
 #overlay {

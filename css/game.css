@@ -1,6 +1,8 @@
+/*TODO: make rubber field and cards */
+
 /* Главное игровое окно */ 
 
-#header {
+header {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -12,32 +14,43 @@
     background-color: black;
 }
 
-#nav {
-    width: 120%;
+nav {
+    position: relative;
+    width: 30%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-content: center;
     align-items: center;
 }
 
-#nav div {
-    margin: calc((var(--height-header) - 90px) / 3);
+nav div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: max(calc((var(--height-header) - 10vh) / 3), 10px);
 }
 
-#nav img {
-    width: 90px;
+nav img {
+    width: 60%;
 }
 
 #game-header {
-    font-size: 82pt;
-    margin-right: calc((var(--height-header) - 90px) / 3);
+    font-size: 10vmin;
+    margin-right: max(calc((var(--height-header) - 10vh) / 3), 10px);
     color: white;
 }
 
+main {
+    height: calc(100% - var(--height-header));
+    width: 100%;
+}
+
 #main {
-    height: calc(100vh - var(--height-header));
+    height: 100%;
     width: 100%;
     background-color: #a5a5a5;
     display: flex;
@@ -46,42 +59,49 @@
 }
 
 #game-info {
+    width: 20%;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-evenly;
-    margin-left: 20px;
+    align-items: center;
+    margin: calc(var(--height-header) / 6);
 }
 
 #score, #left-balls {
+    width: 35vmin;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: calc((var(--height-header) - 90px) / 3);
     background-color: #828282;
 }
 
 #score-header, #left-balls-header {
     text-align: center;
-    padding: 20px;
-    font-size: 25pt;
+    padding: 4%;
+    font-size: 3.5vmin;
     color: white;
 }
 
 #score-table, #left-balls-table {
-    font-size: 18pt;
+    font-size: 2.4vmin;
+    width: 100%;
 }
 
 #score-table thead {
     font-family: "Agency FB Extended Bold";
 }
 
-#score-table th, td {
-    padding: 15px;
+#score-table th {
+    padding: 3%;
+}
+
+#left-balls-table th {
+    padding: 3%;
 }
 
 #left-balls-table img  {
-    width: 45px;
+    width: 60%;
     transition: transform 0.3s;
 }
 
@@ -89,7 +109,7 @@
     transform: scale(1.5, 1.5);
 }
 
-#left-balls-table th, td {
+#left-balls-table th {
     text-align: center;
 }
 
@@ -104,9 +124,9 @@
 
 #field {
     position: relative;
-    width: 665px;
-    height: 665px;
-    margin: 50px;
+    width: 35vmax; /* 665px */
+    height: 35vmax; /* 665px */
+    margin: 1vmax; /* 50px */
     display: grid;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
@@ -114,24 +134,29 @@
 }
 
 .field-part {
+    width: 100%;
+    height: 100%;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     justify-items: center;
     align-items: center;
-    width: 330px;
-    height: 330px;
     background-color: #e8e8e8;
-    border-radius: 46px;
+    border-radius: 15%;
     transition: transform 1s ease;
 }
 
 .notch {
-    width: 65px;
-    height: 65px;
+    width: 60%;
+    height: 60%;
     background: radial-gradient(white, 60%, #b3b3b3);
     box-shadow: inset 0px 0px 10px #a3a3a3;
     border-radius: 50%;
+}
+
+.notch img {
+    width: 100%;
+    height: 100%;
 }
 
 #cards {
@@ -145,8 +170,8 @@
 }
 
 .card { /* flip-card */
-    width: 240px;
-    height: 240px;
+    width: 25vmin;
+    height: 25vmin;
     perspective: 1000px;
 }
 
@@ -174,7 +199,7 @@
 }
 
 .card-pattern div img {
-    width: 38px;
+    width: 18%;
 }
 
 .card-marble { /* flip-card-front */
@@ -200,51 +225,51 @@
 
 .arrow {
     position: absolute;
-    width: 80px;
+    width: var(--width-of-arrows);
 } 
 
 .cw-f1 {
-    top: -80px;
+    top: calc(0% - var(--width-of-arrows));
     left: 0px;
 }
 
 .ccw-f1 { 
     top: 0px;
-    left: -80px;
+    left: calc(0% - var(--width-of-arrows));
     transform: rotate(-90deg);
 }
 
 .cw-f2 { 
     top: 0px;
-    right: -80px;
+    right: calc(0% - var(--width-of-arrows));
     transform: rotate(90deg);
 }
 
 .ccw-f2 {
-    top: -80px;
+    top: calc(0% - var(--width-of-arrows));
     right: 0px;
 }
 
 .cw-f3 {
-    bottom: -80px;
+    bottom: calc(0% - var(--width-of-arrows));
     right: 0px;
     transform: rotate(-180deg);
 }
 
 .ccw-f3 {
     bottom: 0px;
-    right: -80px;
+    right: calc(0% - var(--width-of-arrows));
     transform: rotate(90deg);
 }
 
 .cw-f4 {
     bottom: 0px;
-    left: -80px;
+    left: calc(0% - var(--width-of-arrows));
     transform: rotate(-90deg);
 }
 
 .ccw-f4 {
-    bottom: -80px;
+    bottom: calc(0% - var(--width-of-arrows));
     left: 0px;
     transform: rotate(180deg);
 }
@@ -265,4 +290,73 @@
 
 #btn-rules img:hover {
     transform: scale(1.2, 1.2);
+}
+
+/* burger menu */
+
+#burger-button-toggle {
+    display: none;
+}
+
+#burger-toggle {
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#burger-button {
+    width: 50%;
+    height: 50%;
+    transition: transform var(--time-of-highlighting);
+}
+
+#burger-button,
+#burger-button::before,
+#burger-button::after {
+    display: block;
+    position: absolute;
+    margin: 0;
+    width: 60%;
+    height: 10px;
+    background-color: white;
+}
+
+#burger-button::before {
+    content: '';
+    width: 100%;
+    margin-top: 24px;
+}
+
+#burger-button::after {
+    content: '';
+    width: 100%;
+    margin-top: -24px;
+}
+
+#burger-toggle:hover #burger-button {
+    transform: rotate(90deg);
+}
+
+#burger-menu {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+}
+
+#burger-menu li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }

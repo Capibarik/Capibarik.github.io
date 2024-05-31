@@ -4,6 +4,7 @@
 <!--DONE: find out why checked doesn`t work properly on radio button-->
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,28 +20,37 @@
     <link rel="stylesheet" type="text/css" href="css/add-style.css">
     <link rel="stylesheet" type="text/css" href="css/alert.css">
     <link rel="stylesheet" type="text/css" href="css/animations.css">
+    <link rel="stylesheet" type="text/css" href="css/mobile-version.css">
     <script src="js/presenter.js" type="module"></script>
     <title>Pentago</title>
 </head>
 
 <body>
     <header>
-        <div id="header">
-            <nav>
-                <div id="nav">
+        <nav>
+            <input id="burger-button-toggle" type="checkbox">
+            <label for="burger-button-toggle" id="burger-toggle">
+                <div id="burger-button"></div>
+            </label>
+            <ul id="burger-menu">
+                <li>
                     <div id="btn-settings">
                         <img src="imgs/settings.svg" alt="Settings">
                     </div>
+                </li>
+                <li>
                     <div id="btn-stats">
                         <img src="imgs/stats.svg" alt="Stats">
                     </div>
+                </li>
+                <li>
                     <div id="btn-rules">
                         <img src="imgs/rules.svg" alt="Rules">
                     </div>
-                </div>
-            </nav>
-            <h2 id="game-header">PENTAGO</h2>
-        </div>
+                </li>
+            </ul>
+        </nav>
+        <h2 id="game-header">PENTAGO</h2>
     </header>
     <main>
         <div id="main">
@@ -75,9 +85,9 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td id="yellow-xnum">X9</td>
-                                <td id="blue-xnum">X9</td>
-                                <td id="red-xnum">X9</td>
+                                <th id="yellow-xnum">X9</td>
+                                <th id="blue-xnum">X9</td>
+                                <th id="red-xnum">X9</td>
                             </tr>
                         </tbody>
                     </table>

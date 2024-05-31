@@ -1,13 +1,19 @@
+/* TODO: block of rules doesn`t want work properly on phone*/
+
 #rules {
-    padding: 40px;
-    padding-top: 20px;
+    padding: 5%;
+    padding-top: 2%;
     top: calc(180px - 70%);
-    left: 192px;
+    left: 5%;
+    height: 35%;
     width: 70%;
-    height: 40%;
     background-color: #e8e8e8;
-    font-size: 20pt;
+    font-size: 2.7vmin;
     transition: top var(--time-of-appearing);
+}
+
+#rules h2 {
+    font-size: 4vmin;
 }
 
 #rules-block {
@@ -15,10 +21,11 @@
 }
 
 #rules img {
+    width: min(10vw, 70px);
     left: calc(100% + 10px);
     transform: rotate(90deg);
 }
 
 #rules img:hover {
-    transform: scale(1.2, 1.2) rotate(90deg);
+    transform: scale(1.5, 1.5) rotate(90deg);
 }

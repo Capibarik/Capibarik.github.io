@@ -14,7 +14,7 @@ input[type="radio"] {
 
 .options input[type="radio"] + label {
     padding: 5px;
-    font-size: 20pt;
+    font-size: min(5vmin, 20pt);
 }
 
 .options input[type="radio"]:checked + label {
@@ -22,7 +22,7 @@ input[type="radio"] {
 }
 
 #theme label {
-    font-size: 16pt;
+    font-size: min(3.6vmin, 16pt);
 }
 
 #btn-start {
@@ -33,7 +33,7 @@ input[type="radio"] {
     align-items: center;
     width: 80%;
     height: 8%;
-    font-size: 30pt;
+    font-size: min(8vmin, 30pt);
     background-color: #cccccc;
 }
 
