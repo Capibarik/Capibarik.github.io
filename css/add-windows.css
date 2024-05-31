@@ -11,7 +11,7 @@
     left: calc(0px - var(--add-window-width) - 70px - 10px - 10px); /* 70px - width of img, 10px - left shift, 10px - depth*/
     width: var(--add-window-width);
     height: 86%;
-    z-index: 2;
+    z-index: 4;
     background-color: #828282;
     transition: left var(--time-of-appearing);
 }
@@ -65,7 +65,7 @@
     top: var(--height-header);
     width: 100vw;
     height: calc(100vh - var(--height-header));
-    z-index: 1;
+    z-index: 3;
     background-color: rgb(100, 100, 100);
     opacity: 0%;
     transition: opacity var(--time-of-appearing);

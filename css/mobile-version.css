@@ -60,7 +60,7 @@
     } 
 
     .slide-window {
-        width: calc(var(--add-window-width) - 100px);
+        width: 70%;
     }
 
     #left-balls {

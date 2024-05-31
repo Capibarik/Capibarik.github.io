@@ -1,5 +1,6 @@
 <!--HACK: I couldn`t come up with anything better than the implementation of coordinate plot on the field with group of classes n{i} - i belongs from 1 to 9 -->
 <!--FIXME: there are checked radio buttons in settings only to use for test, then you need set them with localStorage-->
+<!--TODO: delete class="back-arrow" -->
 <!--TODO: adapt to different size of screen: phone, PC and tablet-->
 <!--DONE: find out why checked doesn`t work properly on radio button-->
 
@@ -200,14 +201,14 @@
                 </div>
                 <div id="btn-start">START</div>
             </div>
-            <img src="imgs/back_arrow.svg" alt="Стрелка назад">
+            <img class="back-arrow" src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
         <div id="stats" class="slide-window">
             <h2>STATS</h2>
             <div id="stats-block" class="slide-window-block">
                 <div class="slide-window-block-options">
                     <h2>Number of Games</h2>
-                    <span id="number-of-games">0</span>
+                    <span id="number-of-games">100</span>
                 </div>
                 <div class="slide-window-block-options">
                     <h2>Cards Per Round</h2>
@@ -222,7 +223,7 @@
                     <span id="number-of-wins">0</span>
                 </div>
             </div>
-            <img src="imgs/back_arrow.svg" alt="Стрелка назад">
+            <img class="back-arrow" src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
         <div id="rules" class="slide-window">
             <h2>Game`s rules</h2>
@@ -236,7 +237,7 @@
                 then you rotate any disk on 90 degrees clockwise or counterclockwise.
                 When you place the marble, no one will able to move it.
             </div>
-            <img src="imgs/back_arrow.svg" alt="Стрелка назад">
+            <img class="back-arrow" src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
         <div id="overlay"></div>
     </main>

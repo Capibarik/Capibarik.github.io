@@ -19,6 +19,7 @@ export function smooth_move(elem, direction, offset) {
         elem.style.cssText = addCss;
         overlay.style.opacity = "0%";
         current_add_window = false; // free
+        doc.getElementById("burger-button-toggle").checked = false; // close burger menu
     }
 }
 export function send_alert(message) {
