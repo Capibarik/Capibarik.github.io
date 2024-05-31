@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-around;
     top: -20%;
-    z-index: 2;
+    z-index: 5;
     padding: 10px;
     border: 2px solid white;
     color: white;

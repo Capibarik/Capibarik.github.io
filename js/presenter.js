@@ -1,5 +1,6 @@
 // HACK: create normal screen to announce winner or draw (without alert)
 // FIXME: delete everything has comment DELETE
+// TODO: 
 // TODO: find out how create pretty animations in order to real player manages to keep an eye on the game
 // TODO: find out how computer can get only not zero number of balls
 // TODO: how can computer get random color of available ball (number of this ball doesn`t equal zero)
@@ -79,6 +80,9 @@ function init_events() {
     // events for game
     for (let game_ball of doc.querySelectorAll("#left-balls-table img")) {
         game_ball.addEventListener("dragstart", dragstart_ball);
+        game_ball.addEventListener("touchstart", touchstart_ball);
+        game_ball.addEventListener("touchmove", touchmove_ball);
+        game_ball.addEventListener("touchend", touchend_ball);
     }
     for (let notch of doc.getElementsByClassName("notch")) {
         notch.addEventListener("dragover", dragover_notch);
@@ -234,6 +238,30 @@ function dragover_notch(evt) {
 function dragleave_notch(evt) {
     // dragged ball leave from notch
     evt.target.classList.remove("bordered");
+}
+
+function touchstart_ball(evt) {
+    // dragstart_ball, BUT for phone
+    dragged_elem = evt.target;
+}
+
+function touchmove_ball(evt) {
+    // when ball is moved by user
+    if (game.settings.isBlock) {
+        let ball = evt.target;
+        let touch = evt.touches[0];
+        ball.classList.add("moveable-ball");
+        ball.style.left = touch.clientX - ball.offsetWidth / 2 + "px";
+        ball.style.top = touch.clientY - ball.offsetHeight / 2 + "px";
+        console.log(ball.offsetWidth);
+        console.log(ball.offsetHeight);
+    }
+}
+
+function touchend_ball(evt) {
+    // drop for phone
+    let touch = evt.changedTouches[0];
+    place_marble(doc.elementFromPoint(touch.clientX, touch.clientY), true);
 }
 
 function place_marble(notch, isRealPlayer) { // notch: HTMLElement

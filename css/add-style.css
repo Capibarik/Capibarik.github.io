@@ -9,3 +9,9 @@
 .text-nowrapped {
     white-space: nowrap;
 }
+
+.moveable-ball {
+    position: fixed;
+    width: 8vmin !important;
+    z-index: 1;
+}
