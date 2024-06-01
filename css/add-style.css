@@ -10,8 +10,12 @@
     white-space: nowrap;
 }
 
-.moveable-ball {
+.moveable-ball { 
     position: fixed;
     width: 8vmin !important;
     z-index: 1;
+}
+
+.immovable-ball {
+    pointer-events: none;
 }

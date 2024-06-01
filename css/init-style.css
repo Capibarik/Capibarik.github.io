@@ -12,7 +12,7 @@
 
 :root {
     /* sizes */
-    --height-header: 14.3%;
+    --height-header: 14%;
     --add-window-width: 420px;
     --time-of-appearing: 0.8s;
     --time-of-highlighting: 0.4s;

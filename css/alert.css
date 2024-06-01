@@ -1,4 +1,6 @@
 .alert {
+    max-width: 450px;
+    width: 60vw;
     position: fixed;
     display: flex;
     justify-content: space-around;
@@ -26,16 +28,20 @@
     border-radius: 100%;
     border: 2px solid white;
     background-color: #666666;
-    width: 80px;
-    height: 80px;
-    font-size: 30pt;
+    max-width: 80px;
+    max-height: 80px;
+    width: 20%;
+    height: 20%;
+    font-size: min(20%, 30pt);
 }
 
 .attention img {
-    width: 15px;
+    max-width: 15px;
+    min-width: 12px;
+    width: 30%;
 }
 
 .message {
     padding: 10px;
-    font-size: 20pt; 
+    font-size: min(100%, 20pt); 
 }

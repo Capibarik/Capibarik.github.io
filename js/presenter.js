@@ -124,6 +124,12 @@ function update_settings() { // or start game
             "draggable",
             "true"
         );
+        set_list_of_elems_attr(
+            doc.querySelectorAll("#left-balls-table img"),
+            "class",
+            ""
+        );
+
     }
     else {
         send_alert("Game is going on");
@@ -241,27 +247,28 @@ function dragleave_notch(evt) {
 }
 
 function touchstart_ball(evt) {
-    // dragstart_ball, BUT for phone
-    dragged_elem = evt.target;
+    // for phone
+    dragstart_ball(evt);
 }
 
 function touchmove_ball(evt) {
     // when ball is moved by user
+    let ball = evt.target;
+    let touch = evt.touches[0];
     if (game.settings.isBlock) {
-        let ball = evt.target;
-        let touch = evt.touches[0];
         ball.classList.add("moveable-ball");
-        ball.style.left = touch.clientX - ball.offsetWidth / 2 + "px";
-        ball.style.top = touch.clientY - ball.offsetHeight / 2 + "px";
-        console.log(ball.offsetWidth);
-        console.log(ball.offsetHeight);
+        ball.style.left = touch.pageX - ball.offsetWidth / 2 + "px";
+        ball.style.top = touch.pageY - ball.offsetHeight / 2 + "px";
     }
 }
 
 function touchend_ball(evt) {
     // drop for phone
+    console.log(doc.querySelectorAll("#left-balls-table img"));
     let touch = evt.changedTouches[0];
-    place_marble(doc.elementFromPoint(touch.clientX, touch.clientY), true);
+    let notch = doc.elementsFromPoint(touch.pageX, touch.pageY)[1]; // should be notch
+    console.log(notch);
+    place_marble(notch, true);
 }
 
 function place_marble(notch, isRealPlayer) { // notch: HTMLElement
@@ -269,6 +276,11 @@ function place_marble(notch, isRealPlayer) { // notch: HTMLElement
     // continue read data from interface (from UI)
     if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
         send_alert("This place has been occupied");
+        set_list_of_elems_attr(
+            [dragged_elem],
+            "class",
+            ""
+        ); // return ball on its place
     }
     else {
         // update inteface (to UI)
@@ -293,6 +305,12 @@ function place_marble(notch, isRealPlayer) { // notch: HTMLElement
             "draggable",
             "false"
         );
+        // for touches
+        set_list_of_elems_attr(
+            doc.querySelectorAll("#left-balls-table img"),
+            "class",
+            "immovable-ball"
+        )
         if (isRealPlayer) add_arrows_on_field();
     }
 }
@@ -355,6 +373,7 @@ function rotate(part_field, direction) {
         let number_of_color = game.getNumberOfMarbles(color);
         // update interface (to UI)
         game_ball.setAttribute("draggable", number_of_color != 0);
+        game_ball.setAttribute("class", number_of_color != 0 ? "" : "immovable-ball");
 }
     normalize_part_field_coords(part_field, direction);
     check_combs();
@@ -412,6 +431,11 @@ function change_turn() {
             "draggable",
             "false"
         );
+        set_list_of_elems_attr(
+            doc.querySelectorAll("#left-balls-table img"),
+            "class",
+            "immovable-ball"
+        );
         // computer`s move
         let move = calc_move(game.marblesOnField);
         dragged_elem = move["game-ball"];
@@ -445,6 +469,11 @@ function can_we_continue_game() {
             doc.querySelectorAll("#left-balls-table img"),
             "draggable",
             "false"
+        );
+        set_list_of_elems_attr(
+            doc.querySelectorAll("#left-balls-table img"),
+            "class",
+            "immovable-ball"
         );
         // calculate result (from model)
         game.scoreTable.summarizeScore();
@@ -500,6 +529,11 @@ function run_round() {
         doc.querySelectorAll("#left-balls-table img"),
         "draggable",
         "true"
+    );
+    set_list_of_elems_attr(
+        doc.querySelectorAll("#left-balls-table img"),
+        "class",
+        ""
     );
     // update table
     let current_round_in_table = doc.getElementById("current-round");
