@@ -213,6 +213,8 @@ main {
 }
 
 .card-back { /* flip-card-back */
+    width: 90%;
+    height: 90%;
     position: absolute;
     background: url("../imgs/card_back.svg");
     background-repeat: no-repeat;

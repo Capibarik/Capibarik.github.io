@@ -253,6 +253,7 @@ function touchstart_ball(evt) {
 
 function touchmove_ball(evt) {
     // when ball is moved by user
+    evt.preventDefault();
     let ball = evt.target;
     let touch = evt.touches[0];
     if (game.settings.isBlock) {
