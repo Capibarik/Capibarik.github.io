@@ -12,12 +12,13 @@
     width: var(--add-window-width);
     height: 86%;
     z-index: 4;
-    background-color: #828282;
+    background-color: var(--background-add-window-color);
     transition: left var(--time-of-appearing);
 }
 
 .slide-window > h2 {
     font-size: min(8vmin, 30pt);
+    color: var(--text-add-window-color);
 }
 
 .slide-window-block {
@@ -28,7 +29,7 @@
     align-items: center;
     width: 100%;
     height: 80%;
-    background-color: #828282;
+    background-color: var(--background-add-window-color);
 }
 
 .slide-window-block + img {
@@ -36,6 +37,7 @@
     top: 10px;
     left: calc(100% + 10px);
     width: min(10vw, 70px);
+    filter: var(--arrow-color);
     transition: transform var(--time-of-highlighting);
 }
 
@@ -51,11 +53,13 @@
     align-items: center;
     width: 80%;
     height: 20%;
-    background-color: #cccccc;
+    background-color: var(--background-add-window-block-color);
+    color: var(--text-add-window-color);
 }
 
 .slide-window-block-options > h2 {
     font-size: min(4.2vmin, 18pt);
+    color: var(--text-add-window-color);
 }
 
 #overlay {
@@ -66,7 +70,7 @@
     width: 100vw;
     height: calc(100vh - var(--height-header));
     z-index: 3;
-    background-color: rgb(100, 100, 100);
+    background-color: var(--overlay-color);
     opacity: 0%;
     transition: opacity var(--time-of-appearing);
 }

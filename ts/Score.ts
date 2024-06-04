@@ -27,7 +27,7 @@ class Score {
     }
     getResultRow(): number[] {
         let result = [];
-        for (let i = 0; i < this._table.length; i++) {
+        for (let i = 0; i < this._table[0].length; i++) {
             result.push(this._table[this._table.length - 1][i]);
         }
         return result;

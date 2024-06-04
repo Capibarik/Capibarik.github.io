@@ -15,10 +15,11 @@ input[type="radio"] {
 .options input[type="radio"] + label {
     padding: 5px;
     font-size: min(5vmin, 20pt);
+    background-color: var(--background-add-window-block-color);
 }
 
 .options input[type="radio"]:checked + label {
-    background-color: #ffffff;
+    background-color: var(--elem-interact-color);
 }
 
 #theme label {
@@ -34,9 +35,10 @@ input[type="radio"] {
     width: 80%;
     height: 8%;
     font-size: min(8vmin, 30pt);
-    background-color: #cccccc;
+    background-color: var(--background-add-window-block-color);
+    color: var(--text-add-window-color);
 }
 
 #btn-start:hover {
-    background-color: #ffffff;
+    background-color: var(--elem-interact-color);
 }

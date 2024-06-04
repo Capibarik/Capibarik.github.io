@@ -124,9 +124,9 @@ class GameField {
         this._settings.isBlock = true; // game has started, settings is blocked
         this._currentRound = 1;
         this.restoreMarbles();
-        this.numberOfPlayers = settings.numberOfPlayers;
-        this.numberOfRounds = settings.numberOfRounds;
-        this.numberOfCardsInRounds = settings.numberOfCardsInRound;
+        this.numberOfPlayers = this._settings.numberOfPlayers;
+        this.numberOfRounds = this._settings.numberOfRounds;
+        this.numberOfCardsInRounds = this._settings.numberOfCardsInRound;
         this.alivePlayerID = Math.floor(Math.random() * (this.numberOfPlayers + 1 - 1) + 1);
         this._playerIDTurn = this.alivePlayerID;
         this.players = [];
@@ -182,7 +182,7 @@ class GameField {
         /*
         From parts ([][][]):
         [
-            [first_part] [second_part][third_part] [fourth_part]
+            [first_part], [second_part], [third_part], [fourth_part]
         ]
         To general field ([][])
         [

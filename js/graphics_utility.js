@@ -24,36 +24,38 @@ export function smooth_move(elem, direction, offset) {
 }
 export function send_alert(message) {
     // like alert, but it is better
-    let div_alert = doc.createElement("div");
-    div_alert.classList.add("alert");
-    let div_attention = doc.createElement("div");
-    div_attention.classList.add("attention");
-    let img = doc.createElement("img");
-    img.src = "imgs/attention.svg";
-    img.alt = "Внимание";
-    let div_message = doc.createElement("div");
-    div_message.classList.add("message");
-    div_message.innerHTML = message;
-    let div_alert_close = doc.createElement("div");
-    div_alert_close.classList.add("alert-close");
-    div_alert_close.innerHTML = "X";
-    div_attention.appendChild(img);
-    div_alert.appendChild(div_attention);
-    div_alert.appendChild(div_message);
-    div_alert.appendChild(div_alert_close);
-    div_alert_close.addEventListener("click", function () {
-        remove_alert(div_alert);
-    });
-    doc.getElementsByTagName("body")[0].appendChild(div_alert);
-    // situate alert on the screen
-    let width = div_alert.getBoundingClientRect().width;
-    let left_offset = window.innerWidth / 2 - width / 2;
-    div_alert.style.left = `${left_offset}px`;
-    div_alert.style.top = "20%";
-    div_alert.style.opacity = "100%";
-    setTimeout(function () {
-        remove_alert(div_alert);
-    }, 3000);
+    if (doc.getElementsByClassName("alert").length === 0) {
+        let div_alert = doc.createElement("div");
+        div_alert.classList.add("alert");
+        let div_attention = doc.createElement("div");
+        div_attention.classList.add("attention");
+        let img = doc.createElement("img");
+        img.src = "imgs/attention.svg";
+        img.alt = "Внимание";
+        let div_message = doc.createElement("div");
+        div_message.classList.add("message");
+        div_message.innerHTML = message;
+        let div_alert_close = doc.createElement("div");
+        div_alert_close.classList.add("alert-close");
+        div_alert_close.innerHTML = "X";
+        div_attention.appendChild(img);
+        div_alert.appendChild(div_attention);
+        div_alert.appendChild(div_message);
+        div_alert.appendChild(div_alert_close);
+        div_alert_close.addEventListener("click", function () {
+            remove_alert(div_alert);
+        });
+        doc.getElementsByTagName("body")[0].appendChild(div_alert);
+        // situate alert on the screen
+        let width = div_alert.getBoundingClientRect().width;
+        let left_offset = window.innerWidth / 2 - width / 2;
+        div_alert.style.left = `${left_offset}px`;
+        div_alert.style.top = "20%";
+        div_alert.style.opacity = "100%";
+        setTimeout(function () {
+            remove_alert(div_alert);
+        }, 3000);
+    }
 }
 
 function remove_alert(div_alert) {

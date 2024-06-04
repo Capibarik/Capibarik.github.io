@@ -40,7 +40,7 @@
 
     #burger-menu li {
         height: 0;
-        background-color: black;
+        background-color: var(--header-color);
         transition: height var(--time-of-highlighting);
     }
 
@@ -69,5 +69,9 @@
 
     #left-balls {
         width: 50%;
+    }
+    
+    .message {
+        font-size: 12pt;
     }
 }

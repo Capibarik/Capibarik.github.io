@@ -3,15 +3,17 @@
 <!--TODO: delete class="back-arrow" -->
 <!--TODO: adapt to different size of screen: phone, PC and tablet-->
 <!--DONE: find out why checked doesn`t work properly on radio button-->
+<!--TODO: fix size of text in the alert on different versions -->
 
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data="light-theme">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="imgs/icon.svg">
     <link rel="stylesheet" type="text/css" href="css/init-style.css">
     <link rel="stylesheet" type="text/css" href="css/game.css">
     <link rel="stylesheet" type="text/css" href="css/settings.css">
@@ -27,6 +29,24 @@
 </head>
 
 <body>
+    <!-- For changing colors of svg images depending on themes -->
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0"
+        height="0">
+        <defs>
+            <filter x="0" y="0" width="1" height="1" id="light-themeColor">
+                <feFlood flood-color="black" />
+                <feComposite in2="SourceGraphic" operator="in" />
+            </filter>
+            <filter x="0" y="0" width="1" height="1" id="dark-themeColor">
+                <feFlood flood-color="#DCE0D9" />
+                <feComposite in2="SourceGraphic" operator="in" />
+            </filter>
+            <filter x="0" y="0" width="1" height="1" id="color-themeColor">
+                <feFlood flood-color="#F5DDDD" />
+                <feComposite in2="SourceGraphic" operator="in" />
+            </filter>
+        </defs>
+    </svg>
     <header>
         <nav>
             <input id="burger-button-toggle" type="checkbox">
@@ -74,10 +94,12 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <img id="yellow-gameball" src="imgs/yellow_gameball.png" alt="Yellow ball" draggable="false">
+                                    <img id="yellow-gameball" src="imgs/yellow_gameball.png" alt="Yellow ball"
+                                        draggable="false">
                                 </th>
                                 <th>
-                                    <img id="blue-gameball" src="imgs/blue_gameball.png" alt="Blue ball" draggable="false">
+                                    <img id="blue-gameball" src="imgs/blue_gameball.png" alt="Blue ball"
+                                        draggable="false">
                                 </th>
                                 <th>
                                     <img id="red-gameball" src="imgs/red_gameball.png" alt="Red ball" draggable="false">
@@ -201,7 +223,7 @@
                 </div>
                 <div id="btn-start">START</div>
             </div>
-            <img class="back-arrow" src="imgs/back_arrow.svg" alt="Стрелка назад">
+            <img src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
         <div id="stats" class="slide-window">
             <h2>STATS</h2>
@@ -223,21 +245,23 @@
                     <span id="number-of-wins">0</span>
                 </div>
             </div>
-            <img class="back-arrow" src="imgs/back_arrow.svg" alt="Стрелка назад">
+            <img src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
         <div id="rules" class="slide-window">
             <h2>Game`s rules</h2>
             <div id="rules-block" class="slide-window-block text-nowrapped">
                 Players must build as many patterns on the cards as they can in a round.
-                The player wins in the round if he builds the most number of patterns. The player wins in the game 
+                The player wins in the round if he builds the most number of patterns. The player wins in the game
                 if his amount of built patterns for all rounds is the most, else it is draw.
-                There are n - 1 cards of patterns in a round where n is number of players. As all patterns on cards are built,
+                There are n - 1 cards of patterns in a round where n is number of players. As all patterns on cards are
+                built,
                 the round is over.
-                <strong>Mechanic of game:</strong> you put any marble in free recess on one of four disks of the game field,
+                <strong>Mechanic of game:</strong> you put any marble in free recess on one of four disks of the game
+                field,
                 then you rotate any disk on 90 degrees clockwise or counterclockwise.
                 When you place the marble, no one will able to move it.
             </div>
-            <img class="back-arrow" src="imgs/back_arrow.svg" alt="Стрелка назад">
+            <img src="imgs/back_arrow.svg" alt="Стрелка назад">
         </div>
         <div id="overlay"></div>
     </main>

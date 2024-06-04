@@ -17,25 +17,123 @@
     --time-of-appearing: 0.8s;
     --time-of-highlighting: 0.4s;
     --width-of-arrows: 12%;
-    /* colors for themes */
-    /* light theme */
-    --dim-gray: #696969ff;
-    --eerie-black: #201F1Fff;
-    --gray: #818181ff;
-    --silver: #BBBAB9ff;
-    --battleship-gray: #999999ff;
-    /* color theme */
-    --indigo-dye: #274060ff;
-    --lapis-lazuli: #335c81ff;
-    --argentinian-blue: #65afffff;
-    --space-cadet: #1b2845ff;
-    --united-nations-blue: #5899e2ff;
-    /* dark theme */
-    --night: #000f08ff;
-    --gunmetal: #1c3738ff;
-    --davys-gray: #4d4847ff;
-    --mint-cream: #f4fff8ff;
-    --cadet-gray: #8baaadff;
+    /* themes */
+    /* light */
+    --l1: black;
+    --l2: white;
+    --l3: #a5a5a5;
+    --l4: #828282;
+    --l5: #e2e2e2;
+    --l6: #b3b3b3;
+    --l7: #666666;
+    --l8: #cccccc;
+    --l9: cyan;
+    /* dark */
+    --d1: #1B2432;
+    --d2: #DCE0D9;
+    --d3: #121420;
+    --d4: #2C2B3C;
+    --d5: #C5C9C2;
+    --d6: #90948D;
+    --d7: #80847D;
+    --d8: black;
+    --d9: #4D7C8A;
+    --d10: #192b38;
+    --d11: #FFD700;
+    /* color */
+    --c1: #6B4E71;
+    --c2: #dfdfdf;
+    --c3: #53687E;
+    --c4: #3a4a63;
+    --c5: #C2B2B4;
+    --c6: #8D7D7F;
+    --c7: #7D6D6F;
+    --c8: black;
+    --c9: #58acc4;
+    --c10: #192b38;
+    --c11: #e45eff;
+}
+
+[data="light-theme"] {
+    --header-color: var(--l1);
+    --header-title-color: var(--l2);
+    --burger-menu-color: var(--l2);
+    --background-game-color: var(--l3);
+    --background-table-color: var(--l4);
+    --header-title-table-color: var(--l2);
+    --text-table-color: var(--l1);
+    --field-part-color: var(--l5);
+    --notch-first-gradient-color: var(--l2);
+    --notch-second-gradient-color: var(--l6);
+    --notch-shadow-color: var(--l3);
+    --background-card-color: var(--l5);
+    --border-card-color: var(--l1);
+    --background-alert-color: var(--l7);
+    --border-alert-color: var(--l2);
+    --background-add-window-color: var(--l4);
+    --background-add-window-block-color: var(--l8);
+    --background-rules-color: var(--l8);
+    --text-add-window-color: var(--l1);
+    --overlay-color: var(--l7);
+    --border-hover-notch-color: var(--l9);
+    --highlight-color: var(--l2);
+    --background-rules-color: var(--l5);
+    --elem-interact-color: var(--l2);
+    --arrow-color: url(#light-themeColor);
+}
+
+[data="dark-theme"] {
+    --header-color: var(--d1);
+    --header-title-color: var(--d2);
+    --burger-menu-color: var(--d2);
+    --background-game-color: var(--d3);
+    --background-table-color: var(--d4);
+    --header-title-table-color: var(--d2);
+    --text-table-color: var(--d2);
+    --field-part-color: var(--d5);
+    --notch-first-gradient-color: var(--d2);
+    --notch-second-gradient-color: var(--d6);
+    --notch-shadow-color: var(--d7);
+    --background-card-color: var(--d5);
+    --border-card-color: var(--d8);
+    --background-alert-color: var(--d9);
+    --border-alert-color: var(--d2);
+    --background-add-window-color: var(--d1);
+    --background-add-window-block-color: var(--d3);
+    --background-rules-color: var(--d3);
+    --text-add-window-color: var(--d2);
+    --overlay-color: var(--d10);
+    --border-hover-notch-color: var(--d9);
+    --highlight-color: var(--d11);
+    --elem-interact-color: var(--d9);
+    --arrow-color: url(#dark-themeColor);
+}
+
+[data="color-theme"] {
+    --header-color: var(--c1);
+    --header-title-color: var(--c2);
+    --burger-menu-color: var(--c2);
+    --background-game-color: var(--c3);
+    --background-table-color: var(--c4);
+    --header-title-table-color: var(--c2);
+    --text-table-color: var(--c2);
+    --field-part-color: var(--c5);
+    --notch-first-gradient-color: var(--c2);
+    --notch-second-gradient-color: var(--c6);
+    --notch-shadow-color: var(--c7);
+    --background-card-color: var(--c5);
+    --border-card-color: var(--c8);
+    --background-alert-color: var(--c1);
+    --border-alert-color: var(--c2);
+    --background-add-window-color: var(--c1);
+    --background-add-window-block-color: var(--c3);
+    --background-rules-color: var(--c3);
+    --text-add-window-color: var(--c2);
+    --overlay-color: var(--c10);
+    --border-hover-notch-color: var(--c9);
+    --highlight-color: var(--c11);
+    --elem-interact-color: var(--c9);
+    --arrow-color: url(#color-themeColor);
 }
 
 * {
@@ -55,4 +153,13 @@ html, body {
 h2 {
     font-family: "Agency FB Extended Bold";
     margin: 0px;
+}
+
+/* 
+Для изменения цвета svg картинок
+svg не отображается, он содержит фильтры для изменения цветов
+*/
+svg { 
+    position: fixed;
+    top: -100%;
 }

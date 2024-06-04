@@ -1,6 +1,7 @@
 // HACK: create normal screen to announce winner or draw (without alert)
 // FIXME: delete everything has comment DELETE
-// TODO: 
+// FIXME: change color of arrows depending on themes
+// TODO: create normal localStorage (with JSON)
 // TODO: find out how create pretty animations in order to real player manages to keep an eye on the game
 // TODO: find out how computer can get only not zero number of balls
 // TODO: how can computer get random color of available ball (number of this ball doesn`t equal zero)
@@ -9,7 +10,7 @@
 // TODO: before a game you should disable everything except 'theme' radiobuttons in settings
 // TODO: graphic code refactoring
 // TODO: make smooth appearing of card back after checking combs if player builds a combinations
-// TODO: process the end of the game (while without animations and transitions)
+// TODO: process the end of the game (while without animations and transitions
 // DONE: implement function of rotate and add marbles of field at both model and view 
 // DONE: part of fields rotate in wrong way (they do entire 360 degrees turn)
 // DONE: coords on parts of fields will break when a player rotates part
@@ -36,11 +37,15 @@ import {
     set_number_of_marbles,
     random_number } from "./graphics_utility.js";
 // model
-import { game, stats } from "./model.js";
+// import { game, stats } from "./model.js";
+import {Settings, GameField, Stats} from "./model.js";
 
 
 let doc = document;
 let dragged_elem = null; // it is game ball
+let settings = null;
+let stats = null;
+let game = null;
 
 (function () {
     window.addEventListener('load', function () {
@@ -77,6 +82,11 @@ function init_events() {
     doc.getElementById("btn-start").addEventListener("click", function () {
         update_settings();
     });
+    for (let theme_radio of doc.querySelectorAll("#theme input[type='radio']")) {
+        theme_radio.addEventListener("change", function (evt) {
+            set_theme(evt.target.value);
+        })
+    }
     // events for game
     for (let game_ball of doc.querySelectorAll("#left-balls-table img")) {
         game_ball.addEventListener("dragstart", dragstart_ball);
@@ -96,21 +106,114 @@ function init_events() {
 }
 
 function init_window() {
+    window.localStorage.clear();
+    set_data();
     smooth_move(doc.getElementById("settings"), "left", 0); // open settings at the beginning
+}
+
+function set_data() {
+    // from localStorage to UI
+    let data = read_data_from_localStorage();
+    // write default data to localStorage
+    for (let row in data) {
+        console.log(row, data[row]);
+        write_data_to_localStorage(row, data[row]);
+    }
+    // to model
+    settings = new Settings(
+        data.settings_data.number_of_players,
+        data.settings_data.number_of_rounds,
+        data.settings_data.theme
+    );
+    stats = new Stats(
+        data.stats_data.number_of_games,
+        data.stats_data.number_of_rounds,
+        data.stats_data.number_of_cards,
+        data.stats_data.wins
+    );
+    game = new GameField(settings);
+    // to UI
+    // settings
+    doc.querySelector(`#number-of-players input[value='${
+        game.settings.numberOfPlayers
+    }']`).setAttribute("checked", "");
+    doc.querySelector(`#number-of-rounds input[value='${
+        game.settings.numberOfRounds
+    }']`).setAttribute("checked", "");
+    doc.querySelector(`#theme input[value='${
+        game.settings.theme
+    }']`).setAttribute("checked", "");
+    set_theme(game.settings.theme);
+    // stats
+    doc.querySelector(`#number-of-games`).innerHTML = stats.numberOfGames;
+    doc.querySelector(`#cards-per-round`).innerHTML = stats.cardsPerRound;
+    doc.querySelector(`#cards-per-game`).innerHTML = stats.cardsPerGame;
+    doc.querySelector(`#number-of-wins`).innerHTML = stats.numberWins;
+}
+
+function write_data_to_localStorage(purpose, data) {
+    if (window.localStorage) {
+        window.localStorage[purpose] = JSON.stringify(data);
+    }
+}
+
+function read_data_from_app() {
+    let settings_data = {
+        "number_of_players": parseInt(game.settings.numberOfPlayers),
+        "number_of_rounds": parseInt(game.settings.numberOfRounds),
+        "theme": game.settings.theme
+    };
+    let stats_data = {
+        "number_of_games": parseInt(stats.numberOfGames),
+        "number_of_rounds": parseInt(stats.numberOfRounds),
+        "number_of_cards": parseInt(stats.numberOfCards),
+        "wins": parseInt(stats.numberWins)
+    };
+    return {
+        "settings_data": settings_data,
+        "stats_data": stats_data
+    }
+}
+
+function read_data_from_localStorage() {
+    if (window.localStorage) {
+        let settings_data;
+        let stats_data;
+        if (window.localStorage.length > 0) {
+            settings_data = JSON.parse(window.localStorage.settings_data);
+            stats_data = JSON.parse(window.localStorage.stats_data);
+        }
+        else {
+            settings_data = {
+                "number_of_players": 2,
+                "number_of_rounds": 1,
+                "theme": "light" 
+            }
+            stats_data = {
+                "number_of_games": 0,
+                "number_of_rounds": 0,
+                "number_of_cards": 0,
+                "wins": 0
+            }
+        }
+        return {
+            "settings_data": settings_data,
+            "stats_data": stats_data
+        };
+    }
 }
 
 function update_settings() { // or start game
     // update game settings
-    let settings = game.settings;
-    if (!settings.isBlock) { // game hasn`t started yet
+    if (!game.settings.isBlock) { // game hasn`t started yet
         // read data from interface (from UI)
         let numberOfPlayers = parseInt(read_radio_data(doc.querySelectorAll("#number-of-players input")));
         let numberOfRounds = parseInt(read_radio_data(doc.querySelectorAll("#number-of-rounds input")));
         let theme = read_radio_data(doc.querySelectorAll("#theme input"));
         // set data in game settings (to model)
-        settings.updateSettings(numberOfPlayers, numberOfRounds, theme);
-        settings.isBlock = true; // game has started
+        game.settings.updateSettings(numberOfPlayers, numberOfRounds, theme);
         game.runGame(); // update game field according to the settings
+        console.log(game);
         // close settings and draw score table (to UI)
         if (doc.getElementById("score-table") !== null) {
             doc.getElementById("score-table").remove();
@@ -129,10 +232,24 @@ function update_settings() { // or start game
             "class",
             ""
         );
-
+        // write data from UI to localStorage
+        let data = read_data_from_app();
+        write_data_to_localStorage("settings_data", data.settings_data);
     }
     else {
         send_alert("Game is going on");
+    }
+}
+
+function set_theme(theme) {
+    // set theme
+    let theme_id = theme + "-theme";
+    doc.getElementsByTagName("html")[0].setAttribute("data", theme_id);
+    // write theme to localStorage
+    if (window.localStorage) {
+        let settings_data = JSON.parse(window.localStorage['settings_data']);
+        settings_data['theme'] = theme;
+        window.localStorage["settings_data"] = JSON.stringify(settings_data);
     }
 }
 
@@ -257,7 +374,7 @@ function touchmove_ball(evt) {
     let ball = evt.target;
     let touch = evt.touches[0];
     if (game.settings.isBlock) {
-        ball.classList.add("moveable-ball");
+        evt.target.setAttribute("class", "moveable-ball");
         ball.style.left = touch.pageX - ball.offsetWidth / 2 + "px";
         ball.style.top = touch.pageY - ball.offsetHeight / 2 + "px";
     }
@@ -276,7 +393,7 @@ function place_marble(notch, isRealPlayer) { // notch: HTMLElement
     // drop ball on the notch
     // continue read data from interface (from UI)
     if (notch.childNodes.length > 0 | notch.nodeName !== "DIV") {
-        send_alert("This place has been occupied");
+        send_alert("The ball isn`t in a notch");
         set_list_of_elems_attr(
             [dragged_elem],
             "class",
@@ -325,8 +442,8 @@ function add_arrows_on_field() {
         let arrow_ccw = doc.createElement("img"); // counter clockwise
         arrow_cw.src = "imgs/bended_arrow.svg";
         arrow_ccw.src = "imgs/bended_arrow_mirrored.svg";
-        arrow_cw.classList.add(...["arrow", "cw-f" + i]);
-        arrow_ccw.classList.add(...["arrow", "ccw-f" + i]);
+        arrow_cw.classList.add(...["arrow", "cw-f" + i, "arrow-color"]);
+        arrow_ccw.classList.add(...["arrow", "ccw-f" + i, "arrow-color"]);
         arrow_cw.setAttribute("draggable", "false");
         arrow_ccw.setAttribute("draggable", "false");
         let part_field = doc.getElementById("field-part-" + i);
@@ -425,7 +542,8 @@ function change_turn() {
     }, 1000);
     console.log("alive player", game.alivePlayerID, "\n player ID", game.playerIDTurn);
     // check alive player
-    if (game.alivePlayerID !== game.playerIDTurn) { // computer plays
+    if (false) {
+    // if (game.alivePlayerID !== game.playerIDTurn) { // computer plays
         // disable balls
         set_list_of_elems_attr(
             doc.querySelectorAll("#left-balls-table img"),
@@ -442,10 +560,10 @@ function change_turn() {
         dragged_elem = move["game-ball"];
         setTimeout(function () {
             place_marble(move["target"], false);
-        }, 2000);
+        }, 0); // FIX TIME
         setTimeout(function () {
             rotate(move["part-field"], move["direction"]);
-        }, 3000);
+        }, 0); // FIX TIME
     }
 }
 
@@ -491,7 +609,7 @@ function can_we_continue_game() {
             send_alert("Draw :(");
         }
         else { // one winner
-            send_alert(`Player P${winner_id} has won!!!\nCongratulations!!!`);
+            send_alert(`Player P${winner_id} has won!!!`);
         }
         // update stats (to model)
         stats.updateStats(game.scoreTable);
@@ -500,13 +618,21 @@ function can_we_continue_game() {
         doc.getElementById("cards-per-round").innerHTML = stats.cardsPerRound;
         doc.getElementById("cards-per-game").innerHTML = stats.cardsPerGame;
         doc.getElementById("number-of-wins").innerHTML = stats.numberWins;
+        // write stats from UI to localStorage
+        let data = read_data_from_app();
+        write_data_to_localStorage("stats_data", data.stats_data);
         // clean all game field
-        clear_gamefield();
+        setTimeout(function () {
+            clear_gamefield()
+        }, 3000);
         // unlock settings in order to play again
         game.settings.isBlock = false; // settings is enabled
     }
     else { // it isn`t last round
-        run_round(); // run new round
+        setTimeout(function () {
+            run_round(); // run new round
+        }, 1500);
+        
     }
 }
 

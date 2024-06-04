@@ -140,9 +140,9 @@ class GameField {
         this._settings.isBlock = true;
         this._currentRound = 1;
         this.restoreMarbles();
-        this.numberOfPlayers = settings.numberOfPlayers;
-        this.numberOfRounds = settings.numberOfRounds;
-        this.numberOfCardsInRounds = settings.numberOfCardsInRound;
+        this.numberOfPlayers = this._settings.numberOfPlayers;
+        this.numberOfRounds = this._settings.numberOfRounds;
+        this.numberOfCardsInRounds = this._settings.numberOfCardsInRound;
         this.alivePlayerID = Math.floor(Math.random() * (this.numberOfPlayers + 1 - 1) + 1);
         this._playerIDTurn = this.alivePlayerID;
         this.players = [];
@@ -324,7 +324,7 @@ class Score {
     }
     getResultRow() {
         let result = [];
-        for (let i = 0; i < this._table.length; i++) {
+        for (let i = 0; i < this._table[0].length; i++) {
             result.push(this._table[this._table.length - 1][i]);
         }
         return result;
@@ -416,10 +416,10 @@ class Settings {
 class Stats {
     constructor(numberOfGames, numberOfRounds, numberOfCards, numberWins) {
         this._numberOfGames = numberOfGames;
-        this.numberOfRounds = numberOfRounds;
-        this.numberOfCards = numberOfCards;
-        this._cardsPerRound = numberOfCards / numberOfRounds;
-        this._cardsPerGame = numberOfCards / numberOfGames;
+        this._numberOfRounds = numberOfRounds;
+        this._numberOfCards = numberOfCards;
+        this._cardsPerRound = (Number.isNaN(numberOfCards / numberOfRounds) ? 0 : Stats.roundToFixed(numberOfCards / numberOfRounds, 2));
+        this._cardsPerGame = (Number.isNaN(numberOfCards / numberOfGames) ? 0 : Stats.roundToFixed(numberOfCards / numberOfGames, 2));
         this._numberWins = numberWins;
     }
     get numberOfGames() {
@@ -434,13 +434,19 @@ class Stats {
     get numberWins() {
         return this._numberWins;
     }
+    get numberOfCards() {
+        return this._numberOfCards;
+    }
+    get numberOfRounds() {
+        return this._numberOfRounds;
+    }
     updateStats(scoreTable) {
         let table = scoreTable.table;
         let rows = table.length;
         let alivePlayerID = scoreTable.alivePlayerID;
         this._numberOfGames++;
-        this.numberOfRounds += (rows - 1);
-        this.numberOfCards += (table[rows - 1][alivePlayerID - 1]);
+        this._numberOfRounds += (rows - 1);
+        this._numberOfCards += (table[rows - 1][alivePlayerID - 1]);
         this._cardsPerRound = Stats.roundToFixed(this.numberOfCards / this.numberOfRounds, 2);
         this._cardsPerGame = Stats.roundToFixed(this.numberOfCards / this._numberOfGames, 2);
         this._numberWins += (scoreTable.alivePlayerID == scoreTable.winnerPlayerID ? 1 : 0);
@@ -450,8 +456,5 @@ class Stats {
         return ans;
     }
 }
-let settings = new Settings(3, 3, "light");
-let stats = new Stats(0, 0, 0, 0);
-let game = new GameField(settings);
 
-export {game, stats};
+export {Settings, Stats, GameField};

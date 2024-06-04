@@ -7,9 +7,9 @@
     top: -20%;
     z-index: 5;
     padding: 10px;
-    border: 2px solid white;
-    color: white;
-    background-color: #666666;
+    border: 2px solid var(--border-alert-color);
+    color: var(--border-alert-color);
+    background-color: var(--background-alert-color);
     box-shadow: 0px 0px 30px black;
     opacity: 0%;
     transition: top 0.8s, opacity 0.5s ease;
@@ -26,13 +26,12 @@
     justify-content: center;
     align-items: center;
     border-radius: 100%;
-    border: 2px solid white;
-    background-color: #666666;
+    border: 2px solid var(--border-alert-color);
+    background-color:  var(--background-alert-color);
     max-width: 80px;
     max-height: 80px;
     width: 20%;
     height: 20%;
-    font-size: min(20%, 30pt);
 }
 
 .attention img {
@@ -43,5 +42,5 @@
 
 .message {
     padding: 10px;
-    font-size: min(100%, 20pt); 
+    font-size: 20pt; /* изменится шрифт в mobile-version.css */ 
 }
