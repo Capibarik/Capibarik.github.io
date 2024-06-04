@@ -1,4 +1,3 @@
-// HACK: create normal screen to announce winner or draw (without alert)
 // FIXME: delete everything has comment DELETE
 // FIXME: change color of arrows depending on themes
 // TODO: create normal localStorage (with JSON)
@@ -43,6 +42,7 @@ import {Settings, GameField, Stats} from "./model.js";
 
 let doc = document;
 let dragged_elem = null; // it is game ball
+let computer = null;
 let settings = null;
 let stats = null;
 let game = null;
@@ -106,7 +106,7 @@ function init_events() {
 }
 
 function init_window() {
-    window.localStorage.clear();
+    // window.localStorage.clear();
     set_data();
     smooth_move(doc.getElementById("settings"), "left", 0); // open settings at the beginning
 }
@@ -116,7 +116,6 @@ function set_data() {
     let data = read_data_from_localStorage();
     // write default data to localStorage
     for (let row in data) {
-        console.log(row, data[row]);
         write_data_to_localStorage(row, data[row]);
     }
     // to model
@@ -134,6 +133,9 @@ function set_data() {
     game = new GameField(settings);
     // to UI
     // settings
+    doc.querySelector(`#computer input[value=${
+        data.settings_data.computer // playing with computer doesn`t connect with settings of game 
+    }]`).setAttribute("checked", "");
     doc.querySelector(`#number-of-players input[value='${
         game.settings.numberOfPlayers
     }']`).setAttribute("checked", "");
@@ -159,6 +161,7 @@ function write_data_to_localStorage(purpose, data) {
 
 function read_data_from_app() {
     let settings_data = {
+        "computer": (computer ? "on" : "off"),
         "number_of_players": parseInt(game.settings.numberOfPlayers),
         "number_of_rounds": parseInt(game.settings.numberOfRounds),
         "theme": game.settings.theme
@@ -185,6 +188,7 @@ function read_data_from_localStorage() {
         }
         else {
             settings_data = {
+                "computer": "on",
                 "number_of_players": 2,
                 "number_of_rounds": 1,
                 "theme": "light" 
@@ -207,13 +211,16 @@ function update_settings() { // or start game
     // update game settings
     if (!game.settings.isBlock) { // game hasn`t started yet
         // read data from interface (from UI)
+        let play_with_computer = read_radio_data(doc.querySelectorAll("#computer input"));
         let numberOfPlayers = parseInt(read_radio_data(doc.querySelectorAll("#number-of-players input")));
         let numberOfRounds = parseInt(read_radio_data(doc.querySelectorAll("#number-of-rounds input")));
         let theme = read_radio_data(doc.querySelectorAll("#theme input"));
         // set data in game settings (to model)
         game.settings.updateSettings(numberOfPlayers, numberOfRounds, theme);
         game.runGame(); // update game field according to the settings
-        console.log(game);
+        // do we let computer plays or not?
+        if (play_with_computer === 'on') computer = true;
+        else computer = false;
         // close settings and draw score table (to UI)
         if (doc.getElementById("score-table") !== null) {
             doc.getElementById("score-table").remove();
@@ -382,10 +389,10 @@ function touchmove_ball(evt) {
 
 function touchend_ball(evt) {
     // drop for phone
-    console.log(doc.querySelectorAll("#left-balls-table img"));
+    
     let touch = evt.changedTouches[0];
     let notch = doc.elementsFromPoint(touch.pageX, touch.pageY)[1]; // should be notch
-    console.log(notch);
+    
     place_marble(notch, true);
 }
 
@@ -540,10 +547,9 @@ function change_turn() {
         let next_player_in_table = doc.querySelector(`#score-table thead tr th:nth-child(${next_player + 1})`);
         next_player_in_table.setAttribute("id", "current-player");
     }, 1000);
-    console.log("alive player", game.alivePlayerID, "\n player ID", game.playerIDTurn);
+    
     // check alive player
-    if (false) {
-    // if (game.alivePlayerID !== game.playerIDTurn) { // computer plays
+    if (computer && (game.alivePlayerID !== game.playerIDTurn)) { // computer plays
         // disable balls
         set_list_of_elems_attr(
             doc.querySelectorAll("#left-balls-table img"),
@@ -560,10 +566,10 @@ function change_turn() {
         dragged_elem = move["game-ball"];
         setTimeout(function () {
             place_marble(move["target"], false);
-        }, 0); // FIX TIME
+        }, 1000);
         setTimeout(function () {
             rotate(move["part-field"], move["direction"]);
-        }, 0); // FIX TIME
+        }, 2000); 
     }
 }
 
@@ -594,11 +600,21 @@ function can_we_continue_game() {
             "class",
             "immovable-ball"
         );
+        // smooth disappearing cards and balls
+        // 
+        for (let ball of doc.querySelectorAll(".notch img")) {
+            ball.classList.add("disappear-ball");
+        }
+        for (let card of doc.querySelectorAll("#cards .card")) {
+            setInterval(function () {
+                card.classList.add("spin-disappear-card");
+            }, 1500);
+        }
         // calculate result (from model)
         game.scoreTable.summarizeScore();
         let result_row = game.scoreTable.getResultRow();
         let winner_id = game.scoreTable.winnerPlayerID;
-        console.log(game.scoreTable);
+        
         // update score table result (to UI)
         let result_cells = doc.querySelectorAll("#score-table tbody tr:last-child th:nth-child(n+2)");
         for (let i = 0; i < result_cells.length; i++) {
@@ -702,14 +718,14 @@ function calc_move() {
     let number_of_field = random_number(1, 5);
     let number_of_notch = random_number(1, 10);
     let target = doc.querySelector(`#field-part-${number_of_field} .n${number_of_notch}`);
-    console.log("___________________________________");
-    console.log("BEFORE", target, target.childNodes);
+    
+    
     while (target.childNodes.length > 0) {
         number_of_field = random_number(1, 5);
         number_of_notch = random_number(1, 10);
         target = doc.querySelector(`#field-part-${number_of_field} .n${number_of_notch}`);
     }
-    console.log("AFTER", target);
+    
     let part_field = doc.getElementById("field-part-" + random_number(1, 5));
     return {
         "game-ball": game_ball,

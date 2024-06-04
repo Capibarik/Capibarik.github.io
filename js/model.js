@@ -209,8 +209,11 @@ class GameField {
         for (let index = 0; index < this._deckOfPatterns.length; index++) {
             let card_pattern = this._deckOfPatterns[index];
             if (!card_pattern.isBuilt) {
+                let isCardFound = false;
                 let reverse_card_pattern = new CardPattern(card_pattern.getReversePattern());
                 for (let i = 0; i < 6; i++) {
+                    if (isCardFound)
+                        break;
                     let patterns = [[], [], [], []];
                     for (let j = 0; j < 5; j++) {
                         if (gf[i][j] !== null && patterns[0] !== null)
@@ -231,12 +234,14 @@ class GameField {
                             patterns[3] = null;
                     }
                     let card_patterns = [null, null, null, null];
-                    for (let k = 0; k < 4; k++) {
+                    for (let k = 0; k < patterns.length; k++) {
                         if (patterns[k] !== null)
                             card_patterns[k] = new CardPattern(patterns[k]);
                         if (card_pattern.equals(card_patterns[k]) || reverse_card_pattern.equals(card_patterns[k])) {
                             card_pattern.itIsbuilt();
                             builtCardsIndexes.push(index);
+                            isCardFound = true;
+                            break;
                         }
                     }
                 }
@@ -457,4 +462,4 @@ class Stats {
     }
 }
 
-export {Settings, Stats, GameField};
+export {GameField, Settings, Stats};

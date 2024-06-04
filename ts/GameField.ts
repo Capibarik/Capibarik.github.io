@@ -164,7 +164,7 @@ class GameField {
             }
             new_part_field.push(line);
         }
-        // console.log(part_field);
+        // (part_field);
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (direction === "cw") {
@@ -175,7 +175,7 @@ class GameField {
                 }
             }
         }
-        // console.log(new_part_field);
+        // (new_part_field);
         this._marblesOnField[index_field] = new_part_field;
     }
     private toGeneralField(): (GameMarble | null)[][] {
@@ -205,19 +205,22 @@ class GameField {
             }
             general_field.push(line);
         }
-        // console.log(general_field); // DELETE
+        // (general_field); // DELETE
         return general_field;
     }
     checkCombs(): number[] {
         // check combinations of marbles on the field
-        // console.log(this._deckOfPatterns);
+        // (this._deckOfPatterns);
         let gf = this.toGeneralField();
         let builtCardsIndexes: number[] = [];
         for (let index = 0; index < this._deckOfPatterns.length; index++) {
             let card_pattern: CardPattern = this._deckOfPatterns[index];
             if (!card_pattern.isBuilt) { // if card hasn`t built yet
+                let isCardFound: boolean = false;
                 let reverse_card_pattern: CardPattern = new CardPattern(card_pattern.getReversePattern());
+                // check straight lines
                 for (let i = 0; i < 6; i++) {
+                    if (isCardFound) break; // cards has been found, we should start to search new card
                     let patterns: (CardMarble[] | null)[] = [[], [], [], []];
                     for (let j = 0; j < 5; j++) {
                         // horizontal
@@ -234,16 +237,17 @@ class GameField {
                         else patterns[3] = null;
                     }
                     let card_patterns: (CardPattern | null)[] = [null, null, null, null];
-                    for (let k = 0; k < 4; k++) {
+                    for (let k = 0; k < patterns.length; k++) {
                         if (patterns[k] !== null) card_patterns[k] = new CardPattern(patterns[k]);
                         if (card_pattern.equals(card_patterns[k]) || reverse_card_pattern.equals(card_patterns[k])) {
+                            // card is found
                             card_pattern.itIsbuilt();
                             builtCardsIndexes.push(index);
+                            isCardFound = true;
+                            break; 
                         }
                     }
-                }   
-                // console.log("====================================");
-                // console.log(card_pattern.pattern, card_pattern.isBuilt);
+                }
             }
         }
         return builtCardsIndexes;

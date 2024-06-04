@@ -10,7 +10,29 @@
     }
 }
 
+@keyframes spin-disappear-card {
+    to {
+        transform: rotate(361deg) scale(0);
+        opacity: 0%;
+    }
+}
+
+@keyframes disappear-ball {
+    to {
+        transform: scale(0);
+        opacity: 0%;
+    }
+}
+
 .flip-card {
     animation: 1.5s ease flip-card;
     animation-fill-mode: forwards;
+}
+
+.spin-disappear-card {
+    animation: 1.5s cubic-bezier(0.95, 0.29, 0.78, 0.58) spin-disappear-card;
+}
+
+.disappear-ball {
+    animation: 3s cubic-bezier(0.95, 0.29, 0.78, 0.58) disappear-ball;
 }
