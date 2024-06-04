@@ -24,6 +24,15 @@
     }
 }
 
+@keyframes smooth-appearing-card {
+    from {
+        opacity: 0%;
+    }
+    to {
+        opacity: 100%;
+    }
+}
+
 .flip-card {
     animation: 1.5s ease flip-card;
     animation-fill-mode: forwards;
@@ -35,4 +44,8 @@
 
 .disappear-ball {
     animation: 3s cubic-bezier(0.95, 0.29, 0.78, 0.58) disappear-ball;
+}
+
+.smooth-appear-card {
+    animation: 0.6s linear smooth-appearing-card;
 }

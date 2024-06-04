@@ -106,7 +106,6 @@ function init_events() {
 }
 
 function init_window() {
-    // window.localStorage.clear();
     set_data();
     smooth_move(doc.getElementById("settings"), "left", 0); // open settings at the beginning
 }
@@ -328,7 +327,10 @@ function gen_cards() {
     let container_cards = doc.getElementById("cards"); // container has already been on page
     for (let i = 0; i < deckOfPatterns.length; i++) {
         let flip_card = doc.createElement("div");
-        flip_card.setAttribute("class", "card");
+        flip_card.setAttribute("class", "card smooth-appear-card");
+        flip_card.addEventListener("animationend", function () {
+            flip_card.classList.remove("smooth-appear-card"); // after animation we should delete this class
+        });
         let inner_card = doc.createElement("div");
         inner_card.setAttribute("class", "card-pattern");
         inner_card.setAttribute("id", "card-pattern-" + i);
@@ -601,20 +603,11 @@ function can_we_continue_game() {
             "immovable-ball"
         );
         // smooth disappearing cards and balls
-        // 
-        for (let ball of doc.querySelectorAll(".notch img")) {
-            ball.classList.add("disappear-ball");
-        }
-        for (let card of doc.querySelectorAll("#cards .card")) {
-            setInterval(function () {
-                card.classList.add("spin-disappear-card");
-            }, 1500);
-        }
+        smooth_clear();
         // calculate result (from model)
         game.scoreTable.summarizeScore();
         let result_row = game.scoreTable.getResultRow();
         let winner_id = game.scoreTable.winnerPlayerID;
-        
         // update score table result (to UI)
         let result_cells = doc.querySelectorAll("#score-table tbody tr:last-child th:nth-child(n+2)");
         for (let i = 0; i < result_cells.length; i++) {
@@ -637,18 +630,14 @@ function can_we_continue_game() {
         // write stats from UI to localStorage
         let data = read_data_from_app();
         write_data_to_localStorage("stats_data", data.stats_data);
-        // clean all game field
-        setTimeout(function () {
-            clear_gamefield()
-        }, 3000);
         // unlock settings in order to play again
         game.settings.isBlock = false; // settings is enabled
     }
     else { // it isn`t last round
+        smooth_clear(); // during 3 seconds function is cleaning field
         setTimeout(function () {
             run_round(); // run new round
-        }, 1500);
-        
+        }, 3000);
     }
 }
 
@@ -656,9 +645,6 @@ function run_round() {
     // clear game field on the screen 
     // clean out marbles and cards
     // restore amount of marbles
-    // clear screen (UI)
-    remove_elems(".card");
-    remove_elems(".notch img");
     // run new round (model)
     game.runRound();
     let next_round = game.currentRound;
@@ -689,6 +675,21 @@ function run_round() {
     change_turn();
 }
 
+function smooth_clear() {
+    // clean all game field
+    for (let ball of doc.querySelectorAll(".notch img")) {
+        ball.classList.add("disappear-ball");
+    }
+    for (let card of doc.querySelectorAll("#cards .card")) {
+        setInterval(function () {
+            card.classList.add("spin-disappear-card");
+        }, 1500);
+    }
+    setTimeout(function () {
+        clear_gamefield();
+    }, 3000);
+}
+
 function clear_gamefield() {
     // full clear to almost first condition
     // restore marbles (to model)
@@ -711,6 +712,7 @@ function calc_move() {
     let directions = ["cw", "ccw"];
     let direction = directions[Math.floor(Math.random() * 2)];
     let number_of_color = random_number(0, 3);
+    // choose color
     while (game.getNumberOfMarbles(game.getColorOfNumber(number_of_color)) === 0) {
         number_of_color = random_number(0, 3);
     }
@@ -718,14 +720,13 @@ function calc_move() {
     let number_of_field = random_number(1, 5);
     let number_of_notch = random_number(1, 10);
     let target = doc.querySelector(`#field-part-${number_of_field} .n${number_of_notch}`);
-    
-    
+    // choose notch
     while (target.childNodes.length > 0) {
         number_of_field = random_number(1, 5);
         number_of_notch = random_number(1, 10);
         target = doc.querySelector(`#field-part-${number_of_field} .n${number_of_notch}`);
     }
-    
+    // choose part field
     let part_field = doc.getElementById("field-part-" + random_number(1, 5));
     return {
         "game-ball": game_ball,
